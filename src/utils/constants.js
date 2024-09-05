@@ -1,0 +1,77 @@
+export const fontStyles = {
+  regular: {
+    fontFamily: "Poppins-Regular",
+    fontWeight: "normal",
+  },
+  bold: {
+    fontFamily: "Poppins-Bold",
+    fontWeight: "normal",
+  },
+  semibold: {
+    fontFamily: "Poppins-SemiBold",
+    fontWeight: "normal",
+  },
+  medium: {
+    fontFamily: "Poppins-Medium",
+    fontWeight: "normal",
+  },
+  light: {
+    fontFamily: "Poppins-Light",
+    fontWeight: "normal",
+  },
+  thin: {
+    fontFamily: "Poppins-Thin",
+    fontWeight: "normal",
+  },
+};
+export const colors = {
+  primary: "#7D5FFE",
+  primaryLight: "#7D5FFEB0",
+  primaryHeader: "#e7e3fa",
+  primaryExtraLight: "#f4f2ff",
+  secondary: "#061023",
+  white: "#FFFFFF",
+  black: "#000000",
+  borderInputColor: "#0000004F",
+  gray: "#E3E3E3",
+  greyText: "#4F5663",
+  tomato: "#f23122",
+  orange: "#f29d38",
+  green: "#bae0bd",
+  darkGreen: "#5e9c76",
+};
+export const defaultStyles = {
+  paddingHorizantally: 12,
+  paddingVertical: 15,
+  borderWidth: 1,
+  borderRadius: 12,
+  buttonBorderRadius: 0,
+  buttonHeight: 50,
+  zeroWidth: 0,
+  chipRadius: 25,
+  iconSize: 40,
+  iconSizeSmall: 30,
+  iconSizeXSmall: 25,
+  iconSizeXXSmall: 20,
+  searchRadius: 10,
+  marginBottom: 15,
+  height: 50,
+  bannerHeight: 160,
+  catHeight: 100,
+  inputHeight: 50,
+  productImgHeight: 150,
+  productHeading: 18,
+  productSubHeading: 12,
+  borderTopBottom: 2,
+  largeFont: 25,
+  chipRadius: 20,
+  textPadding: 8,
+  cartImgHeight: 150,
+  padding: 5,
+  colorSize: 60,
+  sizeSize: 50,
+  starSize: 25,
+  cardHeight: 180,
+  width: 100
+}
+
