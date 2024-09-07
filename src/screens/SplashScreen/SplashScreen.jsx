@@ -1,22 +1,30 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, Dimensions, Text} from 'react-native';
-const {width, height} = Dimensions.get('window');
-
+import React from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 const SplashScreen = ({navigation}) => {
-  useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('AuthNavigation');
-    }, 5000);
-  }, []);
+  const handleSelection = () => {
+    console.log('PositionSelectionScreen clicked');
+    navigation.navigate('AuthNavigation');
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.circle1}></View>
-      <View style={styles.circle2}></View>
-      <View style={styles.circle3}></View>
+      <Image
+        source={require('../../assets/images/logo.png')}
+        style={styles.logo}
+      />
 
-      <View style={styles.topSection}>
-        <Text style={styles.brandName}>AAA - SWITCHGEAR</Text>
-      </View>
+      <Text style={styles.subtitle}>Site Service App</Text>
+
+      <TouchableOpacity activeOpacity={1}  style={styles.button} onPress={handleSelection}>
+        <Image
+          source={require('../../assets/icons/arrow.png')}
+          style={styles.logoIcon}
+        />
+      </TouchableOpacity>
+
+      <Text style={styles.footerText}>
+        A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
+      </Text>
     </View>
   );
 };
@@ -24,59 +32,47 @@ const SplashScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#7D5FFE',
-    paddingVertical: 20,
-  },
-  topSection: {
-    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
-  welcomeText: {
-    fontSize: 38,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    paddingLeft: 25,
+  logo: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
   },
-  brandName: {
-    fontSize: 50,
-    color: '#FFFFFF',
-    fontWeight: '800',
-    letterSpacing: 2,
-    paddingLeft: 25,
-  },
-
-  subtitle: {
-    fontSize: 25,
-    fontWeight: '700',
-    color: '#7D5FFE',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
     marginBottom: 10,
   },
-  circle1: {
-    position: 'absolute',
-    width: height * 0.16,
-    height: height * 0.16,
-    borderRadius: height * 0.125,
-    backgroundColor: '#aa98fe',
-    top: height * 0.01,
-    right: width * 0.03,
+  subtitle: {
+    fontSize: 26,
+    color: '#555',
+    marginBottom: 40,
   },
-  circle2: {
-    position: 'absolute',
-    width: height * 0.3,
-    height: height * 0.3,
-    borderRadius: height * 0.175,
-    backgroundColor: '#aa98fe',
-    top: height * 0.3,
-    left: width * 0.05,
+  button: {
+    backgroundColor: '#FF0000',
+    width: 80,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginBottom: 30,
   },
-  circle3: {
+  logoIcon: {
+    width: 30, // Replace with your icon size
+    height: 30,
+    tintColor: '#fff',
+  },
+  footerText: {
+    fontSize: 12,
+    color: '#555',
+    textAlign: 'center',
     position: 'absolute',
-    width: height * 0.16,
-    height: height * 0.16,
-    borderRadius: height * 0.125,
-    backgroundColor: '#aa98fe',
-    bottom: height * 0.03,
-    right: width * 0.03,
+    bottom: 20,
+    fontStyle: 'italic',
   },
 });
 

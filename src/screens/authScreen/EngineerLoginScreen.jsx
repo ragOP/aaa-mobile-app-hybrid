@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
-const LoginScreen = () => {
+const EngineerLoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -11,19 +11,13 @@ const LoginScreen = () => {
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Image
-            source={require('../../assets/icons/Smartphone.png')} // Replace with your logo image
+            source={require('../../assets/icons/Smartphone.png')} 
             style={styles.logoIcon}
           />
         </View>
       </View>
-
-      {/* Title */}
-      <Text style={styles.title}>Customer Login</Text>
-
-      {/* Subtitle */}
+      <Text style={styles.title}>Engineer Login</Text>
       <Text style={styles.subtitle}>Enter Your Username & Password</Text>
-
-      {/* Username Input */}
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -43,7 +37,7 @@ const LoginScreen = () => {
       />
 
       {/* Submit Button */}
-      <TouchableOpacity activeOpacity={1}style={styles.submitButton}>
+      <TouchableOpacity activeOpacity={1} style={styles.submitButton}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
 
@@ -136,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default EngineerLoginScreen;
