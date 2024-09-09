@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthNavigation from './AuthNavigation/AuthNavigation';
 import BottomNavigation from './BottomNavigation';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import EngineerBottomNavigation from './EngineerBottomNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,15 +15,16 @@ const Navigation = () => {
         screenOptions={{ headerShown: false }}
         initialRouteName="SplashScreen"
       >
-     
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="AuthNavigation" component={AuthNavigation} />
         <Stack.Screen
           name="BottomTabNavigation"
           component={BottomNavigation}
         />
-
-        {/* Others Common Screens */}
+         <Stack.Screen
+          name="EngineerTabNavigation"
+          component={EngineerBottomNavigation}
+        />
         
       </Stack.Navigator>
     </NavigationContainer>

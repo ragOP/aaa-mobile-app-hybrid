@@ -1,9 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-
-const LoginScreen = () => {
+import { customerloginApi } from '../../store/api';
+import toastFunction from '../../functions/toastFunction';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const saveTokenHandler = async (token) => {
+    await AsyncStorage.setItem("token", token);
+  };
+const handleLogin = async () => {
+    try {
+      const body = { userName:username, password };
+      const response = await customerloginApi(body);
+
+      if (response.data  ) {
+        saveTokenHandler(response.data.token);
+        console.log(response?.data)
+        navigation.navigate('BottomTabNavigation');
+      } else {
+        toastFunction("Login Failed", "AAA-SWITCHGEAR", "Invalid username or password.")
+
+      }
+    } catch (error) {
+      console.error(error);
+      toastFunction("Login Failed", "Something went wrong. Please try again.")
+
+    }
+  };
 
   return (
     
@@ -11,7 +35,7 @@ const LoginScreen = () => {
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Image
-            source={require('../../assets/icons/Smartphone.png')} // Replace with your logo image
+            source={require('../../assets/icons/Smartphone.png')} 
             style={styles.logoIcon}
           />
         </View>
@@ -42,17 +66,12 @@ const LoginScreen = () => {
         secureTextEntry={true}
       />
 
-      {/* Submit Button */}
-      <TouchableOpacity activeOpacity={1}style={styles.submitButton}>
+      <TouchableOpacity onPress={handleLogin} activeOpacity={1}style={styles.submitButton}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
-
-      {/* Forgot Password Link */}
       <TouchableOpacity activeOpacity={1}>
         <Text style={styles.forgotPasswordText}>Forget Password ?</Text>
       </TouchableOpacity>
-
-      {/* Footer */}
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
@@ -66,10 +85,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    paddingVertical: 20,  
+
   },
   logoContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    
     marginBottom: 20,
   },
   logoCircle: {

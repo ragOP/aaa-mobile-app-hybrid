@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 const SplashScreen = ({navigation}) => {
   const handleSelection = () => {
-    console.log('PositionSelectionScreen clicked');
     navigation.navigate('AuthNavigation');
   };
 
@@ -15,7 +14,10 @@ const SplashScreen = ({navigation}) => {
 
       <Text style={styles.subtitle}>Site Service App</Text>
 
-      <TouchableOpacity activeOpacity={1}  style={styles.button} onPress={handleSelection}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.button}
+        onPress={handleSelection}>
         <Image
           source={require('../../assets/icons/arrow.png')}
           style={styles.logoIcon}
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   logoIcon: {
-    width: 30, // Replace with your icon size
+    width: 30,
     height: 30,
     tintColor: '#fff',
   },

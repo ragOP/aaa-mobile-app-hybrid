@@ -1,23 +1,63 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-
-const EngineerLoginScreen = () => {
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
+import {engineerloginApi} from '../../store/api';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import toastFunction from '../../functions/toastFunction';
+const EngineerLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const saveTokenHandler = async token => {
+    await AsyncStorage.setItem('aaa_token', token);
+  };
+  const handleLogin = async () => {
+    try {
+      const body = {userName: username, password};
+      const response = await engineerloginApi(body);
+
+      if (response.data) {
+        saveTokenHandler(response?.data?.token);
+        console.log(response?.data?.token, 'aaa-token');
+        console.log(response?.data);
+
+        navigation.navigate('EngineerTabNavigation');
+      } else {
+        toastFunction(
+          'Login Failed',
+          'AAA-SWITCHGEAR',
+          'Invalid username or password.',
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      toastFunction('Login Failed', 'Something went wrong. Please try again.');
+    }
+  };
 
   return (
-    
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Image
-            source={require('../../assets/icons/Smartphone.png')} 
+            source={require('../../assets/icons/Smartphone.png')}
             style={styles.logoIcon}
           />
         </View>
       </View>
+
+      {/* Title */}
       <Text style={styles.title}>Engineer Login</Text>
+
+      {/* Subtitle */}
       <Text style={styles.subtitle}>Enter Your Username & Password</Text>
+
+      {/* Username Input */}
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -36,17 +76,15 @@ const EngineerLoginScreen = () => {
         secureTextEntry={true}
       />
 
-      {/* Submit Button */}
-      <TouchableOpacity activeOpacity={1} style={styles.submitButton}>
+      <TouchableOpacity
+        onPress={handleLogin}
+        activeOpacity={1}
+        style={styles.submitButton}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
-
-      {/* Forgot Password Link */}
       <TouchableOpacity activeOpacity={1}>
         <Text style={styles.forgotPasswordText}>Forget Password ?</Text>
       </TouchableOpacity>
-
-      {/* Footer */}
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
