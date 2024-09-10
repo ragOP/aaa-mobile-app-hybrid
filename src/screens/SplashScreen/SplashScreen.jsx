@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const SplashScreen = ({navigation}) => {
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('aaa_token');
+        if (token === null) {
+          navigation.replace('AuthNavigation');
+        } else {
+          navigation.navigate('BottomTabNavigation');
+        }
+      } catch (error) {
+        console.error('Error retrieving token from AsyncStorage', error);
+      }
+    };
+
+    checkToken();
+  }, [navigation]);
   const handleSelection = () => {
     navigation.navigate('AuthNavigation');
   };

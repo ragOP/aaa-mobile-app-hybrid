@@ -5,6 +5,7 @@ import AuthNavigation from './AuthNavigation/AuthNavigation';
 import BottomNavigation from './BottomNavigation';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import EngineerBottomNavigation from './EngineerBottomNavigation';
+import ComplainDetailScreen from '../screens/ComplainDetailScreen/ComplainDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,10 @@ const Navigation = () => {
           name="EngineerTabNavigation"
           component={EngineerBottomNavigation}
         />
-        
+         <Stack.Screen
+          name="ComplainDetailScreen"
+          component={ComplainDetailScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

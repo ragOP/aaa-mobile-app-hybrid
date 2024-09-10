@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,26 +6,32 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  ActivityIndicator
 } from 'react-native';
-import {engineerloginApi} from '../../store/api';
+import { engineerloginApi } from '../../store/api';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import toastFunction from '../../functions/toastFunction';
-const EngineerLoginScreen = ({navigation}) => {
+
+const EngineerLoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const saveTokenHandler = async token => {
+  const [loading, setLoading] = useState(false); // New state for loader
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // New state for button
+
+  const saveTokenHandler = async (token) => {
     await AsyncStorage.setItem('aaa_token', token);
   };
+
   const handleLogin = async () => {
+    setLoading(true); // Show loader when login starts
     try {
-      const body = {userName: username, password};
+      const body = { userName: username, password };
       const response = await engineerloginApi(body);
+      const token = response?.data?.data?.token;
 
       if (response.data) {
-        saveTokenHandler(response?.data?.token);
-        console.log(response?.data?.token, 'aaa-token');
-        console.log(response?.data);
-
+        await AsyncStorage.setItem('aaa_token', token);
+        console.log('Token saved successfully to AsyncStorage.', token);
         navigation.navigate('EngineerTabNavigation');
       } else {
         toastFunction(
@@ -37,8 +43,19 @@ const EngineerLoginScreen = ({navigation}) => {
     } catch (error) {
       console.error(error);
       toastFunction('Login Failed', 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false); // Hide loader when login ends
     }
   };
+
+  useEffect(() => {
+    // Check if both username and password are empty
+    if (username === '' || password === '') {
+      setIsButtonDisabled(true);
+    } else {
+      setIsButtonDisabled(false);
+    }
+  }, [username, password]);
 
   return (
     <View style={styles.container}>
@@ -79,12 +96,21 @@ const EngineerLoginScreen = ({navigation}) => {
       <TouchableOpacity
         onPress={handleLogin}
         activeOpacity={1}
-        style={styles.submitButton}>
-        <Text style={styles.submitButtonText}>Submit</Text>
+        style={[styles.submitButton, isButtonDisabled && styles.disabledButton]} // Apply disabled style
+        disabled={isButtonDisabled || loading} // Disable button if either isButtonDisabled or loading is true
+      >
+        {/* Show loader when logging in, otherwise show the submit text */}
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.submitButtonText}>Submit</Text>
+        )}
       </TouchableOpacity>
+
       <TouchableOpacity activeOpacity={1}>
         <Text style={styles.forgotPasswordText}>Forget Password ?</Text>
       </TouchableOpacity>
+
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
@@ -113,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   logoIcon: {
-    width: 40, // Replace with your icon size
+    width: 40,
     height: 40,
     tintColor: '#fff',
   },
@@ -147,6 +173,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginBottom: 20,
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   submitButtonText: {
     color: '#fff',

@@ -1,41 +1,60 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { customerloginApi } from '../../store/api';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+import {customerloginApi} from '../../store/api';
 import toastFunction from '../../functions/toastFunction';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const saveTokenHandler = async (token) => {
-    await AsyncStorage.setItem("token", token);
-  };
-const handleLogin = async () => {
-    try {
-      const body = { userName:username, password };
-      const response = await customerloginApi(body);
+  const [loading, setLoading] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-      if (response.data  ) {
-        saveTokenHandler(response.data.token);
-        console.log(response?.data)
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const body = {userName: username, password};
+      const response = await customerloginApi(body);
+      const token = response?.data?.data?.token;
+      if (response.data) {
+        await AsyncStorage.setItem('aaa_token', token);
+        console.log('Token saved successfully to AsyncStorage.', token);
         navigation.navigate('BottomTabNavigation');
       } else {
-        toastFunction("Login Failed", "AAA-SWITCHGEAR", "Invalid username or password.")
-
+        toastFunction(
+          'Login Failed',
+          'AAA-SWITCHGEAR',
+          'Invalid username or password.',
+        );
       }
     } catch (error) {
       console.error(error);
-      toastFunction("Login Failed", "Something went wrong. Please try again.")
-
+      toastFunction('Login Failed', error);
+    } finally {
+      setLoading(false);
     }
   };
+  useEffect(() => {
+    if (username === '' || password === '') {
+      setIsButtonDisabled(true);
+    } else {
+      setIsButtonDisabled(false);
+    }
+  }, [username, password]);
 
   return (
-    
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Image
-            source={require('../../assets/icons/Smartphone.png')} 
+            source={require('../../assets/icons/Smartphone.png')}
             style={styles.logoIcon}
           />
         </View>
@@ -66,12 +85,22 @@ const handleLogin = async () => {
         secureTextEntry={true}
       />
 
-      <TouchableOpacity onPress={handleLogin} activeOpacity={1}style={styles.submitButton}>
-        <Text style={styles.submitButtonText}>Submit</Text>
+      <TouchableOpacity
+        onPress={handleLogin}
+        activeOpacity={1}
+        style={[styles.submitButton, isButtonDisabled && styles.disabledButton]}
+        disabled={isButtonDisabled || loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.submitButtonText}>Submit</Text>
+        )}
       </TouchableOpacity>
+
       <TouchableOpacity activeOpacity={1}>
-        <Text style={styles.forgotPasswordText}>Forget Password ?</Text>
+        <Text style={styles.forgotPasswordText}>Forget Password?</Text>
       </TouchableOpacity>
+
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
@@ -85,12 +114,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingVertical: 20,  
-
+    paddingVertical: 20,
   },
   logoContainer: {
-    
     marginBottom: 20,
+    position: 'relative',
   },
   logoCircle: {
     backgroundColor: '#FF0000',
@@ -101,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   logoIcon: {
-    width: 40, // Replace with your icon size
+    width: 40,
     height: 40,
     tintColor: '#fff',
   },
@@ -119,8 +147,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: 300,
-    height: 50,
+    width: '83%',
     backgroundColor: '#f3f3f3',
     borderRadius: 5,
     paddingHorizontal: 15,
@@ -135,6 +162,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginBottom: 20,
+  },
+  disabledButton: {
+    opacity: 0.7,
   },
   submitButtonText: {
     color: '#fff',
