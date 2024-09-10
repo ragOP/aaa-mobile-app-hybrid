@@ -42,8 +42,7 @@ const HomeScreen = ({navigation}) => {
     },
   ];
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Image
             source={require('../../assets/images/logobg.png')}
@@ -59,11 +58,16 @@ const HomeScreen = ({navigation}) => {
               variant="titleSmall"
               fontStyling={styles.userName}
             />
-            <Text style={styles.userPhone}>Mobile Number</Text>
+             <PaperText
+              text="9696874826"
+              variant="titleSmall"
+              fontStyling={styles.userPhone}
+            />
           </View>
         </View>
 
-        <View style={styles.complaintsSection}>
+        <View style={styles.complaintsSection}>            
+        </View>
           <View style={styles.complaintsCard}>
             <View style={styles.complaintsHeader}>
               <Text style={styles.complaintsTitle}>Your Complaints</Text>
@@ -106,17 +110,15 @@ const HomeScreen = ({navigation}) => {
               ))}
             </Swiper>
           </View>
-        </View>
-
-        <View style={styles.gap}></View>
-
-        <View style={styles.grid}>
+          <View style={styles.grid}>
           <View style={styles.gridItem} />
           <View style={styles.gridItem} />
           <View style={styles.gridItem} />
           <View style={styles.gridItem} />
         </View>
-      </View>
+
+
+   
     </ScrollView>
   );
 };
@@ -139,24 +141,27 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     alignItems: 'center',
-    padding: '25',
+    paddingRight:10,
   },
   profileImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
     marginBottom: 5,
+
   },
   userName: {
     color: '#FFFFFF',
     fontWeight: 'bold',
+
   },
   userPhone: {
     color: '#FFFFFF',
+    paddingRight:4
+
   },
   complaintsSection: {
     backgroundColor: 'red',
-    height: '16%',
   },
 
   complaintsCard: {
@@ -169,8 +174,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    height: '100%',
-  },
+    height: '21%',
+ },
   complaintsContent: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -180,6 +185,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     padding: 5,
+    margin:4,
+    height:170
   },
   complaintsHeader: {
     flexDirection: 'row',
@@ -234,7 +241,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     paddingHorizontal: 20,
-    marginTop: '12%',
+    marginTop: '5%',
   },
   gridItem: {
     width: '46%',
