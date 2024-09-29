@@ -67,7 +67,6 @@ const HomeScreen = ({navigation}) => {
         </View>
 
         <View style={styles.complaintsSection}>            
-        </View>
           <View style={styles.complaintsCard}>
             <View style={styles.complaintsHeader}>
               <Text style={styles.complaintsTitle}>Your Complaints</Text>
@@ -110,6 +109,8 @@ const HomeScreen = ({navigation}) => {
               ))}
             </Swiper>
           </View>
+          </View>
+
           <View style={styles.grid}>
           <View style={styles.gridItem} />
           <View style={styles.gridItem} />
@@ -161,7 +162,8 @@ const styles = StyleSheet.create({
 
   },
   complaintsSection: {
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
+
   },
 
   complaintsCard: {
@@ -174,20 +176,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    height: '21%',
+    height: 260,
  },
-  complaintsContent: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 8,
-    padding: 5,
-    margin:4,
-    height:170
-  },
+
   complaintsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -202,6 +193,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#404969',
+  },
+  complaintsContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 8,
+    padding: 10,
+    margin:4,
+    height:170
   },
   panelType: {
     color: '#f02b2b',
