@@ -26,9 +26,12 @@ const LoginScreen = ({navigation}) => {
       const body = {userName: username, password};
       const response = await customerloginApi(body);
       const token = response?.data?.data?.token;
+      const user = response?.data?.data?.user;
       if (response.data) {
         await AsyncStorage.setItem('aaa_token', token);
         console.log('Token saved successfully to AsyncStorage.', token);
+        await AsyncStorage.setItem('aaa_user', JSON.stringify(user));
+        console.log('User saved successfully to AsyncStorage.', user);
         navigation.navigate('BottomTabNavigation');
       } else {
         toastFunction(

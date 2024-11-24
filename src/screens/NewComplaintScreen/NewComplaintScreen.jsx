@@ -13,6 +13,7 @@ import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { newComplaintApi } from '../../store/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
@@ -36,9 +37,9 @@ const NewComplaintScreen = () => {
   const availablePanels = panels[selectedProject] || [];
 
   const getSeverityText = () => {
-    if (severity < 0.3) return 'Low - Minor Error';
-    if (severity < 0.6) return 'Med - Major Error But Functional';
-    return 'High - Breakdown';
+    if (severity < 0.3) return 'Low';
+    if (severity < 0.6) return 'Medium';
+    return 'High';
   };
 
   const getSeverityColor = () => {
@@ -79,9 +80,11 @@ const NewComplaintScreen = () => {
 
   const severityText = getSeverityText();
 
+  const user = JSON.parse(await AsyncStorage.getItem('aaa_user'));
+
   // Dynamically create FormData
   const formData = new FormData();
-  formData.append('customerId', customerId); // Add the customer ID dynamically
+  formData.append('customerId', user._id);
   formData.append('projectName', selectedProjectName);
   formData.append('siteLocation', siteLocation);
   formData.append('panelSectionName', selectedPanelName);
@@ -96,10 +99,9 @@ const NewComplaintScreen = () => {
       name: `image_${index}.jpg`,
     });
   });
-
+  console.log(formData, "image");
   try {
-    // Make API call
-    const response = await newComplaintApi(customerId, formData); 
+    const response = await newComplaintApi(user._id, formData);
     console.log('Complaint submitted successfully:', response.data);
     navigation.navigate('ComplaintScreen', {
       projectName: selectedProjectName,
@@ -108,10 +110,10 @@ const NewComplaintScreen = () => {
       description,
       siteLocation,
       images,
+      activity: response.data.data.activity,
     });
   } catch (error) {
-    console.error('Error submitting complaint:', error);
-    alert('An error occurred while submitting the complaint. Please try again.');
+    console.error('Error submitting complaint:', error.response ? error.response.data : error.message);
   }
 };
 

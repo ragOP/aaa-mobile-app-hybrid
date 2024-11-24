@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
-import gridImage1 from '../../assets/icons/call.png';  // Replace with your image path
-import gridImage2 from '../../assets/icons/Settings.png'; // Replace with your image path
+// import gridImage1 from '../../assets/icons/call.png';  // Replace with your image path
+// import gridImage2 from '../../assets/icons/Settings.png'; // Replace with your image path
 const HomeScreen = ({navigation}) => {
   const panels = [
     {
@@ -114,11 +114,11 @@ const HomeScreen = ({navigation}) => {
 
           <View style={styles.grid}>
           <TouchableOpacity style={styles.gridItem}  activeOpacity={1}>
-          <Image source={gridImage1} style={styles.gridImage} />
+          {/* <Image source={gridImage1} style={styles.gridImage} /> */}
           <Text style={styles.gridText}>Call Support</Text>
         </TouchableOpacity>
         <View style={styles.gridItem}>
-          <Image source={gridImage2} style={styles.gridImage} />
+          {/* <Image source={gridImage2} style={styles.gridImage} /> */}
           <Text style={styles.gridText}>Warranty & AMC</Text>
         </View>
           <View style={styles.gridItem} />
