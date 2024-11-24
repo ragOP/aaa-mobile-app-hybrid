@@ -16,6 +16,8 @@ import {newComplaintApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AudioRecord from 'react-native-audio-record';
 import {requestMicrophonePermission} from "../../helper/permission"
+import {getLocation} from "../../helper/getLocation";
+import { getAddressFromCoordinates } from "../../helper/getAddress"
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
@@ -57,12 +59,16 @@ const NewComplaintScreen = () => {
     setIsRecording(false);
   };
 
-  // const convertToMp3 = async (filePath) => {
-  //   const outputPath = filePath.replace('.wav', '.mp3');
-  //   await FFmpegKit.execute(`-i ${filePath} ${outputPath}`);
-  //   return outputPath; // Return MP3 file path
-  // };
-
+ const getYourCurrentLocation = async () => {
+  try {
+    const { latitude, longitude } = await getLocation();
+    const fullAddress = await getAddressFromCoordinates(latitude, longitude);
+    setSiteLocation(fullAddress);
+    console.log('User Location:', `Lat: ${latitude}, Lon: ${longitude} -- ${fullAddress}`);
+  } catch (error) {
+    console.error('Error fetching location:', error.message);
+  }
+ }
   const handlePress = () => {
     console.log(audioPath);
     if (isRecording) {
@@ -201,13 +207,13 @@ const NewComplaintScreen = () => {
             placeholderTextColor="black"
           />
         </View>
-        <TouchableOpacity style={styles.autoLocationButton}>
-          <Image
-            source={require('../../assets/icons/location.png')}
-            style={styles.icon}
-          />
-          <Text style={styles.autoLocationText}>Auto Location</Text>
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.autoLocationButton} onPress={getYourCurrentLocation}>
+      <Image
+        source={require('../../assets/icons/location.png')}
+        style={styles.icon}
+      />
+      <Text style={styles.autoLocationText}>Auto Location</Text>
+    </TouchableOpacity>
       </View>
 
       <Picker
