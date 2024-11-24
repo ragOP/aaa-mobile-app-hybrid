@@ -11,6 +11,7 @@ import {
 import {customerloginApi} from '../../store/api';
 import toastFunction from '../../functions/toastFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +19,9 @@ const LoginScreen = ({navigation}) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const handleLogin = async () => {
+    // navigation.navigate('BottomTabNavigation');
     setLoading(true);
+
     try {
       const body = {userName: username, password};
       const response = await customerloginApi(body);
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 20,
-    position: 'relative',
+
   },
   logoCircle: {
     backgroundColor: '#FF0000',
@@ -138,11 +141,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 60,
   },
   subtitle: {
     fontSize: 16,
-    color: '#555',
+    fontWeight: 'bold',
+    color: '#000',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -156,18 +160,18 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#333',
-    width: 300,
+    width: '83%',
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 25,
   },
   disabledButton: {
     opacity: 0.7,
   },
   submitButtonText: {
-    color: '#fff',
+    color: '#FF0000',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -181,7 +185,7 @@ const styles = StyleSheet.create({
     color: '#555',
     textAlign: 'center',
     position: 'absolute',
-    bottom: 20,
+    bottom: '1%',
     fontStyle: 'italic',
   },
 });

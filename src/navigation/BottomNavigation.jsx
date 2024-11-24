@@ -5,6 +5,8 @@ import {colors, defaultStyles} from '../utils/constants';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import PaperText from '../ui/PaperText';
+import ComplaintScreen from '../screens/ComplaintScreen/ComplaintScreen';
+import ProjectScreen from '../screens/ProjectScreen/ProjectScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,7 +52,70 @@ const BottomTabNavigation = () => {
             ),
         }}
       />
-
+ <Tab.Screen
+        name="ComplaintScreen"
+        component={ComplaintScreen}
+        options={{
+          tabBarIcon: ({focused, color, size}) =>
+            focused ? (
+              <View style={styles.tabItemContainerActive}>
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/icons/invoice.png')}
+                />
+                <PaperText
+                  text="Complaints"
+                  variant="titleSmall"
+                  fontStyling={styles.tabText}
+                />
+              </View>
+            ) : (
+              <View style={styles.tabItemContainer}>
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/icons/invoice.png')}
+                />
+                <PaperText
+                  text=""
+                  variant="titleSmall"
+                  fontStyling={styles.tabText}
+                />
+              </View>
+            ),
+        }}
+      />
+       <Tab.Screen
+        name="ProjectScreen"
+        component={ProjectScreen}
+        options={{
+          tabBarIcon: ({focused, color, size}) =>
+            focused ? (
+              <View style={styles.tabItemContainerActive}>
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/icons/invoice.png')}
+                />
+                <PaperText
+                  text="My Projects"
+                  variant="titleSmall"
+                  fontStyling={styles.tabText}
+                />
+              </View>
+            ) : (
+              <View style={styles.tabItemContainer}>
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/icons/invoice.png')}
+                />
+                <PaperText
+                  text=""
+                  variant="titleSmall"
+                  fontStyling={styles.tabText}
+                />
+              </View>
+            ),
+        }}
+      />
       <Tab.Screen
         name="ProfileScreen"
         component={ProfileScreen}
@@ -60,7 +125,7 @@ const BottomTabNavigation = () => {
               <View style={styles.tabItemContainerActive}>
                 <Image
                   style={styles.icon}
-                  source={require('../assets/icons/profile.png')}
+                  source={require('../assets/icons/invoice.png')}
                 />
                 <PaperText
                   text="Profile"
@@ -106,10 +171,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderTopWidth: 2,
-    borderColor: colors.primary,
+    borderColor: 'red',
   },
   tabText: {
-    color: colors.primary,
+    color: 'black',
     marginTop: 2,
   },
 });

@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    paddingVertical: 20,
   },
   logoContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 20,
+
   },
   logoCircle: {
     backgroundColor: '#FF0000',
@@ -148,17 +148,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 60,
   },
   subtitle: {
     fontSize: 16,
-    color: '#555',
+    fontWeight: 'bold',
+    color: '#000',
     textAlign: 'center',
     marginBottom: 20,
   },
   input: {
-    width: 300,
-    height: 50,
+    width: '83%',
     backgroundColor: '#f3f3f3',
     borderRadius: 5,
     paddingHorizontal: 15,
@@ -167,18 +167,18 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#333',
-    width: 300,
+    width: '83%',
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 25,
   },
   disabledButton: {
-    opacity: 0.5,
+    opacity: 0.7,
   },
   submitButtonText: {
-    color: '#fff',
+    color: '#FF0000',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     color: '#555',
     textAlign: 'center',
     position: 'absolute',
-    bottom: 20,
+    bottom: '1%',
     fontStyle: 'italic',
   },
 });

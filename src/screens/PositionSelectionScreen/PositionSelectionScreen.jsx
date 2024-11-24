@@ -14,7 +14,6 @@ const PositionSelectionScreen = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.title}>Please Select Your Position</Text>
       <Text style={styles.subtitle}>We look forward to serving you.</Text>
-
       <TouchableOpacity activeOpacity={1}style={styles.customerButton}
                 onPress={handleLogin}
 >
@@ -29,7 +28,7 @@ const PositionSelectionScreen = ({navigation}) => {
 
       <TouchableOpacity activeOpacity={1} style={styles.engineerButton}
       onPress={handleEngineerLogin}>
-        <Text style={styles.buttonText}>Service Engineer</Text>
+        <Text style={styles.engineerButtonText}>Service Engineer</Text>
       </TouchableOpacity>
 
       <Text style={styles.footerText}>
@@ -75,6 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
+    marginTop:20
   },
   buttonText: {
     color: '#fff',
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 30,
   },
   line: {
     height: 1,

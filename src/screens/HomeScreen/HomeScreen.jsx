@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
-
+import gridImage1 from '../../assets/icons/call.png';  // Replace with your image path
+import gridImage2 from '../../assets/icons/Settings.png'; // Replace with your image path
 const HomeScreen = ({navigation}) => {
   const panels = [
     {
@@ -72,7 +73,7 @@ const HomeScreen = ({navigation}) => {
               <Text style={styles.complaintsTitle}>Your Complaints</Text>
               <TouchableOpacity
                 activeOpacity={1}
-                onPress={() => console.log('View More pressed')}>
+                onPress={() => navigation.navigate('ViewMoreComplaints')}>
                 <Text style={styles.viewMore}>View More</Text>
               </TouchableOpacity>
             </View>
@@ -112,12 +113,18 @@ const HomeScreen = ({navigation}) => {
           </View>
 
           <View style={styles.grid}>
-          <View style={styles.gridItem} />
-          <View style={styles.gridItem} />
-          <View style={styles.gridItem} />
-          <View style={styles.gridItem} />
+          <TouchableOpacity style={styles.gridItem}  activeOpacity={1}>
+          <Image source={gridImage1} style={styles.gridImage} />
+          <Text style={styles.gridText}>Call Support</Text>
+        </TouchableOpacity>
+        <View style={styles.gridItem}>
+          <Image source={gridImage2} style={styles.gridImage} />
+          <Text style={styles.gridText}>Warranty & AMC</Text>
         </View>
-
+          <View style={styles.gridItem} />
+          <View style={styles.gridItem} />
+        
+          </View>
 
    
     </ScrollView>
@@ -259,7 +266,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  gridImage: {
+    width: '30%',  // Adjust to fit the grid item width
+    height: '30%', // Adjust to fit the grid item height
+    borderRadius: 8, // Optional: rounds the image corners
+    resizeMode: 'fit', // Ensures the image covers the grid item area
+  },
+  gridText :{
+    color: 'black',
+    fontWeight: '500',
+    fontSize: 14,
+    marginTop: 10,
+  }
 });
 
 export default HomeScreen;
