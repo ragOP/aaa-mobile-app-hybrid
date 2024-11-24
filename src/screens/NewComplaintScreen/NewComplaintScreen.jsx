@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,8 +12,10 @@ import Slider from '@react-native-community/slider';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import { newComplaintApi } from '../../store/api';
+import {newComplaintApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AudioRecord from 'react-native-audio-record';
+import {requestMicrophonePermission} from "../../helper/permission"
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
@@ -23,11 +25,52 @@ const NewComplaintScreen = () => {
   const [description, setDescription] = useState('');
   const [siteLocation, setSiteLocation] = useState('');
   const [images, setImages] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioPath, setAudioPath] = useState('');
   const projects = [
     {id: '1', name: 'Project A'},
     {id: '2', name: 'Project B'},
     {id: '3', name: 'Project C'},
   ];
+
+  useEffect(() => {
+    requestMicrophonePermission();
+    AudioRecord.init({
+      sampleRate: 16000,
+      channels: 1,
+      bitsPerSample: 16,
+      audioSource: 6,
+      wavFile: 'audio.wav',
+    });
+  }, []);
+
+  const startRecording = () => {
+    if (!isRecording) {
+      AudioRecord.start();
+      setIsRecording(true);
+    }
+  };
+
+  const stopRecording = async () => {
+    const filePath = await AudioRecord.stop();
+    setAudioPath(filePath);
+    setIsRecording(false);
+  };
+
+  // const convertToMp3 = async (filePath) => {
+  //   const outputPath = filePath.replace('.wav', '.mp3');
+  //   await FFmpegKit.execute(`-i ${filePath} ${outputPath}`);
+  //   return outputPath; // Return MP3 file path
+  // };
+
+  const handlePress = () => {
+    console.log(audioPath);
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
 
   const panels = {
     1: ['Panel A1', 'Panel A2', 'Panel A3'],
@@ -68,55 +111,62 @@ const NewComplaintScreen = () => {
   const isSubmitDisabled = () => {
     return !selectedProject || !selectedPanel || !siteLocation || !description;
   };
- const handleSubmit = async () => {
-  // Dynamically fetch project, panel, and severity information
-  const selectedProjectName =
-    projects.find(project => project.id === selectedProject)?.name ||
-    'No project selected';
+  const handleSubmit = async () => {
+    // Dynamically fetch project, panel, and severity information
+    const selectedProjectName =
+      projects.find(project => project.id === selectedProject)?.name ||
+      'No project selected';
 
-  const selectedPanelName =
-    panels[selectedProject]?.find(panel => panel === selectedPanel) ||
-    'No panel selected';
+    const selectedPanelName =
+      panels[selectedProject]?.find(panel => panel === selectedPanel) ||
+      'No panel selected';
 
-  const severityText = getSeverityText();
+    const severityText = getSeverityText();
 
-  const user = JSON.parse(await AsyncStorage.getItem('aaa_user'));
+    const user = JSON.parse(await AsyncStorage.getItem('aaa_user'));
 
-  // Dynamically create FormData
-  const formData = new FormData();
-  formData.append('customerId', user._id);
-  formData.append('projectName', selectedProjectName);
-  formData.append('siteLocation', siteLocation);
-  formData.append('panelSectionName', selectedPanelName);
-  formData.append('severity', severityText);
-  formData.append('description', description);
-
-  // Dynamically append images (if any)
-  images.forEach((image, index) => {
-    formData.append('images', {
-      uri: image.uri,
-      type: image.type,
-      name: `image_${index}.jpg`,
+    // Dynamically create FormData
+    const formData = new FormData();
+    formData.append('customerId', user._id);
+    formData.append('projectName', selectedProjectName);
+    formData.append('siteLocation', siteLocation);
+    formData.append('panelSectionName', selectedPanelName);
+    formData.append('severity', severityText);
+    formData.append('description', description);
+    formData.append('voiceNote', {
+      uri: `file://${audioPath}`, // Add `file://` prefix
+      type: 'audio/wav',
+      name: 'audio.wav',
     });
-  });
-  console.log(formData, "image");
-  try {
-    const response = await newComplaintApi(user._id, formData);
-    console.log('Complaint submitted successfully:', response.data);
-    navigation.navigate('ComplaintScreen', {
-      projectName: selectedProjectName,
-      panelName: selectedPanelName,
-      severity: severityText,
-      description,
-      siteLocation,
-      images,
-      activity: response.data.data.activity,
-    });
-  } catch (error) {
-    console.error('Error submitting complaint:', error.response ? error.response.data : error.message);
-  }
-};
 
+    // Dynamically append images (if any)
+    images.forEach((image, index) => {
+      formData.append('images', {
+        uri: image.uri,
+        type: image.type,
+        name: `image_${index}.jpg`,
+      });
+    });
+    console.log(formData, 'image');
+    try {
+      const response = await newComplaintApi(user._id, formData);
+      console.log('Complaint submitted successfully:', response.data);
+      navigation.navigate('ComplaintScreen', {
+        projectName: selectedProjectName,
+        panelName: selectedPanelName,
+        severity: severityText,
+        description,
+        siteLocation,
+        images,
+        activity: response.data.data.activity,
+      });
+    } catch (error) {
+      console.error(
+        'Error submitting complaint:',
+        error.response ? error.response.data : error.message,
+      );
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -182,7 +232,7 @@ const NewComplaintScreen = () => {
           onChangeText={setDescription}
           placeholderTextColor="black"
         />
-        <TouchableOpacity style={styles.micButton}>
+        <TouchableOpacity onPress={handlePress} style={styles.micButton}>
           <Image
             source={require('../../assets/icons/mic.png')}
             style={styles.micIcon}
@@ -237,10 +287,9 @@ const NewComplaintScreen = () => {
 
       {/* Submit Button */}
       <TouchableOpacity
-      style={[styles.submitButton, isSubmitDisabled() && {opacity: 0.5}]}
-      onPress={handleSubmit}
-      disabled={isSubmitDisabled()}
-    >
+        style={[styles.submitButton, isSubmitDisabled() && {opacity: 0.5}]}
+        onPress={handleSubmit}
+        disabled={isSubmitDisabled()}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>

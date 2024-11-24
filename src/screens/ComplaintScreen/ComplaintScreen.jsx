@@ -37,7 +37,6 @@ const ComplaintScreen = ({route, navigation}) => {
         const user = await getUserDetails();
         if (user?._id) {
           const response = await getComplaintsApi(user._id);
-          console.log(response.data.data.data);
           setComplaints(response.data.data.data);
         }
       } catch (error) {
@@ -71,20 +70,16 @@ const ComplaintScreen = ({route, navigation}) => {
               <Text style={styles.viewMoreText}>View More</Text>
             </View>
 
-            <View style={styles.infoRow}>
-              <Text style={styles.labelText}>
-                Project Name: {complaint.projectName}
-              </Text>
-              <Text style={styles.labelText}>
-                Activity: {complaint.activity}
-              </Text>
-            </View>
+            {/* <View style={styles.infoRow}> */}
+            <Text style={styles.labelText}>
+              Project Name: {complaint.projectName}
+            </Text>
+            <Text style={styles.labelText}>Activity: {complaint.activity}</Text>
+            {/* </View> */}
 
-            <View style={styles.infoRow}>
-              <Text style={styles.labelText}>
-                Site Location: {complaint.siteLocation}
-              </Text>
-            </View>
+            <Text style={styles.labelText}>
+              Site Location: {complaint.siteLocation}
+            </Text>
 
             <View style={styles.divider} />
 
