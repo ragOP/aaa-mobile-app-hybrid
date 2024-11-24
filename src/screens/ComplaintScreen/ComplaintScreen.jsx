@@ -16,7 +16,7 @@ import warningIcon from '../../assets/icons/Priority.png';
 import checkCircleIcon from '../../assets/icons/Checkmark.png';
 import {getComplaintsApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ComplaintScreen = ({route, navigation}) => {
   const [complaints, setComplaints] = useState([]);
@@ -25,8 +25,10 @@ const ComplaintScreen = ({route, navigation}) => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
 
-  const handleCallTechnician = () => {
-    const phoneNumber = 'tel:+1234567890';
+  const handleCallTechnician = number => {
+    console.log('number: ' + number);
+    if (number == null) return;
+    const phoneNumber = `tel:+91-${number}`;
     Linking.openURL(phoneNumber).catch(err =>
       console.error('Failed to open dialer', err),
     );
@@ -46,7 +48,7 @@ const ComplaintScreen = ({route, navigation}) => {
         }
       };
       fetchData();
-    }, [])
+    }, []),
   );
 
   return (
@@ -77,7 +79,10 @@ const ComplaintScreen = ({route, navigation}) => {
             <Text style={styles.labelText}>
               Project Name: {complaint.projectName}
             </Text>
-            <Text style={styles.labelText}>Activity: {complaint.activity}</Text>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Activity </Text>
+              <Text style={styles.statusCode}> : {complaint.activity}</Text>
+            </View>
             {/* </View> */}
 
             <Text style={styles.labelText}>
@@ -130,7 +135,9 @@ const ComplaintScreen = ({route, navigation}) => {
             <View style={styles.actionButtons}>
               <TouchableOpacity
                 style={styles.actionButton}
-                onPress={handleCallTechnician}>
+                onPress={() =>
+                  handleCallTechnician(complaint?.technician?.phoneNumber)
+                }>
                 <Image source={phoneIcon} style={styles.actionIcon} />
                 <Text style={styles.actionButtonText}>Call Technician</Text>
               </TouchableOpacity>
@@ -229,6 +236,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 2,
+  },
+  row: {
+    flexDirection: 'row',
   },
   labelText: {
     fontSize: 14,

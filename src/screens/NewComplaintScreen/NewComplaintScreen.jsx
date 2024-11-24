@@ -18,17 +18,20 @@ import AudioRecord from 'react-native-audio-record';
 import {requestMicrophonePermission} from "../../helper/permission"
 import {getLocation} from "../../helper/getLocation";
 import { getAddressFromCoordinates } from "../../helper/getAddress"
+import pause from "../../assets/icons/pause.png";
+import play from "../../assets/icons/mic.png";
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedPanel, setSelectedPanel] = useState('');
   const [severity, setSeverity] = useState(0);
-  const [description, setDescription] = useState('');
+  const [issuedescription, setIssueDescription] = useState('');
   const [siteLocation, setSiteLocation] = useState('');
   const [images, setImages] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [audioPath, setAudioPath] = useState('');
+  const [audioIcons, setAudioIcons] = useState(play);
   const projects = [
     {id: '1', name: 'Project A'},
     {id: '2', name: 'Project B'},
@@ -73,8 +76,10 @@ const NewComplaintScreen = () => {
     console.log(audioPath);
     if (isRecording) {
       stopRecording();
+      setAudioIcons(play);
     } else {
       startRecording();
+      setAudioIcons(pause);
     }
   };
 
@@ -115,7 +120,7 @@ const NewComplaintScreen = () => {
     );
   };
   const isSubmitDisabled = () => {
-    return !selectedProject || !selectedPanel || !siteLocation || !description;
+    return !selectedProject || !selectedPanel || !siteLocation || !issuedescription;
   };
   const handleSubmit = async () => {
     // Dynamically fetch project, panel, and severity information
@@ -138,7 +143,7 @@ const NewComplaintScreen = () => {
     formData.append('siteLocation', siteLocation);
     formData.append('panelSectionName', selectedPanelName);
     formData.append('severity', severityText);
-    formData.append('description', description);
+    formData.append('issuedescription', issuedescription);
     formData.append('voiceNote', {
       uri: `file://${audioPath}`, // Add `file://` prefix
       type: 'audio/wav',
@@ -226,13 +231,13 @@ const NewComplaintScreen = () => {
           style={styles.descriptionInput}
           multiline
           placeholder="A Product of AAA SWITCH GEAR PVT LTD\nAll Rights Reserved."
-          value={description}
-          onChangeText={setDescription}
+          value={issuedescription}
+          onChangeText={setIssueDescription}
           placeholderTextColor="black"
         />
         <TouchableOpacity onPress={handlePress} style={styles.micButton}>
           <Image
-            source={require('../../assets/icons/mic.png')}
+            source={audioIcons}
             style={styles.micIcon}
           />
         </TouchableOpacity>
