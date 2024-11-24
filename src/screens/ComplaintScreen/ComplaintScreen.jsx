@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import warningIcon from '../../assets/icons/Priority.png';
 import checkCircleIcon from '../../assets/icons/Checkmark.png';
 import {getComplaintsApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ComplaintScreen = ({route, navigation}) => {
   const [complaints, setComplaints] = useState([]);
@@ -31,20 +32,22 @@ const ComplaintScreen = ({route, navigation}) => {
     );
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = await getUserDetails();
-        if (user?._id) {
-          const response = await getComplaintsApi(user._id);
-          setComplaints(response.data.data.data);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const user = await getUserDetails();
+          if (user?._id) {
+            const response = await getComplaintsApi(user._id);
+            setComplaints(response.data.data.data);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+      };
+      fetchData();
+    }, [])
+  );
 
   return (
     <ScrollView style={styles.container}>

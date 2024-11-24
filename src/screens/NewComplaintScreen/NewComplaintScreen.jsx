@@ -157,15 +157,7 @@ const NewComplaintScreen = () => {
     try {
       const response = await newComplaintApi(user._id, formData);
       console.log('Complaint submitted successfully:', response.data);
-      navigation.navigate('ComplaintScreen', {
-        projectName: selectedProjectName,
-        panelName: selectedPanelName,
-        severity: severityText,
-        description,
-        siteLocation,
-        images,
-        activity: response.data.data.activity,
-      });
+      navigation.navigate('ComplaintScreen');
     } catch (error) {
       console.error(
         'Error submitting complaint:',
