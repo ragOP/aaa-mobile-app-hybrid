@@ -125,7 +125,7 @@ const BottomTabNavigation = () => {
               <View style={styles.tabItemContainerActive}>
                 <Image
                   style={styles.icon}
-                  source={require('../assets/icons/invoice.png')}
+                  source={require('../assets/icons/profile_outline.png')}
                 />
                 <PaperText
                   text="Profile"

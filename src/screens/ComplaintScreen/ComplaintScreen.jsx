@@ -14,7 +14,7 @@ import addIcon from '../../assets/icons/+.png';
 import phoneIcon from '../../assets/icons/Call.png';
 import warningIcon from '../../assets/icons/Priority.png';
 import checkCircleIcon from '../../assets/icons/Checkmark.png';
-import {getComplaintsApi} from '../../store/api';
+import {getComplaintsApi, raisePrority} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 
@@ -32,6 +32,15 @@ const ComplaintScreen = ({route, navigation}) => {
     Linking.openURL(phoneNumber).catch(err =>
       console.error('Failed to open dialer', err),
     );
+  };
+
+  const handleRaisePriority = async(id) => {
+    try {
+      const response = await raisePrority(id);
+      console.log('Priority raised successfully:', response.data);
+    } catch (error) {
+      console.error('Failed to open dialer', error);
+    }
   };
 
   useFocusEffect(
@@ -147,7 +156,7 @@ const ComplaintScreen = ({route, navigation}) => {
                 <Image source={phoneIcon} style={styles.actionIcon} />
                 <Text style={styles.actionButtonText}>Call Technician</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
+              <TouchableOpacity style={styles.actionButton} onPress={()=> handleRaisePriority(complaint._id)}>
                 <Image source={warningIcon} style={styles.actionIcon} />
                 <Text style={styles.actionButtonText}>Raise Priority</Text>
               </TouchableOpacity>

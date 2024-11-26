@@ -8,6 +8,7 @@ import EngineerBottomNavigation from './EngineerBottomNavigation';
 import ComplainDetailScreen from '../screens/ComplainDetailScreen/ComplainDetailScreen';
 import ViewMoreComplaints from '../screens/ViewMoreComplaints/ViewMoreComplaints';
 import NewComplaintScreen from '../screens/NewComplaintScreen/NewComplaintScreen';
+import ComplaintScreen from '../screens/ComplaintScreen/ComplaintScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,10 @@ const Navigation = () => {
          <Stack.Screen
           name="NewComplaintScreen"
           component={NewComplaintScreen}
+        />
+        <Stack.Screen
+          name="ComplaintScreen"
+          component={ComplaintScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

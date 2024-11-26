@@ -6,28 +6,15 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getComplaintsApi} from '../../store/api';
 import phoneIcon from '../../assets/icons/Call.png';
-import checkCircleIcon from '../../assets/icons/Checkmark.png';
-// import gridImage1 from '../../assets/icons/call.png';  // Replace with your image path
-// import gridImage2 from '../../assets/icons/Settings.png'; // Replace with your image path
+import checkCircleIcon from '../../assets/icons/Settings.png';
 const HomeScreen = ({navigation}) => {
-  const [user, setUser] = useState(null);
   const [complaints, setComplaints] = useState([]);
-
-  const handleCallTechnician = number => {
-    console.log('number: ' + number);
-    if (number == null) return;
-    const phoneNumber = `tel:+91-${number}`;
-    Linking.openURL(phoneNumber).catch(err =>
-      console.error('Failed to open dialer', err),
-    );
-  };
 
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
@@ -79,7 +66,8 @@ const HomeScreen = ({navigation}) => {
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => navigation.navigate('ViewMoreComplaints')}>
-              <Text style={styles.viewMore}>View More</Text>
+              <Text style={styles.viewMore} onPress={() =>
+                    navigation.navigate('ComplaintScreen')}>View More</Text>
             </TouchableOpacity>
           </View>
 
