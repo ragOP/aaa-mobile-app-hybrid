@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,127 +6,132 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getComplaintsApi} from '../../store/api';
+import phoneIcon from '../../assets/icons/Call.png';
+import checkCircleIcon from '../../assets/icons/Checkmark.png';
 // import gridImage1 from '../../assets/icons/call.png';  // Replace with your image path
 // import gridImage2 from '../../assets/icons/Settings.png'; // Replace with your image path
 const HomeScreen = ({navigation}) => {
-  const panels = [
-    {
-      panelType: 'APFC Panel',
-      tokenNumber: '68',
-      status: 'Ongoing',
-      projectName: 'Project Name:',
-      siteLocation: 'Site Location:',
-    },
-    {
-      panelType: 'APFC Panel',
-      tokenNumber: '69',
-      status: 'Completed',
-      projectName: 'Project Name:',
-      siteLocation: 'Site Location:',
-    },
-    {
-      panelType: 'Another Panel',
-      tokenNumber: '70',
-      status: 'Ongoing',
-      projectName: 'Project Name:',
-      siteLocation: 'Site Location:',
-    },
-    {
-      panelType: 'Another Panel',
-      tokenNumber: '71',
-      status: 'Ongoing',
-      projectName: 'Project Name:',
-      siteLocation: 'Site Location:',
-    },
-  ];
+  const [user, setUser] = useState(null);
+  const [complaints, setComplaints] = useState([]);
+
+  const handleCallTechnician = number => {
+    console.log('number: ' + number);
+    if (number == null) return;
+    const phoneNumber = `tel:+91-${number}`;
+    Linking.openURL(phoneNumber).catch(err =>
+      console.error('Failed to open dialer', err),
+    );
+  };
+
+  const getUserDetails = async () => {
+    return JSON.parse(await AsyncStorage.getItem('aaa_user'));
+  };
+
+  useEffect(() => {
+    const fetchAllComplaints = async () => {
+      try {
+        const data = await getUserDetails();
+        const response = await getComplaintsApi(data._id);
+        console.log('challaaa');
+        setComplaints(response.data.data.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchAllComplaints();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
-        <View style={styles.header}>
+      <View style={styles.header}>
+        <Image
+          source={require('../../assets/images/logobg.png')}
+          style={styles.logo}
+        />
+        <View style={styles.userInfo}>
           <Image
-            source={require('../../assets/images/logobg.png')}
-            style={styles.logo}
+            source={require('../../assets/images/avatar.png')}
+            style={styles.profileImage}
           />
-          <View style={styles.userInfo}>
-            <Image
-              source={require('../../assets/images/avatar.png')}
-              style={styles.profileImage}
-            />
-            <PaperText
-              text="Name"
-              variant="titleSmall"
-              fontStyling={styles.userName}
-            />
-             <PaperText
-              text="9696874826"
-              variant="titleSmall"
-              fontStyling={styles.userPhone}
-            />
-          </View>
+          <PaperText
+            text="Farish"
+            variant="titleSmall"
+            fontStyling={styles.userName}
+          />
+          <PaperText
+            text="98989898"
+            variant="titleSmall"
+            fontStyling={styles.userPhone}
+          />
         </View>
+      </View>
 
-        <View style={styles.complaintsSection}>            
-          <View style={styles.complaintsCard}>
-            <View style={styles.complaintsHeader}>
-              <Text style={styles.complaintsTitle}>Your Complaints</Text>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => navigation.navigate('ViewMoreComplaints')}>
-                <Text style={styles.viewMore}>View More</Text>
-              </TouchableOpacity>
-            </View>
+      <View style={styles.complaintsSection}>
+        <View style={styles.complaintsCard}>
+          <View style={styles.complaintsHeader}>
+            <Text style={styles.complaintsTitle}>Your Complaints</Text>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => navigation.navigate('ViewMoreComplaints')}>
+              <Text style={styles.viewMore}>View More</Text>
+            </TouchableOpacity>
+          </View>
 
+          {complaints && (
             <Swiper showsPagination={false} autoplay={false} loop={false}>
-              {panels.map((panel, index) => (
+              {complaints.map((complaint, index) => (
                 <TouchableOpacity
                   key={index}
                   activeOpacity={1}
                   style={styles.complaintsContent}
-                  onPress={() => navigation.navigate('ComplainDetailScreen')}>
-                  <Text style={styles.panelType}>{panel.panelType}</Text>
+                  onPress={() =>
+                    navigation.navigate('ComplainDetailScreen', {complaint})
+                  }>
+                  <Text style={styles.panelType}>APFC Panel</Text>
                   <View style={styles.tokenStatusRow}>
                     <Text style={styles.tokenText}>
-                      Token No.{' '}
-                      <Text style={styles.tokenNumber}>
-                        {panel.tokenNumber}
-                      </Text>
+                      Token No. <Text style={styles.tokenNumber}>88</Text>
                     </Text>
                     <Text style={styles.status}>
                       Status:
                       <Text
                         style={[
                           styles.ongoing,
-                          panel.status === 'Completed' ? {color: 'red'} : {},
+                          complaint.activity === 'Closed' ? {color: 'red'} : {},
                         ]}>
-                        {panel.status}
+                        {complaint.activity}
                       </Text>
                     </Text>
                   </View>
-                  <Text style={styles.detailText}>{panel.projectName}</Text>
-                  <Text style={styles.detailText}>{panel.siteLocation}</Text>
+                  <Text style={styles.detailText}>{complaint.projectName}</Text>
+                  <Text style={styles.detailText}>
+                    {complaint.siteLocation}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </Swiper>
-          </View>
-          </View>
+          )}
+        </View>
+      </View>
 
-          <View style={styles.grid}>
-          <TouchableOpacity style={styles.gridItem}  activeOpacity={1}>
-          {/* <Image source={gridImage1} style={styles.gridImage} /> */}
+      <View style={styles.grid}>
+        <TouchableOpacity style={styles.gridItem} activeOpacity={1}>
+          <Image source={phoneIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Call Support</Text>
         </TouchableOpacity>
         <View style={styles.gridItem}>
-          {/* <Image source={gridImage2} style={styles.gridImage} /> */}
+          <Image source={checkCircleIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Warranty & AMC</Text>
         </View>
-          <View style={styles.gridItem} />
-          <View style={styles.gridItem} />
-        
-          </View>
-
-   
+        <View style={styles.gridItem} />
+        <View style={styles.gridItem} />
+      </View>
     </ScrollView>
   );
 };
@@ -149,28 +154,24 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     alignItems: 'center',
-    paddingRight:10,
+    paddingRight: 10,
   },
   profileImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
     marginBottom: 5,
-
   },
   userName: {
     color: '#FFFFFF',
     fontWeight: 'bold',
-
   },
   userPhone: {
     color: '#FFFFFF',
-    paddingRight:4
-
+    paddingRight: 4,
   },
   complaintsSection: {
     // backgroundColor: 'red',
-
   },
 
   complaintsCard: {
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     height: 260,
- },
+  },
 
   complaintsHeader: {
     flexDirection: 'row',
@@ -210,8 +211,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     padding: 10,
-    margin:4,
-    height:170
+    margin: 4,
+    height: 170,
   },
   panelType: {
     color: '#f02b2b',
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   ongoing: {
-    color: 'green',
+    color: 'orange',
   },
   detailText: {
     fontSize: 14,
@@ -270,17 +271,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   gridImage: {
-    width: '30%',  // Adjust to fit the grid item width
+    width: '30%', // Adjust to fit the grid item width
     height: '30%', // Adjust to fit the grid item height
     borderRadius: 8, // Optional: rounds the image corners
     resizeMode: 'fit', // Ensures the image covers the grid item area
   },
-  gridText :{
+  gridText: {
     color: 'black',
     fontWeight: '500',
     fontSize: 14,
     marginTop: 10,
-  }
+  },
 });
 
 export default HomeScreen;

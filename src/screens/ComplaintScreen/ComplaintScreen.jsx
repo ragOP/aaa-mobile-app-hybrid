@@ -72,7 +72,13 @@ const ComplaintScreen = ({route, navigation}) => {
           <View key={index} style={styles.card}>
             <View style={styles.cardHeader}>
               <Text style={styles.panelText}>APFC Panel</Text>
-              <Text style={styles.viewMoreText}>View More</Text>
+              <Text
+                style={styles.viewMoreText}
+                onPress={() =>
+                  navigation.navigate('ComplainDetailScreen', {complaint})
+                }>
+                View More
+              </Text>
             </View>
 
             {/* <View style={styles.infoRow}> */}
