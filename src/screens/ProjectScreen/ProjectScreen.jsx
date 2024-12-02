@@ -1,36 +1,60 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView ,Image} from 'react-native';
-import warrantyImage from '../..//assets/icons/Settings.png'; 
-import amcImage from '../../assets/icons/doc.png'; 
-const ProjectCard = ({ projectName, panels, activity, location, warrantyStatus, amcStatus }) => {
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
+import warrantyImage from '../..//assets/icons/Settings.png';
+import amcImage from '../../assets/icons/doc.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getProjectsApi} from '../../store/api';
+import {ActivityIndicator} from 'react-native-paper';
+const ProjectCard = ({
+  projectName,
+  panels,
+  activity,
+  location,
+  warrantyStatus,
+  amcStatus,
+}) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardHeader}>
-        <Text style={styles.projectName}>Project Name :</Text>
+        <Text style={styles.projectName}>{projectName || '-'}</Text>
         <TouchableOpacity>
           <Text style={styles.viewMore}>View More</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.detailTextRow}>
-  <Text style={styles.panelText}>No. Of Panels: {panels}</Text>
-  <Text style={[styles.label, styles.activityText]}>
-    Activity: <Text style={[styles.status, activity === 'Ongoing' ? styles.ongoing : styles.delivered]}>{activity}</Text>
-  </Text>
-</View>
+        <Text style={styles.panelText}>No. Of Panels: {panels}</Text>
+        <Text style={[styles.label, styles.activityText]}>
+          Activity:{' '}
+          <Text
+            style={[
+              styles.status,
+              activity === 'Ongoing' ? styles.ongoing : styles.delivered,
+            ]}>
+            {activity}
+          </Text>
+        </Text>
+      </View>
 
       <Text style={styles.detailText}>Site Location: {location}</Text>
-      
+
       <View style={styles.divider} />
-      
+
       <View style={styles.statusContainer}>
         <View style={styles.statusBox}>
-        <Image source={warrantyImage} style={styles.statusImage} />
-        <Text style={styles.statusTitle}>Warranty</Text>
+          <Image source={warrantyImage} style={styles.statusImage} />
+          <Text style={styles.statusTitle}>Warranty</Text>
           <Text style={styles.statusText}>{warrantyStatus}</Text>
         </View>
         <View style={styles.statusBox}>
-        <Image source={amcImage} style={styles.statusImage} />
-        <Text style={styles.statusTitle}>AMC</Text>
+          <Image source={amcImage} style={styles.statusImage} />
+          <Text style={styles.statusTitle}>AMC</Text>
           <Text style={styles.statusText}>{amcStatus}</Text>
         </View>
       </View>
@@ -39,25 +63,57 @@ const ProjectCard = ({ projectName, panels, activity, location, warrantyStatus, 
 };
 
 const ProjectScreen = () => {
+  const [projects, setProjects] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const getUserDetails = async () => {
+    return JSON.parse(await AsyncStorage.getItem('aaa_user'));
+  };
+
+  useEffect(() => {
+    const fetchAllProjects = async () => {
+      try {
+        setIsFetching(true);
+        const data = await getUserDetails();
+        const response = await getProjectsApi(data._id);
+
+        setProjects(response?.data?.data?.data || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+    fetchAllProjects();
+  }, []);
+
+  console.log('>>>>', projects);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.screenTitle}>My Projects</Text>
-      <ProjectCard
-        projectName="Project 1"
-        panels="50"
-        activity="Ongoing"
-        location="Location A"
-        warrantyStatus="Active: 81 days left"
-        amcStatus="Not Applicable"
-      />
-      <ProjectCard
-        projectName="Project 2"
-        panels="100"
-        activity="Delivered"
-        location="Location B"
-        warrantyStatus="Expired"
-        amcStatus="Not Applicable"
-      />
+
+      {isFetching ? (
+        <View style={styles.centeredContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : projects && projects.length > 0 ? (
+        projects.map(project => (
+          <ProjectCard
+            key={project?._id}
+            projectName={project?.title || ''}
+            panels={project?.panels?.length || 0}
+            activity={project?.activity}
+            location={project?.siteLocation}
+            warrantyStatus="Active: 81 days left"
+            amcStatus="Not Applicable"
+          />
+        ))
+      ) : (
+        <View style={styles.notFoundContainer}>
+          <Text style={styles.notFoundText}>No projects found.</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -81,7 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowRadius: 5,
     elevation: 5,
   },
@@ -116,9 +172,7 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: 'black',
     marginVertical: 10,
-
   },
-  
 
   statusContainer: {
     flexDirection: 'row',
@@ -132,11 +186,11 @@ const styles = StyleSheet.create({
     width: '40%',
     shadowColor: '#000',
     shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowRadius: 5,
     elevation: 4,
-    borderBottomEndRadius:12,
-borderBottomStartRadius:12
+    borderBottomEndRadius: 12,
+    borderBottomStartRadius: 12,
   },
   statusTitle: {
     fontSize: 14,
@@ -159,11 +213,27 @@ borderBottomStartRadius:12
     fontSize: 14,
     color: 'red',
     marginVertical: 3,
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
   },
   panelText: {
-    color:"black"
-  }
+    color: 'black',
+  },
+  notFoundContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 32,
+  },
+  notFoundText: {
+    fontSize: 16,
+    color: '#888',
+  },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 32,
+  },
 });
 
 export default ProjectScreen;

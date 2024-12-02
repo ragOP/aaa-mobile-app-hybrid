@@ -34,7 +34,7 @@ const ComplaintScreen = ({route, navigation}) => {
     );
   };
 
-  const handleRaisePriority = async(id) => {
+  const handleRaisePriority = async id => {
     try {
       const response = await raisePrority(id);
       console.log('Priority raised successfully:', response.data);
@@ -80,7 +80,7 @@ const ComplaintScreen = ({route, navigation}) => {
         complaints.map((complaint, index) => (
           <View key={index} style={styles.card}>
             <View style={styles.cardHeader}>
-              <Text style={styles.panelText}>APFC Panel</Text>
+              <Text style={styles.panelText}>{complaint?.projectName}</Text>
               <Text
                 style={styles.viewMoreText}
                 onPress={() =>
@@ -92,25 +92,33 @@ const ComplaintScreen = ({route, navigation}) => {
 
             {/* <View style={styles.infoRow}> */}
             <Text style={styles.labelText}>
-              Project Name: {complaint.projectName}
+              Project Name: {complaint?.projectName || '-'}
             </Text>
             <View style={styles.row}>
               <Text style={styles.labelText}>Activity </Text>
-              <Text style={styles.statusCode}> : {complaint.activity}</Text>
+              <Text style={styles.statusCode}>
+                {' '}
+                : {complaint?.activity || '-'}
+              </Text>
             </View>
             {/* </View> */}
 
             <Text style={styles.labelText}>
-              Site Location: {complaint.siteLocation}
+              Site Location: {complaint?.siteLocation || '-'}
             </Text>
 
             <View style={styles.divider} />
 
             <Text style={styles.statusText}>
               <Text style={styles.labelText}>Current Status: </Text>
-              <Text style={styles.statusCode}>{complaint.activity}</Text>
+              <Text style={styles.statusCode}>
+                {complaint?.activity || '-'}
+              </Text>
               {complaint.statusCode && (
-                <Text style={styles.statusCode}> : {complaint.statusCode}</Text>
+                <Text style={styles.statusCode}>
+                  {' '}
+                  : {complaint?.statusCode || '-'}
+                </Text>
               )}
             </Text>
 
@@ -118,28 +126,28 @@ const ComplaintScreen = ({route, navigation}) => {
             <View style={styles.statusBar}>
               <View
                 style={
-                  complaint.activity === 'Pending'
+                  complaint?.activity === 'Pending'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
               />
               <View
                 style={
-                  complaint.activity === 'Ongoing'
+                  complaint?.activity === 'Ongoing'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
               />
               <View
                 style={
-                  complaint.activity === 'Ongoing'
+                  complaint?.activity === 'Ongoing'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
               />
               <View
                 style={
-                  complaint.activity === 'Closed'
+                  complaint?.activity === 'Closed'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
@@ -156,7 +164,9 @@ const ComplaintScreen = ({route, navigation}) => {
                 <Image source={phoneIcon} style={styles.actionIcon} />
                 <Text style={styles.actionButtonText}>Call Technician</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton} onPress={()=> handleRaisePriority(complaint._id)}>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => handleRaisePriority(complaint._id)}>
                 <Image source={warningIcon} style={styles.actionIcon} />
                 <Text style={styles.actionButtonText}>Raise Priority</Text>
               </TouchableOpacity>

@@ -27,5 +27,6 @@ export const newComplaintApi = (customerId, formData) => {
 };
 
 export const getComplaintsApi = (id) => API.get(`/api/customer/my-complaint/${id}`);
+export const getProjectsApi = (id) => API.get(`/api/customer/get-all-projects`);
 export const getMyProfile = () => API.get('/api/customer/get-user');
 export const raisePrority = (id) => API.patch(`api/customer/raise-priorty/${id}`);

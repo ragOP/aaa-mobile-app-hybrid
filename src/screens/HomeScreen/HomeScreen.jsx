@@ -15,17 +15,19 @@ import phoneIcon from '../../assets/icons/Call.png';
 import checkCircleIcon from '../../assets/icons/Settings.png';
 const HomeScreen = ({navigation}) => {
   const [complaints, setComplaints] = useState([]);
+  const [userDetails, setUserDetails] = useState(null);
 
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
 
+  console.log('userDetails >>', userDetails);
   useEffect(() => {
     const fetchAllComplaints = async () => {
       try {
         const data = await getUserDetails();
         const response = await getComplaintsApi(data._id);
-        console.log('challaaa');
+        setUserDetails(data);
         setComplaints(response.data.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -47,12 +49,12 @@ const HomeScreen = ({navigation}) => {
             style={styles.profileImage}
           />
           <PaperText
-            text="Farish"
+            text={userDetails?.userName || ''}
             variant="titleSmall"
             fontStyling={styles.userName}
           />
           <PaperText
-            text="98989898"
+            text={userDetails?.phoneNumber || '-'}
             variant="titleSmall"
             fontStyling={styles.userPhone}
           />
@@ -66,8 +68,11 @@ const HomeScreen = ({navigation}) => {
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => navigation.navigate('ViewMoreComplaints')}>
-              <Text style={styles.viewMore} onPress={() =>
-                    navigation.navigate('ComplaintScreen')}>View More</Text>
+              <Text
+                style={styles.viewMore}
+                onPress={() => navigation.navigate('ComplaintScreen')}>
+                View More
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -81,10 +86,13 @@ const HomeScreen = ({navigation}) => {
                   onPress={() =>
                     navigation.navigate('ComplainDetailScreen', {complaint})
                   }>
-                  <Text style={styles.panelType}>APFC Panel</Text>
+                  <Text style={styles.panelType}>{complaint?.projectName}</Text>
                   <View style={styles.tokenStatusRow}>
                     <Text style={styles.tokenText}>
-                      Token No. <Text style={styles.tokenNumber}>88</Text>
+                      Token No.{' '}
+                      <Text style={styles.tokenNumber}>
+                        {complaint?.statusCode || '-'}
+                      </Text>
                     </Text>
                     <Text style={styles.status}>
                       Status:
