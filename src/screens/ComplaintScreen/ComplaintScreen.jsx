@@ -26,7 +26,6 @@ const ComplaintScreen = ({route, navigation}) => {
   };
 
   const handleCallTechnician = number => {
-    console.log('number: ' + number);
     if (number == null) return;
     const phoneNumber = `tel:+91-${number}`;
     Linking.openURL(phoneNumber).catch(err =>
@@ -37,7 +36,6 @@ const ComplaintScreen = ({route, navigation}) => {
   const handleRaisePriority = async id => {
     try {
       const response = await raisePrority(id);
-      console.log('Priority raised successfully:', response.data);
     } catch (error) {
       console.error('Failed to open dialer', error);
     }

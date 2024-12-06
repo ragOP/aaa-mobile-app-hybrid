@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native';
+import RNFS from 'react-native-fs';
 import warrantyImage from '../..//assets/icons/Settings.png';
 import amcImage from '../../assets/icons/doc.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,14 +21,50 @@ const ProjectCard = ({
   location,
   warrantyStatus,
   amcStatus,
+  warrantyLink,
+  amcLink,
 }) => {
+  const handleDownload = async type => {
+    try {
+      const url = type === 'warranty' ? warrantyLink : amcLink;
+
+      const fileName = url.split('/').pop();
+      if (!url) {
+        Alert.alert('Error', 'Download link not available.');
+        return;
+      }
+
+      const downloadPath = `${RNFS.ExternalDirectoryPath}/${fileName}`;
+
+      // Start downloading the file
+      const download = RNFS.downloadFile({
+        fromUrl: url,
+        toFile: downloadPath,
+      });
+
+      const result = await download.promise;
+
+      if (result.statusCode === 200) {
+        Alert.alert('Download Complete', `File saved to ${downloadPath}`);
+      } else {
+        Alert.alert(
+          'Download Failed',
+          'Something went wrong while downloading the file.',
+        );
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      Alert.alert('Error', 'Failed to download the file.');
+    }
+  };
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardHeader}>
         <Text style={styles.projectName}>{projectName || '-'}</Text>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={styles.viewMore}>View More</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={styles.detailTextRow}>
         <Text style={styles.panelText}>No. Of Panels: {panels}</Text>
@@ -47,16 +85,20 @@ const ProjectCard = ({
       <View style={styles.divider} />
 
       <View style={styles.statusContainer}>
-        <View style={styles.statusBox}>
+        <TouchableOpacity
+          style={styles.statusBox}
+          onPress={() => handleDownload('warranty')}>
           <Image source={warrantyImage} style={styles.statusImage} />
           <Text style={styles.statusTitle}>Warranty</Text>
           <Text style={styles.statusText}>{warrantyStatus}</Text>
-        </View>
-        <View style={styles.statusBox}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.statusBox}
+          onPress={() => handleDownload('AMC')}>
           <Image source={amcImage} style={styles.statusImage} />
           <Text style={styles.statusTitle}>AMC</Text>
           <Text style={styles.statusText}>{amcStatus}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -87,8 +129,6 @@ const ProjectScreen = () => {
     fetchAllProjects();
   }, []);
 
-  console.log('>>>>', projects);
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.screenTitle}>My Projects</Text>
@@ -107,6 +147,8 @@ const ProjectScreen = () => {
             location={project?.siteLocation}
             warrantyStatus="Active: 81 days left"
             amcStatus="Not Applicable"
+            warrantyLink={project?.warraty}
+            amcLink={project?.AMC}
           />
         ))
       ) : (

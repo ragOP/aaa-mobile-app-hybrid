@@ -23,7 +23,6 @@ const ComplainDetailScreen = ({route}) => {
   } = route.params.complaint;
 
   const handleCallEngineer = number => {
-    console.log('number: ' + number);
     if (number == null) return;
     const phoneNumber = `tel:+91-${number}`;
     Linking.openURL(phoneNumber).catch(err =>

@@ -1,22 +1,23 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const PositionSelectionScreen = ({navigation}) => {
-    const handleLogin = () => {
-        console.log('PositionSelectionScreen clicked');
-        navigation.navigate("LoginScreen" );
-      };
-      const handleEngineerLogin = () => {
-        console.log('PositionSelectionScreen clicked');
-        navigation.navigate("EngineerLoginScreen" );
-      };
+  const handleLogin = () => {
+    navigation.navigate('LoginScreen');
+  };
+
+  const handleEngineerLogin = () => {
+    navigation.navigate('EngineerLoginScreen');
+  };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Please Select Your Position</Text>
       <Text style={styles.subtitle}>We look forward to serving you.</Text>
-      <TouchableOpacity activeOpacity={1}style={styles.customerButton}
-                onPress={handleLogin}
->
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.customerButton}
+        onPress={handleLogin}>
         <Text style={styles.buttonText}>Customer</Text>
       </TouchableOpacity>
 
@@ -26,8 +27,10 @@ const PositionSelectionScreen = ({navigation}) => {
         <View style={styles.line} />
       </View>
 
-      <TouchableOpacity activeOpacity={1} style={styles.engineerButton}
-      onPress={handleEngineerLogin}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.engineerButton}
+        onPress={handleEngineerLogin}>
         <Text style={styles.engineerButtonText}>Service Engineer</Text>
       </TouchableOpacity>
 
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    marginTop:20
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',

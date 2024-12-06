@@ -1,21 +1,22 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const API = axios.create({
-  baseURL: "https://aaa-backend-prcc.onrender.com",
+  baseURL: 'https://aaa-backend-prcc.onrender.com',
 });
 
-API.interceptors.request.use(async(req) => {
-  const token = await AsyncStorage.getItem("aaa_token",);
-  console.log(token,"AsyncStorage")
+API.interceptors.request.use(async req => {
+  const token = await AsyncStorage.getItem('aaa_token');
   if (token) {
-    req.headers["Authorization"] = `Bearer ${token}`;
+    req.headers['Authorization'] = `Bearer ${token}`;
   }
   return req;
 });
+
 //Auth API
-export const engineerloginApi = (body) => API.post("/api/engineer/login", body);
-export const customerloginApi = (body) => API.post("/api/customer/login", body);
+export const engineerloginApi = body => API.post('/api/engineer/login', body);
+export const customerloginApi = body => API.post('/api/customer/login', body);
+
 //Customer Api
 // API call to submit a new complaint
 export const newComplaintApi = (customerId, formData) => {
@@ -26,7 +27,8 @@ export const newComplaintApi = (customerId, formData) => {
   });
 };
 
-export const getComplaintsApi = (id) => API.get(`/api/customer/my-complaint/${id}`);
-export const getProjectsApi = (id) => API.get(`/api/customer/get-all-projects`);
+export const getComplaintsApi = id =>
+  API.get(`/api/customer/my-complaint/${id}`);
+export const getProjectsApi = id => API.get(`/api/customer/get-all-projects`);
 export const getMyProfile = () => API.get('/api/customer/get-user');
-export const raisePrority = (id) => API.patch(`api/customer/raise-priorty/${id}`);
+export const raisePrority = id => API.patch(`api/customer/raise-priorty/${id}`);

@@ -31,7 +31,6 @@ const EngineerLoginScreen = ({ navigation }) => {
 
       if (response.data) {
         await AsyncStorage.setItem('aaa_token', token);
-        console.log('Token saved successfully to AsyncStorage.', token);
         navigation.navigate('EngineerTabNavigation');
       } else {
         toastFunction(

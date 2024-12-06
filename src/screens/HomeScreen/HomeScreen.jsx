@@ -21,7 +21,6 @@ const HomeScreen = ({navigation}) => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
 
-  console.log('userDetails >>', userDetails);
   useEffect(() => {
     const fetchAllComplaints = async () => {
       try {
@@ -116,7 +115,7 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
 
-      <View style={styles.grid}>
+      {/* <View style={styles.grid}>
         <TouchableOpacity style={styles.gridItem} activeOpacity={1}>
           <Image source={phoneIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Call Support</Text>
@@ -127,7 +126,7 @@ const HomeScreen = ({navigation}) => {
         </View>
         <View style={styles.gridItem} />
         <View style={styles.gridItem} />
-      </View>
+      </View> */}
     </ScrollView>
   );
 };

@@ -7,19 +7,20 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {newComplaintApi} from '../../store/api';
+import {getProjectsApi, newComplaintApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AudioRecord from 'react-native-audio-record';
-import {requestMicrophonePermission} from "../../helper/permission"
-import {getLocation} from "../../helper/getLocation";
-import { getAddressFromCoordinates } from "../../helper/getAddress"
-import pause from "../../assets/icons/pause.png";
-import play from "../../assets/icons/mic.png";
+import {requestMicrophonePermission} from '../../helper/permission';
+import {getLocation} from '../../helper/getLocation';
+import {getAddressFromCoordinates} from '../../helper/getAddress';
+import pause from '../../assets/icons/pause.png';
+import play from '../../assets/icons/mic.png';
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
@@ -32,11 +33,9 @@ const NewComplaintScreen = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioPath, setAudioPath] = useState('');
   const [audioIcons, setAudioIcons] = useState(play);
-  const projects = [
-    {id: '1', name: 'Project A'},
-    {id: '2', name: 'Project B'},
-    {id: '3', name: 'Project C'},
-  ];
+  const [projects, setProjects] = useState([]);
+  const [panels, setPanels] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     requestMicrophonePermission();
@@ -62,18 +61,16 @@ const NewComplaintScreen = () => {
     setIsRecording(false);
   };
 
- const getYourCurrentLocation = async () => {
-  try {
-    const { latitude, longitude } = await getLocation();
-    const fullAddress = await getAddressFromCoordinates(latitude, longitude);
-    setSiteLocation(fullAddress);
-    console.log('User Location:', `Lat: ${latitude}, Lon: ${longitude} -- ${fullAddress}`);
-  } catch (error) {
-    console.error('Error fetching location:', error.message);
-  }
- }
+  const getYourCurrentLocation = async () => {
+    try {
+      const {latitude, longitude} = await getLocation();
+      const fullAddress = await getAddressFromCoordinates(latitude, longitude);
+      setSiteLocation(fullAddress);
+    } catch (error) {
+      console.error('Error fetching location:', error.message);
+    }
+  };
   const handlePress = () => {
-    console.log(audioPath);
     if (isRecording) {
       stopRecording();
       setAudioIcons(play);
@@ -82,13 +79,6 @@ const NewComplaintScreen = () => {
       setAudioIcons(pause);
     }
   };
-
-  const panels = {
-    1: ['Panel A1', 'Panel A2', 'Panel A3'],
-    2: ['Panel B1', 'Panel B2'],
-    3: ['Panel C1', 'Panel C2', 'Panel C3'],
-  };
-  const availablePanels = panels[selectedProject] || [];
 
   const getSeverityText = () => {
     if (severity < 0.3) return 'Low';
@@ -120,20 +110,25 @@ const NewComplaintScreen = () => {
     );
   };
   const isSubmitDisabled = () => {
-    return !selectedProject || !selectedPanel || !siteLocation || !issuedescription;
+    return (
+      !selectedProject || !selectedPanel || !siteLocation || !issuedescription
+    );
   };
+
   const handleSubmit = async () => {
-    // Dynamically fetch project, panel, and severity information
-    const selectedProjectName =
-      projects.find(project => project.id === selectedProject)?.name ||
-      'No project selected';
+    if (isSubmitDisabled()) {
+      Alert.alert(
+        'Missing Fields',
+        'Please fill all the required fields before submitting.',
+        [{text: 'OK'}],
+        {cancelable: false},
+      );
+      return;
+    }
 
-    const selectedPanelName =
-      panels[selectedProject]?.find(panel => panel === selectedPanel) ||
-      'No panel selected';
-
+    const selectedProjectName = selectedProject?.title || '';
+    const selectedPanelName = selectedPanel || '';
     const severityText = getSeverityText();
-
     const user = JSON.parse(await AsyncStorage.getItem('aaa_user'));
 
     // Dynamically create FormData
@@ -144,11 +139,11 @@ const NewComplaintScreen = () => {
     formData.append('panelSectionName', selectedPanelName);
     formData.append('severity', severityText);
     formData.append('issuedescription', issuedescription);
-    formData.append('voiceNote', {
-      uri: `file://${audioPath}`, // Add `file://` prefix
-      type: 'audio/wav',
-      name: 'audio.wav',
-    });
+    // formData.append('voiceNote', {
+    //   uri: `file://${audioPath}`, // Add `file://` prefix
+    //   type: 'audio/wav',
+    //   name: 'audio.wav',
+    // });
 
     // Dynamically append images (if any)
     images.forEach((image, index) => {
@@ -158,11 +153,32 @@ const NewComplaintScreen = () => {
         name: `image_${index}.jpg`,
       });
     });
-    console.log(formData, 'image');
     try {
       const response = await newComplaintApi(user._id, formData);
-      console.log('Complaint submitted successfully:', response.data);
-      navigation.navigate('ComplaintScreen');
+      if (response?.data?.success) {
+        setSelectedProject('');
+        setSelectedPanel('');
+        setSeverity(0);
+        setIssueDescription('');
+        setSiteLocation('');
+        setImages([]);
+        setAudioPath('');
+        setAudioIcons(play);
+
+        // Show alert
+        Alert.alert(
+          'Success',
+          'New complaint added successfully!',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('ComplaintScreen'),
+            },
+          ],
+          {cancelable: false},
+        );
+        navigation.navigate('ComplaintScreen');
+      }
     } catch (error) {
       console.error(
         'Error submitting complaint:',
@@ -170,6 +186,27 @@ const NewComplaintScreen = () => {
       );
     }
   };
+
+  const getUserDetails = async () => {
+    return JSON.parse(await AsyncStorage.getItem('aaa_user'));
+  };
+
+  useEffect(() => {
+    const fetchAllProjects = async () => {
+      try {
+        setIsFetching(true);
+        const data = await getUserDetails();
+        const response = await getProjectsApi(data._id);
+
+        setProjects(response?.data?.data?.data || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+    fetchAllProjects();
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -180,16 +217,20 @@ const NewComplaintScreen = () => {
         selectedValue={selectedProject}
         onValueChange={itemValue => {
           setSelectedProject(itemValue);
+          setPanels(itemValue.panels);
           setSelectedPanel('');
         }}
         style={styles.picker}
         dropdownIconColor="red">
-        <Picker.Item label="Project Name :" value="" />
+        <Picker.Item
+          label="Project Name :"
+          value={selectedProject?.title || ''}
+        />
         {projects.map(project => (
           <Picker.Item
-            key={project.id}
-            label={project.name}
-            value={project.id}
+            key={project._id}
+            label={project.title}
+            value={project}
           />
         ))}
       </Picker>
@@ -204,23 +245,25 @@ const NewComplaintScreen = () => {
             placeholderTextColor="black"
           />
         </View>
-        <TouchableOpacity style={styles.autoLocationButton} onPress={getYourCurrentLocation}>
-      <Image
-        source={require('../../assets/icons/location.png')}
-        style={styles.icon}
-      />
-      <Text style={styles.autoLocationText}>Auto Location</Text>
-    </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.autoLocationButton}
+          onPress={getYourCurrentLocation}>
+          <Image
+            source={require('../../assets/icons/location.png')}
+            style={styles.icon}
+          />
+          <Text style={styles.autoLocationText}>Auto Location</Text>
+        </TouchableOpacity>
       </View>
 
       <Picker
         selectedValue={selectedPanel}
         onValueChange={itemValue => setSelectedPanel(itemValue)}
         style={styles.picker}
-        enabled={availablePanels.length > 0}
+        enabled={panels.length > 0}
         dropdownIconColor="red">
         <Picker.Item label="Panel/Section Name :" value="" />
-        {availablePanels.map((panel, index) => (
+        {panels.map((panel, index) => (
           <Picker.Item key={index} label={panel} value={panel} />
         ))}
       </Picker>
@@ -236,10 +279,7 @@ const NewComplaintScreen = () => {
           placeholderTextColor="black"
         />
         <TouchableOpacity onPress={handlePress} style={styles.micButton}>
-          <Image
-            source={audioIcons}
-            style={styles.micIcon}
-          />
+          <Image source={audioIcons} style={styles.micIcon} />
         </TouchableOpacity>
       </View>
 
@@ -483,6 +523,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     marginTop: 20,
+    marginBottom: 30,
   },
   submitButtonText: {
     color: '#fff',
