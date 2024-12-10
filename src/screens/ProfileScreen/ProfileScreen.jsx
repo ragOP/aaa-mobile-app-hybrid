@@ -1,17 +1,28 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import {getMyProfile} from '../../store/api';
 
 const ProfileScreen = () => {
-  const [customer, setCustomer] = useState([]);
+  const [customer, setCustomer] = useState(null);
+  const [isFetchingCustomer, setIsFetchingCustomer] = useState(false);
 
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
+        setIsFetchingCustomer(true);
         const data = await getMyProfile();
         setCustomer(data.data.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setIsFetchingCustomer(false);
       }
     };
 
@@ -21,13 +32,17 @@ const ProfileScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>My Profile</Text>
-      {customer && (
+      {isFetchingCustomer ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#007BFF" />
+        </View>
+      ) : (
         <>
           <View style={styles.field}>
             <Text style={styles.label}>Username:</Text>
             <TextInput
               style={styles.input}
-              value={customer.userName}
+              value={customer?.userName || ''}
               editable={false}
             />
           </View>
@@ -35,7 +50,7 @@ const ProfileScreen = () => {
             <Text style={styles.label}>Email:</Text>
             <TextInput
               style={styles.input}
-              value={customer.email}
+              value={customer?.email || ''}
               editable={false}
             />
           </View>
@@ -43,7 +58,7 @@ const ProfileScreen = () => {
             <Text style={styles.label}>Name:</Text>
             <TextInput
               style={styles.input}
-              value={customer.name}
+              value={customer?.name || ''}
               editable={false}
             />
           </View>
@@ -51,7 +66,7 @@ const ProfileScreen = () => {
             <Text style={styles.label}>Address:</Text>
             <TextInput
               style={styles.input}
-              value={customer.address}
+              value={customer?.address || ''}
               editable={false}
             />
           </View>
@@ -59,7 +74,7 @@ const ProfileScreen = () => {
             <Text style={styles.label}>GST:</Text>
             <TextInput
               style={styles.input}
-              value={customer.gst}
+              value={customer?.gst || ''}
               editable={false}
             />
           </View>
@@ -67,7 +82,7 @@ const ProfileScreen = () => {
             <Text style={styles.label}>Contact Person:</Text>
             <TextInput
               style={styles.input}
-              value={customer.contactPerson}
+              value={customer?.contactPerson || ''}
               editable={false}
             />
           </View>
@@ -106,6 +121,12 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     color: '#333',
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 200,
   },
 });
 

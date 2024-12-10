@@ -8,8 +8,6 @@ import {
   Image,
   Linking,
 } from 'react-native';
-
-// Import your local images here
 import addIcon from '../../assets/icons/+.png';
 import phoneIcon from '../../assets/icons/Call.png';
 import warningIcon from '../../assets/icons/Priority.png';

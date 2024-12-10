@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,41 +6,51 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
-import { engineerloginApi } from '../../store/api';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {engineerloginApi} from '../../store/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import toastFunction from '../../functions/toastFunction';
 
-const EngineerLoginScreen = ({ navigation }) => {
+const EngineerLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // New state for loader
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // New state for button
 
-  const saveTokenHandler = async (token) => {
+  const saveTokenHandler = async token => {
     await AsyncStorage.setItem('aaa_token', token);
   };
 
   const handleLogin = async () => {
-    setLoading(true); // Show loader when login starts
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
     try {
-      const body = { userName: username, password };
+      const body = {userName: username, password};
       const response = await engineerloginApi(body);
       const token = response?.data?.data?.token;
+      const user = response?.data?.data?.user;
 
-      if (response.data) {
+      if (response?.data) {
         await AsyncStorage.setItem('aaa_token', token);
+        await AsyncStorage.setItem('aaa_user', JSON.stringify(user));
+        await AsyncStorage.setItem('aaa_user_type', 'engineer');
         navigation.navigate('EngineerTabNavigation');
       } else {
-        toastFunction(
-          'Login Failed',
-          'AAA-SWITCHGEAR',
-          'Invalid username or password.',
-        );
+        // toastFunction(
+        //   'Login Failed',
+        //   'AAA-SWITCHGEAR',
+        //   'Invalid username or password.',
+        // );
+        Alert.alert('Login failed', 'Please enter correct credentials');
       }
     } catch (error) {
       console.error(error);
+      Alert.alert('Login failed', 'Please enter correct credentials');
       toastFunction('Login Failed', 'Something went wrong. Please try again.');
     } finally {
       setLoading(false); // Hide loader when login ends
@@ -127,7 +137,6 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 20,
-
   },
   logoCircle: {
     backgroundColor: '#FF0000',

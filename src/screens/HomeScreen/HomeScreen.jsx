@@ -6,6 +6,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
@@ -16,6 +18,15 @@ import checkCircleIcon from '../../assets/icons/Settings.png';
 const HomeScreen = ({navigation}) => {
   const [complaints, setComplaints] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
+  const [isFetchingComplaints, setFetchingComplaints] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('aaa_user');
+    await AsyncStorage.removeItem('aaa_user_type');
+    await AsyncStorage.removeItem('aaa_token');
+    navigation.replace('AuthNavigation');
+  };
 
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
@@ -24,12 +35,15 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     const fetchAllComplaints = async () => {
       try {
+        setFetchingComplaints(true);
         const data = await getUserDetails();
         const response = await getComplaintsApi(data._id);
         setUserDetails(data);
         setComplaints(response.data.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setFetchingComplaints(false);
       }
     };
     fetchAllComplaints();
@@ -42,7 +56,9 @@ const HomeScreen = ({navigation}) => {
           source={require('../../assets/images/logobg.png')}
           style={styles.logo}
         />
-        <View style={styles.userInfo}>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={styles.userInfo}>
           <Image
             source={require('../../assets/images/avatar.png')}
             style={styles.profileImage}
@@ -57,7 +73,7 @@ const HomeScreen = ({navigation}) => {
             variant="titleSmall"
             fontStyling={styles.userPhone}
           />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.complaintsSection}>
@@ -74,6 +90,12 @@ const HomeScreen = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
+
+          {complaints?.length === 0 && isFetchingComplaints && (
+            <View style={styles.activityIndicatorStyles}>
+              <ActivityIndicator size="large" />
+            </View>
+          )}
 
           {complaints && (
             <Swiper showsPagination={false} autoplay={false} loop={false}>
@@ -127,6 +149,28 @@ const HomeScreen = ({navigation}) => {
         <View style={styles.gridItem} />
         <View style={styles.gridItem} />
       </View> */}
+
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Profile Options</Text>
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={styles.logoutButton}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.cancelButton}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -276,6 +320,49 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 14,
     marginTop: 10,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  logoutButton: {
+    backgroundColor: '#FF0000',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  logoutText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  cancelButton: {
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  cancelText: {
+    color: '#404969',
+    fontWeight: 'bold',
+  },
+  activityIndicatorStyles: {
+    marginTop: 60,
   },
 });
 

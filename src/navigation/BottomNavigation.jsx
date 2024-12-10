@@ -52,7 +52,7 @@ const BottomTabNavigation = () => {
             ),
         }}
       />
- <Tab.Screen
+      <Tab.Screen
         name="ComplaintScreen"
         component={ComplaintScreen}
         options={{
@@ -84,7 +84,7 @@ const BottomTabNavigation = () => {
             ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="ProjectScreen"
         component={ProjectScreen}
         options={{

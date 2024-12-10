@@ -32,3 +32,14 @@ export const getComplaintsApi = id =>
 export const getProjectsApi = id => API.get(`/api/customer/get-all-projects`);
 export const getMyProfile = () => API.get('/api/customer/get-user');
 export const raisePrority = id => API.patch(`api/customer/raise-priorty/${id}`);
+
+// Engineer
+export const getAllJobsApi = id => API.get(`/api/engineer/get-all-jobs`);
+export const startJob = id =>
+  API.post(`/api/engineer/start-job/${id}`, formData, {});
+export const completeJob = (id, formData) =>
+  API.post(`/api/engineer/completed-job/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });

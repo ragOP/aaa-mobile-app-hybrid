@@ -1,17 +1,32 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => {
-      AsyncStorage.getItem("aaa_token").then((value) =>
-        navigation.replace(
-          value === null ? "AuthNavigation" : "BottomTabNavigation"
-        )
-      );
-    }, 3000);
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('aaa_token');
+        const userType = await AsyncStorage.getItem('aaa_user_type');
+
+        if (token) {
+          navigation.replace(
+            userType === 'engineer'
+              ? 'EngineerTabNavigation'
+              : 'BottomTabNavigation',
+          );
+        } else {
+          navigation.replace('AuthNavigation');
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        navigation.replace('AuthNavigation');
+      }
+    };
+
+    setTimeout(checkLoginStatus, 3000);
   }, []);
+
   const handleSelection = () => {
     navigation.navigate('AuthNavigation');
   };
@@ -25,10 +40,7 @@ const SplashScreen = ({navigation}) => {
 
       <Text style={styles.subtitle}>Site Service App</Text>
 
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.button}
-       >
+      <TouchableOpacity activeOpacity={1} style={styles.button}>
         <Image
           source={require('../../assets/icons/arrow.png')}
           style={styles.logoIcon}

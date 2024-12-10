@@ -1,91 +1,83 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, StyleSheet, View} from 'react-native';
-import {colors, defaultStyles} from '../utils/constants';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {colors} from '../utils/constants';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
-import PaperText from '../ui/PaperText';
 import EngineerHomeScreen from '../screens/EngineerHomeScreen/EngineerHomeScreen';
+import AllJobsScreen from '../screens/AllJobsScreen/AllJobScreen';
+import PaperText from '../ui/PaperText';
+import JobDetailScreen from '../screens/JobDetailScreen/JobDetailScreen';
 
 const Tab = createBottomTabNavigator();
 
-const EngineerBottomNavigation = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarStyle: {height: '8%'},
-        tabBarHideOnKeyboard: true,
-      }}
-      initialRouteName="HomeScreen">
-      <Tab.Screen
-        name="EngineerHomeScreen"
-        component={EngineerHomeScreen}
-        options={{
-          tabBarIcon: ({focused, color, size}) =>
-            focused ? (
-              <View style={styles.tabItemContainerActive}>
-                <Image
-                  style={styles.icon}
-                  source={require('../assets/icons/home.png')}
-                />
-                <PaperText
-                  text="Home"
-                  variant="titleSmall"
-                  fontStyling={styles.tabText}
-                />
-              </View>
-            ) : (
-              <View style={styles.tabItemContainer}>
-                <Image
-                  style={styles.icon}
-                  source={require('../assets/icons/home_outline.png')}
-                />
-                <PaperText
-                  text=""
-                  variant="titleSmall"
-                  fontStyling={styles.tabText}
-                />
-              </View>
-            ),
-        }}
-      />
-
-      <Tab.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({focused, color, size}) =>
-            focused ? (
-              <View style={styles.tabItemContainerActive}>
-                <Image
-                  style={styles.icon}
-                  source={require('../assets/icons/profile.png')}
-                />
-                <PaperText
-                  text="Profile"
-                  variant="titleSmall"
-                  fontStyling={styles.tabText}
-                />
-              </View>
-            ) : (
-              <View style={styles.tabItemContainer}>
-                <Image
-                  style={styles.icon}
-                  source={require('../assets/icons/profile_outline.png')}
-                />
-                <PaperText
-                  text=""
-                  variant="titleSmall"
-                  fontStyling={styles.tabText}
-                />
-              </View>
-            ),
-        }}
-      />
-    </Tab.Navigator>
-  );
+const tabConfig = {
+  EngineerHomeScreen: {
+    component: EngineerHomeScreen,
+    icon: {
+      active: require('../assets/icons/home.png'),
+      inactive: require('../assets/icons/home_outline.png'),
+    },
+    text: 'Home',
+  },
+  AllJobsScreen: {
+    component: AllJobsScreen,
+    icon: {
+      active: require('../assets/icons/invoice_active.png'),
+      inactive: require('../assets/icons/invoice.png'),
+    },
+    text: 'All Jobs',
+  },
+  ProfileScreen: {
+    component: ProfileScreen,
+    icon: {
+      active: require('../assets/icons/profile.png'),
+      inactive: require('../assets/icons/profile_outline.png'),
+    },
+    text: 'Profile',
+  },
 };
+
+const getTabBarIcon =
+  (icon, text) =>
+  ({focused}) =>
+    (
+      <View
+        style={
+          focused ? styles.tabItemContainerActive : styles.tabItemContainer
+        }>
+        <Image
+          style={styles.icon}
+          source={focused ? icon.active : icon.inactive}
+        />
+        <PaperText
+          text={text}
+          variant="titleSmall"
+          fontStyling={focused ? styles.activeTabText : styles.tabText}
+        />
+      </View>
+    );
+
+const EngineerBottomNavigation = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarShowLabel: false,
+      tabBarStyle: {height: '8%'},
+      tabBarHideOnKeyboard: true,
+    }}
+    initialRouteName="EngineerHomeScreen">
+    {Object.entries(tabConfig).map(([name, {component, icon, text}]) => (
+      <Tab.Screen
+        key={name}
+        name={name}
+        component={component}
+        options={{
+          tabBarIcon: getTabBarIcon(icon, text),
+        }}
+      />
+    ))}
+  </Tab.Navigator>
+);
 
 const styles = StyleSheet.create({
   icon: {
@@ -108,9 +100,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderColor: colors.primary,
   },
+  activeTabText: {
+    color: 'rgba(0, 0, 0, 1)',
+  },
   tabText: {
-    color: colors.primary,
+    color: 'rgba(162, 162, 162, 1)',
     marginTop: 2,
   },
 });
+
 export default EngineerBottomNavigation;

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {customerloginApi} from '../../store/api';
 import toastFunction from '../../functions/toastFunction';
@@ -19,16 +20,18 @@ const LoginScreen = ({navigation}) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const handleLogin = async () => {
-    // navigation.navigate('BottomTabNavigation');
     setLoading(true);
 
     try {
       const body = {userName: username, password};
       const response = await customerloginApi(body);
+
+      console.log('response >>>', response);
       const token = response?.data?.data?.token;
       const user = response?.data?.data?.user;
-      if (response.data) {
+      if (response?.data) {
         await AsyncStorage.setItem('aaa_token', token);
+        await AsyncStorage.setItem('aaa_user_type', 'customer');
         await AsyncStorage.setItem('aaa_user', JSON.stringify(user));
         navigation.navigate('BottomTabNavigation');
       } else {
@@ -39,8 +42,9 @@ const LoginScreen = ({navigation}) => {
         );
       }
     } catch (error) {
-      console.error(error);
-      toastFunction('Login Failed', error);
+      console.error('error >>', error);
+      Alert.alert('Login failed', 'Please enter correct credentials');
+      // toastFunction('Login Failed', error);
     } finally {
       setLoading(false);
     }
@@ -122,7 +126,6 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 20,
-
   },
   logoCircle: {
     backgroundColor: '#FF0000',
