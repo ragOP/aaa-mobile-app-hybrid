@@ -97,7 +97,11 @@ const HomeScreen = ({navigation}) => {
             </View>
           )}
 
-          {complaints && (
+          {isFetchingComplaints ? (
+            <View style={styles.activityIndicatorStyles}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : complaints && complaints.length > 0 ? (
             <Swiper showsPagination={false} autoplay={false} loop={false}>
               {complaints.map((complaint, index) => (
                 <TouchableOpacity
@@ -116,7 +120,7 @@ const HomeScreen = ({navigation}) => {
                       </Text>
                     </Text>
                     <Text style={styles.status}>
-                      Status:
+                      Status:{' '}
                       <Text
                         style={[
                           styles.ongoing,
@@ -133,11 +137,20 @@ const HomeScreen = ({navigation}) => {
                 </TouchableOpacity>
               ))}
             </Swiper>
+          ) : (
+            <View
+              style={{
+                ...styles.activityIndicatorStyles,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{}}>No complaint data available</Text>
+            </View>
           )}
         </View>
       </View>
 
-      {/* <View style={styles.grid}>
+      <View style={styles.grid}>
         <TouchableOpacity style={styles.gridItem} activeOpacity={1}>
           <Image source={phoneIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Call Support</Text>
@@ -146,9 +159,9 @@ const HomeScreen = ({navigation}) => {
           <Image source={checkCircleIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Warranty & AMC</Text>
         </View>
-        <View style={styles.gridItem} />
-        <View style={styles.gridItem} />
-      </View> */}
+        {/* <View style={styles.gridItem} />
+        <View style={styles.gridItem} /> */}
+      </View>
 
       <Modal
         transparent={true}
@@ -290,8 +303,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    marginTop: '5%',
+    paddingHorizontal: 6,
+    marginTop: '2%',
   },
   gridItem: {
     width: '46%',
