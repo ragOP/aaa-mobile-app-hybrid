@@ -21,6 +21,7 @@ import {getLocation} from '../../helper/getLocation';
 import {getAddressFromCoordinates} from '../../helper/getAddress';
 import pause from '../../assets/icons/pause.png';
 import play from '../../assets/icons/mic.png';
+import {ActivityIndicator} from 'react-native-paper';
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
@@ -36,6 +37,7 @@ const NewComplaintScreen = () => {
   const [projects, setProjects] = useState([]);
   const [panels, setPanels] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
 
   useEffect(() => {
     requestMicrophonePermission();
@@ -62,14 +64,23 @@ const NewComplaintScreen = () => {
   };
 
   const getYourCurrentLocation = async () => {
+    if (isFetchingLocation) {
+      return;
+    }
+
     try {
+      setIsFetchingLocation(true);
       const {latitude, longitude} = await getLocation();
       const fullAddress = await getAddressFromCoordinates(latitude, longitude);
       setSiteLocation(fullAddress);
     } catch (error) {
       console.error('Error fetching location:', error.message);
+      Alert.alert('Error', JSON.stringify(error.message));
+    } finally {
+      setIsFetchingLocation(false);
     }
   };
+
   const handlePress = () => {
     if (isRecording) {
       stopRecording();
@@ -139,11 +150,11 @@ const NewComplaintScreen = () => {
     formData.append('panelSectionName', selectedPanelName);
     formData.append('severity', severityText);
     formData.append('issuedescription', issuedescription);
-    // formData.append('voiceNote', {
-    //   uri: `file://${audioPath}`, // Add `file://` prefix
-    //   type: 'audio/wav',
-    //   name: 'audio.wav',
-    // });
+    formData.append('voiceNote', {
+      uri: `file://${audioPath}`,
+      type: 'audio/wav',
+      name: 'audio.wav',
+    });
 
     // Dynamically append images (if any)
     images.forEach((image, index) => {
@@ -245,15 +256,30 @@ const NewComplaintScreen = () => {
             placeholderTextColor="black"
           />
         </View>
-        <TouchableOpacity
-          style={styles.autoLocationButton}
-          onPress={getYourCurrentLocation}>
-          <Image
-            source={require('../../assets/icons/location.png')}
-            style={styles.icon}
-          />
-          <Text style={styles.autoLocationText}>Auto Location</Text>
-        </TouchableOpacity>
+
+        {isFetchingLocation ? (
+          <View
+            style={{
+              ...styles.autoLocationButton,
+              flex: 1,
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.autoLocationButton}
+            onPress={getYourCurrentLocation}>
+            <Image
+              source={require('../../assets/icons/location.png')}
+              style={styles.icon}
+            />
+            <Text style={styles.autoLocationText}>Auto Location</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <Picker
@@ -278,9 +304,14 @@ const NewComplaintScreen = () => {
           onChangeText={setIssueDescription}
           placeholderTextColor="black"
         />
-        <TouchableOpacity onPress={handlePress} style={styles.micButton}>
-          <Image source={audioIcons} style={styles.micIcon} />
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity onPress={handlePress} style={styles.micButton}>
+            <Image source={audioIcons} style={styles.micIcon} />
+          </TouchableOpacity>
+          {audioPath && (
+            <Text style={{position: 'absolute', right: -5, bottom: -8}}>Record again</Text>
+          )}
+        </View>
       </View>
 
       {/* Add Photos and Uploaded Photos */}
@@ -410,13 +441,21 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
     marginLeft: 5,
+    marginRight: 0,
+    marginTop: 5,
+    marginBottom: 5,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: '100%',
   },
   autoLocationText: {
     color: '#4f4f4f',
     marginLeft: 5,
     fontWeight: 'bold',
     marginTop: 10,
-    fontSize: 15,
+    fontSize: 13,
   },
   descriptionContainer: {
     position: 'relative',
@@ -437,7 +476,7 @@ const styles = StyleSheet.create({
   micButton: {
     position: 'absolute',
     right: 15,
-    bottom: 10,
+    bottom: 12,
     backgroundColor: '#FF0000',
     borderRadius: 22,
     padding: 10,

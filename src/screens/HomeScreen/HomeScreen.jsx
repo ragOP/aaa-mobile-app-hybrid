@@ -91,12 +91,6 @@ const HomeScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
 
-          {complaints?.length === 0 && isFetchingComplaints && (
-            <View style={styles.activityIndicatorStyles}>
-              <ActivityIndicator size="large" />
-            </View>
-          )}
-
           {isFetchingComplaints ? (
             <View style={styles.activityIndicatorStyles}>
               <ActivityIndicator size="large" />

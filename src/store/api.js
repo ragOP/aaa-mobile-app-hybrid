@@ -7,9 +7,11 @@ const API = axios.create({
 
 API.interceptors.request.use(async req => {
   const token = await AsyncStorage.getItem('aaa_token');
+
   if (token) {
     req.headers['Authorization'] = `Bearer ${token}`;
   }
+  console.log('req', req)
   return req;
 });
 

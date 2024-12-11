@@ -1,5 +1,5 @@
 import {PermissionsAndroid, Platform} from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 const requestLocationPermission = async () => {
   try {
     if (Platform.OS === 'android') {
@@ -48,6 +48,7 @@ export const getLocation = async () => {
       },
       error => {
         console.error('Location Error:', error);
+
         switch (error.code) {
           case 1: // PERMISSION_DENIED
             reject(

@@ -22,6 +22,7 @@ import {completeJob, startJob} from '../../store/api';
 import Geolocation from '@react-native-community/geolocation';
 import {Linking} from 'react-native';
 import {Modal} from 'react-native-paper';
+import axios from 'axios';
 
 const JobDetailScreen = ({route, navigation}) => {
   const {
@@ -134,6 +135,22 @@ const JobDetailScreen = ({route, navigation}) => {
       return;
     }
 
+    if (!form || Object.values(form).some(value => !value)) {
+      Alert.alert(
+        'Missing Fields',
+        'All fields are required. Please fill out the entire form.',
+      );
+      return;
+    }
+
+    if (!audioPath) {
+      Alert.alert(
+        'Missing Voice Note',
+        'Please upload a voice note before completing the job.',
+      );
+      return;
+    }
+
     try {
       setCompletingJob(true);
 
@@ -142,7 +159,7 @@ const JobDetailScreen = ({route, navigation}) => {
         formData.append(key, form[key]);
       });
 
-      formData.append('happyCode', happyCode);
+      formData.append('statusCode', happyCode);
 
       if (audioPath) {
         formData.append('completedVoiceNote', {
@@ -151,9 +168,20 @@ const JobDetailScreen = ({route, navigation}) => {
           type: 'audio/mpeg',
         });
       }
-      console.log('>>', formData);
 
-      const apiResponse = await completeJob(_id, formData);
+      // const apiResponse = await completeJob(_id, formData);
+
+      const apiResponse = await axios.post(
+        `/api/engineer/completed-job/${_id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      console.log('apiResponse >>', apiResponse);
 
       if (apiResponse?.response?.success) {
         Alert.alert(
@@ -175,7 +203,7 @@ const JobDetailScreen = ({route, navigation}) => {
         );
       }
     } catch (error) {
-      console.error(error);
+      console.error(error?.response);
       Alert.alert('Error', 'An unexpected error occurred. Please try again.');
     } finally {
       setCompletingJob(false);

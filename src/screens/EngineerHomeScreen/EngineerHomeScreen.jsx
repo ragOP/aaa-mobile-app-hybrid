@@ -12,7 +12,7 @@ import {
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getAllJobsApi, getComplaintsApi} from '../../store/api';
+import {getAllJobsApi} from '../../store/api';
 
 const HomeScreen = ({navigation}) => {
   const [jobs, setJobs] = useState([]);

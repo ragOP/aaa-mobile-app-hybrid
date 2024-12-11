@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import addIcon from '../../assets/icons/+.png';
 import phoneIcon from '../../assets/icons/Call.png';
@@ -18,6 +19,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const ComplaintScreen = ({route, navigation}) => {
   const [complaints, setComplaints] = useState([]);
+  const [fetchingComplaints, setFetchingComplaints] = useState([]);
 
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
@@ -43,6 +45,7 @@ const ComplaintScreen = ({route, navigation}) => {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
+          setFetchingComplaints(true);
           const user = await getUserDetails();
           if (user?._id) {
             const response = await getComplaintsApi(user._id);
@@ -50,6 +53,8 @@ const ComplaintScreen = ({route, navigation}) => {
           }
         } catch (error) {
           console.error('Error fetching data:', error);
+        } finally {
+          setFetchingComplaints(false);
         }
       };
       fetchData();
@@ -72,7 +77,11 @@ const ComplaintScreen = ({route, navigation}) => {
       </View>
 
       {/* Conditionally render the complaint card if data is available */}
-      {complaints.length > 0 ? (
+      {fetchingComplaints ? (
+        <View style={styles.activityIndicatorStyles}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : complaints && complaints?.length > 0 ? (
         complaints.map((complaint, index) => (
           <View key={index} style={styles.card}>
             <View style={styles.cardHeader}>
@@ -91,10 +100,10 @@ const ComplaintScreen = ({route, navigation}) => {
               Project Name: {complaint?.projectName || '-'}
             </Text>
             <View style={styles.row}>
-              <Text style={styles.labelText}>Activity </Text>
+              <Text style={styles.labelText}>Activity: </Text>
               <Text style={styles.statusCode}>
                 {' '}
-                : {complaint?.activity || '-'}
+                {complaint?.activity || '-'}
               </Text>
             </View>
             {/* </View> */}
@@ -174,7 +183,7 @@ const ComplaintScreen = ({route, navigation}) => {
           </View>
         ))
       ) : (
-        <Text style={styles.noDataText}>No complaint data available</Text> // Message when no complaints are present
+        <Text style={styles.noDataText}>No complaint data available</Text>
       )}
     </ScrollView>
   );
@@ -336,6 +345,9 @@ const styles = StyleSheet.create({
     color: '#4f4f4f',
     textAlign: 'center',
     marginTop: 20,
+  },
+  activityIndicatorStyles: {
+    marginTop: 160,
   },
 });
 

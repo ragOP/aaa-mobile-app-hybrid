@@ -7,6 +7,7 @@ import EngineerHomeScreen from '../screens/EngineerHomeScreen/EngineerHomeScreen
 import AllJobsScreen from '../screens/AllJobsScreen/AllJobScreen';
 import PaperText from '../ui/PaperText';
 import JobDetailScreen from '../screens/JobDetailScreen/JobDetailScreen';
+import EngineerProfileScreen from '../screens/EngineerProfileScreen/EngineerProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,8 +28,8 @@ const tabConfig = {
     },
     text: 'All Jobs',
   },
-  ProfileScreen: {
-    component: ProfileScreen,
+  EngineerProfileScreen: {
+    component: EngineerProfileScreen,
     icon: {
       active: require('../assets/icons/profile.png'),
       inactive: require('../assets/icons/profile_outline.png'),

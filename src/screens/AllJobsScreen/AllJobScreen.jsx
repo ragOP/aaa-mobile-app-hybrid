@@ -24,6 +24,7 @@ const AllJobsScreen = ({route, navigation}) => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
 
+
   const handleCallTechnician = number => {
     if (number == null) return;
     const phoneNumber = `tel:+91-${number}`;
@@ -40,11 +41,13 @@ const AllJobsScreen = ({route, navigation}) => {
     }
   };
 
+
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
           setLoading(true);
+          console.log(await AsyncStorage.getItem('token'))
           const user = await getUserDetails();
           if (user?._id) {
             const response = await getAllJobsApi(user._id);
@@ -71,7 +74,7 @@ const AllJobsScreen = ({route, navigation}) => {
         <View style={styles.activityIndicatorStyles}>
           <ActivityIndicator size="large" />
         </View>
-      ) : jobs.length > 0 ? (
+      ) : jobs && jobs.length > 0 ? (
         jobs.map((job, index) => (
           <TouchableOpacity
             key={index}
@@ -85,7 +88,7 @@ const AllJobsScreen = ({route, navigation}) => {
                 <Text style={styles.tokenNumber}>{job?.statusCode || '-'}</Text>
               </Text>
               <Text style={styles.status}>
-                Status:
+                Status:{" "}
                 <Text
                   style={[
                     styles.ongoing,
