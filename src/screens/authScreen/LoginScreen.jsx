@@ -26,7 +26,7 @@ const LoginScreen = ({navigation}) => {
       const body = {userName: username, password};
       const response = await customerloginApi(body);
 
-      console.log('response >>>', response);
+      console.log('response >>>', response?.data);
       const token = response?.data?.data?.token;
       const user = response?.data?.data?.user;
       if (response?.data) {

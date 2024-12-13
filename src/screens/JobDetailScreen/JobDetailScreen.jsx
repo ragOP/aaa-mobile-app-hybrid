@@ -203,8 +203,8 @@ const JobDetailScreen = ({route, navigation}) => {
         );
       }
     } catch (error) {
-      console.error(error?.response);
-      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+      console.error(error);
+      Alert.alert('Invalid code', 'Please enter valid code.');
     } finally {
       setCompletingJob(false);
     }
