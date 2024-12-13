@@ -34,7 +34,7 @@ const EngineerLoginScreen = ({navigation}) => {
       const response = await engineerloginApi(body);
       const token = response?.data?.data?.token;
       const user = response?.data?.data?.user;
-
+      console.log('Response >>>', response);
       if (response?.data) {
         await AsyncStorage.setItem('aaa_token', token);
         await AsyncStorage.setItem('aaa_user', JSON.stringify(user));
@@ -49,7 +49,7 @@ const EngineerLoginScreen = ({navigation}) => {
         Alert.alert('Login failed', 'Please enter correct credentials');
       }
     } catch (error) {
-      console.error(error);
+      console.error('ERROR', error);
       Alert.alert('Login failed', 'Please enter correct credentials');
       toastFunction('Login Failed', 'Something went wrong. Please try again.');
     } finally {

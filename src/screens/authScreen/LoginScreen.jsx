@@ -42,7 +42,7 @@ const LoginScreen = ({navigation}) => {
         );
       }
     } catch (error) {
-      console.error('error >>', error);
+      console.error('ERRRRORR >>', error);
       Alert.alert('Login failed', 'Please enter correct credentials');
       // toastFunction('Login Failed', error);
     } finally {

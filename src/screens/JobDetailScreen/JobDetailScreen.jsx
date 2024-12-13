@@ -23,6 +23,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {Linking} from 'react-native';
 import {Modal} from 'react-native-paper';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const JobDetailScreen = ({route, navigation}) => {
   const {
@@ -168,18 +169,29 @@ const JobDetailScreen = ({route, navigation}) => {
           type: 'audio/mpeg',
         });
       }
+      console.log('>>>', _id);
+      const apiResponse = await completeJob(_id, formData);
+      // const apiResponse = await axios.post(
+      //   `/api/engineer/completed-job/${_id}`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   },
+      // );
+      const token = JSON.parse(await AsyncStorage.getItem('aaa_user'));
 
-      // const apiResponse = await completeJob(_id, formData);
-
-      const apiResponse = await axios.post(
-        `/api/engineer/completed-job/${_id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      );
+      // const apiResponse = await axios.post(
+      //   `/api/engineer/completed-job/${_id}`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
 
       console.log('apiResponse >>', apiResponse);
 
@@ -198,7 +210,7 @@ const JobDetailScreen = ({route, navigation}) => {
       } else {
         Alert.alert(
           'Job completion failed',
-          apiResponse?.response?.message ||
+          apiResponse?.response?.data?.message ||
             'Something went wrong. Please try again.',
         );
       }

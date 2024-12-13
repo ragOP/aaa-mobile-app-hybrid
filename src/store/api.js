@@ -5,15 +5,20 @@ const API = axios.create({
   baseURL: 'https://aaa-backend-prcc.onrender.com',
 });
 
-API.interceptors.request.use(async req => {
-  const token = await AsyncStorage.getItem('aaa_token');
+API.interceptors.request.use(
+  async req => {
+    const token = await AsyncStorage.getItem('aaa_token');
 
-  if (token) {
-    req.headers['Authorization'] = `Bearer ${token}`;
-  }
-  console.log('req', req)
-  return req;
-});
+    if (token) {
+      req.headers['Authorization'] = `Bearer ${token}`;
+    }
+    console.log('REQUEST: ', req);
+    return req;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
 
 //Auth API
 export const engineerloginApi = body => API.post('/api/engineer/login', body);
