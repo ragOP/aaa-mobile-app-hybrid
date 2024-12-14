@@ -12,7 +12,7 @@ API.interceptors.request.use(
     if (token) {
       req.headers['Authorization'] = `Bearer ${token}`;
     }
-    console.log('REQUEST: ', req);
+    // console.log('REQUEST: ', req);
     return req;
   },
   error => {
@@ -29,6 +29,7 @@ export const customerloginApi = body => API.post('/api/customer/login', body);
 export const newComplaintApi = (customerId, formData) => {
   return API.post(`/api/customer/new-complaint/${customerId}`, formData, {
     headers: {
+      accept: 'application/json',
       'Content-Type': 'multipart/form-data',
     },
   });
@@ -47,6 +48,7 @@ export const startJob = id =>
 export const completeJob = (id, formData) =>
   API.post(`/api/engineer/completed-job/${id}`, formData, {
     headers: {
+      accept: 'application/json',
       'Content-Type': 'multipart/form-data',
     },
   });

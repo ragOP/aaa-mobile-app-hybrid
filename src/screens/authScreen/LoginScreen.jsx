@@ -29,22 +29,19 @@ const LoginScreen = ({navigation}) => {
       console.log('response >>>', response?.data);
       const token = response?.data?.data?.token;
       const user = response?.data?.data?.user;
-      if (response?.data) {
+      if (response?.data?.success) {
         await AsyncStorage.setItem('aaa_token', token);
         await AsyncStorage.setItem('aaa_user_type', 'customer');
         await AsyncStorage.setItem('aaa_user', JSON.stringify(user));
         navigation.navigate('BottomTabNavigation');
       } else {
-        toastFunction(
-          'Login Failed',
-          'AAA-SWITCHGEAR',
-          'Invalid username or password.',
-        );
+        Alert.alert('Login failed', response?.data?.data?.message);
       }
     } catch (error) {
-      console.error('ERRRRORR >>', error);
-      Alert.alert('Login failed', 'Please enter correct credentials');
-      // toastFunction('Login Failed', error);
+      Alert.alert(
+        'Login failed',
+        error?.message || 'Server issue, try again later.',
+      );
     } finally {
       setLoading(false);
     }

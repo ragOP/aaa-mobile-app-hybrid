@@ -164,22 +164,14 @@ const JobDetailScreen = ({route, navigation}) => {
 
       if (audioPath) {
         formData.append('completedVoiceNote', {
-          uri: audioPath,
+          uri: `file://${audioPath}`,
           name: `voiceNote_${Date.now()}.mp3`,
           type: 'audio/mpeg',
         });
       }
-      console.log('>>>', _id);
+
       const apiResponse = await completeJob(_id, formData);
-      // const apiResponse = await axios.post(
-      //   `/api/engineer/completed-job/${_id}`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   },
-      // );
+     
       const token = JSON.parse(await AsyncStorage.getItem('aaa_user'));
 
       // const apiResponse = await axios.post(
@@ -193,9 +185,9 @@ const JobDetailScreen = ({route, navigation}) => {
       //   },
       // );
 
-      console.log('apiResponse >>', apiResponse);
+      console.log('apiResponse >>', apiResponse?.data);
 
-      if (apiResponse?.response?.success) {
+      if (apiResponse?.data?.success) {
         Alert.alert(
           'Job completed',
           'Job has been completed successfully',
@@ -210,7 +202,7 @@ const JobDetailScreen = ({route, navigation}) => {
       } else {
         Alert.alert(
           'Job completion failed',
-          apiResponse?.response?.data?.message ||
+          apiResponse?.data?.data?.message ||
             'Something went wrong. Please try again.',
         );
       }

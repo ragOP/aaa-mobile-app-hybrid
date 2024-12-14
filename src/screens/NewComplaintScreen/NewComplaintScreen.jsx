@@ -36,8 +36,10 @@ const NewComplaintScreen = () => {
   const [audioIcons, setAudioIcons] = useState(play);
   const [projects, setProjects] = useState([]);
   const [panels, setPanels] = useState([]);
+  const [isProjectsFetched, setIsProjectsFetched] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
+  const [isCreatingComplaint, setIsCreatingComplaint] = useState(false);
 
   useEffect(() => {
     requestMicrophonePermission();
@@ -122,50 +124,59 @@ const NewComplaintScreen = () => {
   };
   const isSubmitDisabled = () => {
     return (
-      !selectedProject || !selectedPanel || !siteLocation || !issuedescription
+      !selectedProject ||
+      !selectedPanel ||
+      !siteLocation ||
+      !issuedescription ||
+      !audioPath ||
+      images?.length === 0
     );
   };
 
   const handleSubmit = async () => {
+    if (isCreatingComplaint) {
+      return;
+    }
+
     if (isSubmitDisabled()) {
       Alert.alert(
         'Missing Fields',
         'Please fill all the required fields before submitting.',
-        [{text: 'OK'}],
-        {cancelable: false},
       );
       return;
     }
 
-    const selectedProjectName = selectedProject?.title || '';
-    const selectedPanelName = selectedPanel || '';
-    const severityText = getSeverityText();
-    const user = JSON.parse(await AsyncStorage.getItem('aaa_user'));
-
-    // Dynamically create FormData
-    const formData = new FormData();
-    formData.append('customerId', user._id);
-    formData.append('projectName', selectedProjectName);
-    formData.append('siteLocation', siteLocation);
-    formData.append('panelSectionName', selectedPanelName);
-    formData.append('severity', severityText);
-    formData.append('issuedescription', issuedescription);
-    formData.append('voiceNote', {
-      uri: `file://${audioPath}`,
-      type: 'audio/wav',
-      name: 'audio.wav',
-    });
-
-    // Dynamically append images (if any)
-    images.forEach((image, index) => {
-      formData.append('images', {
-        uri: image.uri,
-        type: image.type,
-        name: `image_${index}.jpg`,
-      });
-    });
     try {
+      setIsCreatingComplaint(true);
+      const selectedProjectName = selectedProject?.title || '';
+      const selectedPanelName = selectedPanel || '';
+      const severityText = getSeverityText();
+      const user = JSON.parse(await AsyncStorage.getItem('aaa_user'));
+
+      const formData = new FormData();
+      formData.append('customerId', user._id);
+      formData.append('projectName', selectedProjectName);
+      formData.append('siteLocation', siteLocation);
+      formData.append('panelSectionName', selectedPanelName);
+      formData.append('severity', severityText);
+      formData.append('issuedescription', issuedescription);
+
+      formData.append('voiceNote', {
+        uri: `file://${audioPath}`,
+        type: 'audio/wav',
+        name: 'audio.wav',
+      });
+
+      images.forEach((image, index) => {
+        formData.append('images', {
+          uri: image.uri,
+          type: image.type,
+          name: `image_${index}.jpg`,
+        });
+      });
+
       const response = await newComplaintApi(user._id, formData);
+
       if (response?.data?.success) {
         setSelectedProject('');
         setSelectedPanel('');
@@ -176,7 +187,6 @@ const NewComplaintScreen = () => {
         setAudioPath('');
         setAudioIcons(play);
 
-        // Show alert
         Alert.alert(
           'Success',
           'New complaint added successfully!',
@@ -189,12 +199,23 @@ const NewComplaintScreen = () => {
           {cancelable: false},
         );
         navigation.navigate('ComplaintScreen');
+      } else {
+        Alert.alert(
+          'Create failed',
+          response?.data?.data?.message || 'New complaint create failed',
+        );
       }
     } catch (error) {
       console.error(
         'Error submitting complaint:',
         error.response ? error.response.data : error.message,
       );
+      Alert.alert(
+        'Create failed',
+        error?.message || 'Server error, please try later.',
+      );
+    } finally {
+      setIsCreatingComplaint(false);
     }
   };
 
@@ -202,21 +223,27 @@ const NewComplaintScreen = () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
 
-  useEffect(() => {
-    const fetchAllProjects = async () => {
-      try {
-        setIsFetching(true);
-        const data = await getUserDetails();
-        const response = await getProjectsApi(data._id);
+  const fetchAllProjects = async () => {
+    try {
+      setIsFetching(true);
+      const data = await getUserDetails();
+      const response = await getProjectsApi(data._id);
 
+      if (response?.data?.success) {
         setProjects(response?.data?.data?.data || []);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsFetching(false);
+        setIsProjectsFetched(true);
       }
-    };
-    fetchAllProjects();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isProjectsFetched) {
+      fetchAllProjects();
+    }
   }, []);
 
   return (
@@ -234,7 +261,7 @@ const NewComplaintScreen = () => {
         style={styles.picker}
         dropdownIconColor="red">
         <Picker.Item
-          label="Project Name :"
+          label={isFetching ? 'Fetching projects...' : 'Project Name :'}
           value={selectedProject?.title || ''}
         />
         {projects.map(project => (
@@ -309,7 +336,9 @@ const NewComplaintScreen = () => {
             <Image source={audioIcons} style={styles.micIcon} />
           </TouchableOpacity>
           {audioPath && (
-            <Text style={{position: 'absolute', right: -5, bottom: -8}}>Record again</Text>
+            <Text style={{position: 'absolute', right: -5, bottom: -8}}>
+              Record again
+            </Text>
           )}
         </View>
       </View>
@@ -361,9 +390,13 @@ const NewComplaintScreen = () => {
 
       {/* Submit Button */}
       <TouchableOpacity
-        style={[styles.submitButton, isSubmitDisabled() && {opacity: 0.5}]}
+        style={[
+          styles.submitButton,
+          (isSubmitDisabled() || isCreatingComplaint) && {opacity: 0.5},
+        ]}
         onPress={handleSubmit}
         disabled={isSubmitDisabled()}>
+        {isCreatingComplaint && <ActivityIndicator size="small" />}
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -557,6 +590,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   submitButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
     backgroundColor: '#FF0000',
     borderRadius: 20,
     padding: 15,
