@@ -45,6 +45,7 @@ const JobDetailScreen = ({route, navigation}) => {
   const [sound, setSound] = useState(null);
   const [startCode, setStartCode] = useState('');
   const [happyCode, setHappyCode] = useState('');
+  const [startCodeVerified, setStartCodeVerified] = useState(false);
 
   const [form, setForm] = useState({
     repairDescription: '',
@@ -53,7 +54,6 @@ const JobDetailScreen = ({route, navigation}) => {
   });
 
   const [loadingLocation, setLoadingLocation] = useState(false);
-
   const [isRecording, setIsRecording] = useState(false);
   const [audioPath, setAudioPath] = useState(null);
   const [recordingIcon, setRecordingIcon] = useState(play);
@@ -91,7 +91,7 @@ const JobDetailScreen = ({route, navigation}) => {
       return;
     }
 
-    if (startCode !== statusCode) {
+    if (startCode?.toString() !== statusCode?.toString()) {
       Alert.alert(
         'Invalid Status Code',
         'Please enter a valid 4-digit status code.',
@@ -102,15 +102,24 @@ const JobDetailScreen = ({route, navigation}) => {
     try {
       setSubmittingStartCode(true);
 
-      const form = {
+      const formData = {
         statusCode: startCode,
       };
-      const apiResponse = await startJob(_id, form);
 
-      if (apiResponse?.response?.success) {
+      const apiResponse = await startJob(_id, formData);
+
+      if (apiResponse?.data?.success) {
         Alert.alert(
           'Job Started Successfully',
           'The job has been started with the provided status code.',
+        );
+
+        setStartCodeVerified(true);
+      } else {
+        Alert.alert(
+          'Error',
+          apiResponse?.data?.data?.message ||
+            'There was an issue starting the job. Please try again.',
         );
       }
     } catch (error) {
@@ -171,21 +180,6 @@ const JobDetailScreen = ({route, navigation}) => {
       }
 
       const apiResponse = await completeJob(_id, formData);
-     
-      const token = JSON.parse(await AsyncStorage.getItem('aaa_user'));
-
-      // const apiResponse = await axios.post(
-      //   `/api/engineer/completed-job/${_id}`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   },
-      // );
-
-      console.log('apiResponse >>', apiResponse?.data);
 
       if (apiResponse?.data?.success) {
         Alert.alert(
@@ -362,17 +356,41 @@ const JobDetailScreen = ({route, navigation}) => {
     };
   }, [newAudioPath]);
 
+  const fetchGeocode = async location => {
+    console.log('location', location);
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+        location,
+      )}&format=json&limit=1`,
+    );
+
+    const data = await response.json();
+
+    if (data.length > 0) {
+      const {lat, lon} = data[0];
+      return {latitude: parseFloat(lat), longitude: parseFloat(lon)};
+    } else {
+      console.error('Failed to fetch location details');
+      throw new Error('Failed to fetch location details');
+    }
+  };
+
   const handleGetSiteLocation = async () => {
     try {
+      const {latitude: siteLatitude, longitude: siteLongitude} =
+        await fetchGeocode(siteLocation);
       setLoadingLocation(true);
+
       Geolocation.getCurrentPosition(
         position => {
           const {latitude, longitude} = position.coords;
 
-          const siteLocationLatitude = 18.922;
-          const siteLocationLongitude = 72.8347;
+          // const siteLocationLatitude = 18.922;
+          // const siteLocationLongitude = 72.8347;
 
-          const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${siteLocationLatitude},${siteLocationLongitude}`;
+          const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${siteLatitude},${siteLongitude}`;
+
+          console.log('>>> ' + googleMapsUrl);
 
           Linking.openURL(googleMapsUrl).catch(err => {
             Alert.alert('Error', 'Unable to open Google Maps');
@@ -480,7 +498,7 @@ const JobDetailScreen = ({route, navigation}) => {
           </View>
         </View>
 
-        {!isJobStarted && (
+        {isJobStarted && (
           <View style={styles.startCodeBox}>
             <Text style={styles.label}>Enter start code</Text>
             <View style={styles.startCodeInnerBox}>
@@ -510,7 +528,7 @@ const JobDetailScreen = ({route, navigation}) => {
           </View>
         )}
 
-        {isJobStarted && (
+        {(!isJobStarted || startCodeVerified) && (
           <View style={{...styles.card, marginTop: 8}}>
             <Text style={styles.label}>Job Actions</Text>
 
