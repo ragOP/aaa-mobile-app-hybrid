@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,8 +12,9 @@ import RNFS from 'react-native-fs';
 import warrantyImage from '../..//assets/icons/Settings.png';
 import amcImage from '../../assets/icons/doc.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getProjectsApi} from '../../store/api';
-import {ActivityIndicator} from 'react-native-paper';
+import { getProjectsApi } from '../../store/api';
+import { ActivityIndicator } from 'react-native-paper';
+
 const ProjectCard = ({
   projectName,
   panels,
@@ -28,11 +29,12 @@ const ProjectCard = ({
     try {
       const url = type === 'warranty' ? warrantyLink : amcLink;
 
-      const fileName = url.split('/').pop();
       if (!url) {
-        Alert.alert('Error', 'Download link not available.');
+        Alert.alert('File not present', `The ${type} file is not added.`);
         return;
       }
+
+      const fileName = url.split('/').pop();
 
       const downloadPath = `${RNFS.ExternalDirectoryPath}/${fileName}`;
 
@@ -147,8 +149,8 @@ const ProjectScreen = () => {
             location={project?.siteLocation}
             warrantyStatus="Active: 81 days left"
             amcStatus="Not Applicable"
-            warrantyLink={project?.warraty}
-            amcLink={project?.AMC}
+            warrantyLink={project?.warrantyPdf}
+            amcLink={project?.amcPdf}
           />
         ))
       ) : (
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowRadius: 5,
     elevation: 5,
   },
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     width: '40%',
     shadowColor: '#000',
     shadowOpacity: 0.4,
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowRadius: 5,
     elevation: 4,
     borderBottomEndRadius: 12,
