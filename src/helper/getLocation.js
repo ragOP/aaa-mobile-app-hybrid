@@ -68,9 +68,9 @@ export const getLocation = async () => {
         }
       },
       {
-        enableHighAccuracy: true, // Use GPS for precise location
-        timeout: 15000, // Wait for up to 15 seconds
-        maximumAge: 10000, // Accept cached location if it is less than 10 seconds old
+        enableHighAccuracy: false, // Use GPS for precise location
+        timeout: 30000, // Wait for up to 15 seconds
+        maximumAge: 60000,  // Accept cached location if it is less than 10 seconds old
       },
     );
   });

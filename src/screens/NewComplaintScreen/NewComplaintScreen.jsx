@@ -43,6 +43,8 @@ const NewComplaintScreen = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
   const [isCreatingComplaint, setIsCreatingComplaint] = useState(false);
+  const [geoLatitude, setGeoLatitude] = useState(0);
+  const [geoLongitude, setGeoLongitude] = useState(0);
 
   useEffect(() => {
     requestMicrophonePermission();
@@ -76,6 +78,9 @@ const NewComplaintScreen = () => {
     try {
       setIsFetchingLocation(true);
       const {latitude, longitude} = await getLocation();
+      setGeoLatitude(latitude);
+      setGeoLongitude(longitude);
+      console.log("Location >>>", geoLatitude, geoLongitude);
       const fullAddress = await getAddressFromCoordinates(latitude, longitude);
       setSiteLocation(fullAddress);
     } catch (error) {
@@ -163,6 +168,10 @@ const NewComplaintScreen = () => {
       formData.append('panelSectionName', selectedPanelName);
       formData.append('severity', severityText);
       formData.append('issuedescription', issuedescription);
+      formData.append('geoLatitude', geoLatitude);
+      formData.append('geoLongitude', geoLongitude);
+
+      console.log("FormData >>> ", formData);
 
       formData.append('voiceNote', {
         uri: `file://${audioPath}`,

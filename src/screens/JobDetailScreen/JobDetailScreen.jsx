@@ -40,6 +40,8 @@ const JobDetailScreen = ({route, navigation}) => {
     statusCode,
     severity,
     voiceNote,
+    geoLatitude,
+    geoLongitude,
   } = route.params.job;
 
   const isJobStarted = activity === 'Pending' ? true : false;
@@ -359,39 +361,42 @@ const JobDetailScreen = ({route, navigation}) => {
     };
   }, [newAudioPath]);
 
-  const fetchGeocode = async location => {
-    console.log('location', location);
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-        location,
-      )}&format=json&limit=1`,
-    );
+  // const fetchGeocode = async location => {
+  //   console.log('location', location);
+  //   const response = await fetch(
+  //     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+  //       location,
+  //     )}&format=json&limit=1`,
+  //   );
 
-    const data = await response.json();
+  //   const data = await response.json();
 
-    if (data.length > 0) {
-      const {lat, lon} = data[0];
-      return {latitude: parseFloat(lat), longitude: parseFloat(lon)};
-    } else {
-      console.error('Failed to fetch location details');
-      throw new Error('Failed to fetch location details');
-    }
-  };
+  //   if (data.length > 0) {
+  //     const {lat, lon} = data[0];
+  //     return {latitude: parseFloat(lat), longitude: parseFloat(lon)};
+  //   } else {
+  //     console.error('Failed to fetch location details');
+  //     throw new Error('Failed to fetch location details');
+  //   }
+  // };
 
   const handleGetSiteLocation = async () => {
+    console.log('Current Location >>>>>', geoLatitude, geoLongitude);
     try {
-      const {latitude: siteLatitude, longitude: siteLongitude} =
-        await fetchGeocode(siteLocation);
+      // const {latitude: siteLatitude, longitude: siteLongitude} =
+      //   await fetchGeocode(siteLocation);
       setLoadingLocation(true);
 
       Geolocation.getCurrentPosition(
         position => {
-          const {latitude, longitude} = position.coords;
+          // const {latitude, longitude} = position.coords;
 
           // const siteLocationLatitude = 18.922;
           // const siteLocationLongitude = 72.8347;
 
-          const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${siteLatitude},${siteLongitude}`;
+          console.log('Current Location >>>>>', geoLatitude, geoLongitude);
+
+          const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${geoLatitude},${geoLongitude}&destination=${geoLatitude},${geoLongitude}`;
 
           console.log('>>> ' + googleMapsUrl);
 
@@ -450,6 +455,7 @@ const JobDetailScreen = ({route, navigation}) => {
               <View style={styles.column}>
                 <Text style={styles.label}>Project Name:</Text>
                 <Text style={styles.value}>{projectName || ''}</Text>
+
               </View>
             </View>
 
@@ -475,6 +481,11 @@ const JobDetailScreen = ({route, navigation}) => {
                 <Image source={audioIcons} style={styles.playIcon} />
               </TouchableOpacity>
             </View>
+          </View>
+
+          <View style={styles.projectColumn}>
+            <Text style={styles.label}>Address -</Text>            
+            <Text style={styles.value}>{siteLocation || "No Address Found"}</Text>
           </View>
 
           <View style={styles.photoContainerRows}>

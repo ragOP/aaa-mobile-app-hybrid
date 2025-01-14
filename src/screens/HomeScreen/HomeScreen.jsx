@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width * 0.55,
-    height: height * 0.2,
+    height: height * 0.15,
     resizeMode: 'contain',
   },
   userInfo: {
