@@ -8,6 +8,7 @@ import {
   Image,
   Linking,
   ActivityIndicator,
+  Dimensions, Platform
 } from 'react-native';
 import addIcon from '../../assets/icons/+.png';
 import phoneIcon from '../../assets/icons/Call.png';
@@ -16,6 +17,7 @@ import checkCircleIcon from '../../assets/icons/Checkmark.png';
 import {getComplaintsApi, raisePrority} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
+const { width, height } = Dimensions.get('window');
 
 const ComplaintScreen = ({route, navigation}) => {
   const [complaints, setComplaints] = useState([]);
@@ -193,59 +195,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F3F5FD',
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.05, // Dynamic horizontal padding
   },
   title: {
-    fontSize: 24,
+    fontSize: width * 0.06,
     fontWeight: 'bold',
     color: '#3a3a3a',
-    marginVertical: 20,
+    marginVertical: height * 0.02, // Dynamic vertical margin
   },
   newComplaintButton: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 12,
+    borderRadius: width * 0.05,
+    padding: width * 0.03,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: height * 0.02,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: height * 0.005 },
     shadowOpacity: 0.8,
-    shadowRadius: 5,
+    shadowRadius: width * 0.03,
     elevation: 5,
   },
   newComplaintText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: width * 0.05,
   },
   plusButton: {
     alignItems: 'center',
     backgroundColor: 'red',
-    borderRadius: 15,
-    padding: 14,
-    width: 100,
-    height: 50,
+    borderRadius: width * 0.04,
+    padding: height * 0.015,
+    width: width * 0.25,
+    height: height * 0.06,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: height * 0.005 },
     shadowOpacity: 0.8,
-    shadowRadius: 5,
+    shadowRadius: width * 0.03,
     elevation: 5,
   },
   plusIcon: {
-    width: 22,
-    height: 22,
+    width: width * 0.055,
+    height: width * 0.055,
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
+    borderRadius: width * 0.025,
+    padding: width * 0.04,
+    marginVertical: height * 0.01,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 5,
+    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowRadius: width * 0.03,
     elevation: 3,
   },
   cardHeader: {
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   panelText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
     color: '#FF0000',
   },
@@ -265,13 +267,13 @@ const styles = StyleSheet.create({
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 2,
+    marginVertical: height * 0.005,
   },
   row: {
     flexDirection: 'row',
   },
   labelText: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     color: '#3a3a3a',
   },
   ongoingText: {
@@ -281,11 +283,11 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: '#d3d3d3',
-    marginVertical: 10,
+    marginVertical: height * 0.01,
   },
   statusText: {
-    fontSize: 14,
-    marginVertical: 10,
+    fontSize: width * 0.035,
+    marginVertical: height * 0.01,
   },
   statusCode: {
     color: '#FF8400',
@@ -294,60 +296,60 @@ const styles = StyleSheet.create({
   statusBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: height * 0.01,
   },
   statusBarSectionComplete: {
     flex: 1,
-    height: 6,
+    height: height * 0.007,
     backgroundColor: 'green',
-    marginHorizontal: 2,
-    borderRadius: 3,
+    marginHorizontal: width * 0.005,
+    borderRadius: width * 0.02,
   },
   statusBarSectionIncomplete: {
     flex: 1,
-    height: 6,
+    height: height * 0.007,
     backgroundColor: '#d3d3d3',
-    marginHorizontal: 2,
-    borderRadius: 3,
+    marginHorizontal: width * 0.005,
+    borderRadius: width * 0.02,
   },
   actionButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 15,
+    marginTop: height * 0.02,
   },
   actionButton: {
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 25,
-    width: '31%',
+    padding: height * 0.012,
+    borderRadius: width * 0.06,
+    width: width * 0.25,
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 5,
+    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowRadius: width * 0.03,
     elevation: 3,
   },
   actionButtonText: {
-    marginLeft: 5,
+    marginLeft: width * 0.012,
     color: '#4f4f4f',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 12,
-    marginTop: 6,
+    fontSize: width * 0.03,
+    marginTop: height * 0.008,
   },
   actionIcon: {
-    width: 22,
-    height: 22,
+    width: width * 0.055,
+    height: width * 0.055,
   },
   noDataText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     color: '#4f4f4f',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: height * 0.025,
   },
   activityIndicatorStyles: {
-    marginTop: 160,
+    marginTop: height * 0.2,
   },
 });
 

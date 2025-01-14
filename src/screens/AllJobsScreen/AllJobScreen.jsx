@@ -12,6 +12,9 @@ import {
 import phoneIcon from '../../assets/icons/Call.png';
 import warningIcon from '../../assets/icons/Priority.png';
 import checkCircleIcon from '../../assets/icons/Checkmark.png';
+import { Dimensions, Platform } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 import {getAllJobsApi, raisePrority} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
@@ -115,199 +118,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F3F5FD',
-    paddingHorizontal: 20,
-  },
-  repairText: {
-    color: '#FF0000',
-    fontSize: 24,
-    fontWeight: 'bold',
+    paddingHorizontal: width * 0.05,
   },
   title: {
-    fontSize: 24,
+    fontSize: width * 0.06,
     fontWeight: 'bold',
     color: '#3a3a3a',
-    marginVertical: 20,
+    marginVertical: height * 0.02,
   },
-  newComplaintButton: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 12,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  newComplaintText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  plusButton: {
-    alignItems: 'center',
-    backgroundColor: 'red',
-    borderRadius: 15,
-    padding: 14,
-    width: 100,
-    height: 50,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  plusIcon: {
-    width: 22,
-    height: 22,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  panelText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FF0000',
-  },
-  viewMoreText: {
-    color: '#4f4f4f',
-    fontWeight: 'bold',
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 2,
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  labelText: {
-    fontSize: 14,
-    color: '#3a3a3a',
-  },
-  ongoingText: {
-    color: 'green',
-    fontWeight: 'bold',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#d3d3d3',
-    marginVertical: 10,
-  },
-  statusText: {
-    fontSize: 14,
-    marginVertical: 10,
-  },
-  statusCode: {
-    color: '#FF8400',
-    fontWeight: 'bold',
-  },
-  statusBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  statusBarSectionComplete: {
-    flex: 1,
-    height: 6,
-    backgroundColor: 'green',
-    marginHorizontal: 2,
-    borderRadius: 3,
-  },
-  statusBarSectionIncomplete: {
-    flex: 1,
-    height: 6,
-    backgroundColor: '#d3d3d3',
-    marginHorizontal: 2,
-    borderRadius: 3,
-  },
-  actionButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 15,
-  },
-  actionButton: {
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 25,
-    width: '31%',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  actionButtonText: {
-    marginLeft: 5,
-    color: '#4f4f4f',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: 12,
-    marginTop: 6,
-  },
-  actionIcon: {
-    width: 22,
-    height: 22,
-  },
-  noDataContainer: {
-    flex: 1,
-    minHeight: '100%',
-    alignItems: 'center',
-    marginTop: '70%',
-  },
-  noDataText: {
-    fontSize: 18,
-    color: '#4f4f4f',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  activityIndicatorStyles: {
-    marginTop: 160,
-  },
-
   jobsContent: {
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 8,
-    padding: 10,
-    margin: 4,
-    height: 170,
+    padding: width * 0.04,
+    margin: width * 0.02,
+    height: height * 0.25,
   },
   panelType: {
     color: '#f02b2b',
-    fontSize: 16,
+    fontSize: width * 0.04,
     fontWeight: '700',
-    marginBottom: 10,
+    marginBottom: height * 0.01,
   },
   tokenStatusRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: height * 0.01,
   },
   tokenText: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: '#404969',
     fontWeight: '700',
   },
@@ -315,7 +158,7 @@ const styles = StyleSheet.create({
     color: '#4285F4',
   },
   status: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     color: '#404969',
     fontWeight: '700',
   },
@@ -323,10 +166,26 @@ const styles = StyleSheet.create({
     color: 'orange',
   },
   detailText: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     color: '#404969',
     fontWeight: '700',
-    marginVertical: 5,
+    marginVertical: height * 0.005,
+  },
+  noDataContainer: {
+    flex: 1,
+    minHeight: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: width * 0.05,
+  },
+  noDataText: {
+    fontSize: width * 0.045,
+    color: '#4f4f4f',
+    textAlign: 'center',
+    marginTop: height * 0.02,
+  },
+  activityIndicatorStyles: {
+    marginTop: height * 0.2,
   },
 });
 

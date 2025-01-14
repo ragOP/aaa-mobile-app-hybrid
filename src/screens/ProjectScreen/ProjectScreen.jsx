@@ -7,7 +7,10 @@ import {
   ScrollView,
   Image,
   Alert,
+  Dimensions
 } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 import RNFS from 'react-native-fs';
 import warrantyImage from '../..//assets/icons/Settings.png';
 import amcImage from '../../assets/icons/doc.png';
@@ -164,21 +167,21 @@ const ProjectScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: width * 0.05, 
     backgroundColor: '#F3F6FC',
     flexGrow: 1,
   },
   screenTitle: {
-    fontSize: 24,
+    fontSize: width * 0.06, 
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: height * 0.02, 
     color: '#333',
   },
   cardContainer: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 20,
+    borderRadius: width * 0.03,
+    padding: width * 0.04, 
+    marginBottom: height * 0.02,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 1 },
@@ -190,18 +193,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   projectName: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
     color: '#D64541',
   },
   viewMore: {
-    color: 'black',
+    color: '#000',
     fontWeight: 'bold',
   },
   detailText: {
-    fontSize: 14,
-    color: 'black',
-    marginVertical: 3,
+    fontSize: width * 0.04,
+    color: '#000',
+    marginVertical: height * 0.005,
   },
   status: {
     fontWeight: 'bold',
@@ -214,70 +217,70 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: 'black',
-    marginVertical: 10,
+    backgroundColor: '#000',
+    marginVertical: height * 0.015,
   },
-
   statusContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 10,
+    marginTop: height * 0.02,
   },
   statusBox: {
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: 'white',
+    padding: height * 0.015, 
+    backgroundColor: '#FFF',
     width: '40%',
     shadowColor: '#000',
     shadowOpacity: 0.4,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 5,
     elevation: 4,
-    borderBottomEndRadius: 12,
-    borderBottomStartRadius: 12,
+    borderBottomEndRadius: width * 0.03,
+    borderBottomStartRadius: width * 0.03,
   },
   statusTitle: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     fontWeight: 'bold',
     color: '#333',
-    marginTop: 5,
+    marginTop: height * 0.01,
   },
   statusText: {
-    fontSize: 12,
+    fontSize: width * 0.03,
     color: '#555',
-    marginTop: 3,
+    marginTop: height * 0.005,
   },
   statusImage: {
-    width: 30,
-    height: 30,
-    marginBottom: 5,
+    width: width * 0.08,
+    height: width * 0.08, 
+    marginBottom: height * 0.01, 
   },
   detailTextRow: {
-    flexDirection: 'row', // Makes the text appear in a row
-    fontSize: 14,
-    color: 'red',
-    marginVertical: 3,
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    fontSize: width * 0.04, 
+    color: '#D64541',
+    marginVertical: height * 0.005,
   },
   panelText: {
-    color: 'black',
+    color: '#000',
   },
   notFoundContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 32,
+    marginTop: height * 0.04,
   },
   notFoundText: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: '#888',
   },
   centeredContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 32,
+    marginTop: height * 0.04,
   },
 });
+
 
 export default ProjectScreen;

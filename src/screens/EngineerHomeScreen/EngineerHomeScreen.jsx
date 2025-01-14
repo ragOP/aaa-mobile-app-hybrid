@@ -8,11 +8,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Modal,
+  Dimensions, Platform
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getAllJobsApi} from '../../store/api';
+const { width, height } = Dimensions.get('window');
 
 const HomeScreen = ({navigation}) => {
   const [jobs, setJobs] = useState([]);
@@ -181,21 +183,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#FF0000',
+    padding: width * 0.04,
   },
   logo: {
-    width: 220,
-    height: 160,
+    width: width * 0.5,
+    height: height * 0.1,
     resizeMode: 'contain',
   },
   userInfo: {
     alignItems: 'center',
-    paddingRight: 10,
+    paddingRight: width * 0.03,
   },
   profileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginBottom: 5,
+    width: width * 0.12,
+    height: width * 0.12,
+    borderRadius: width * 0.06,
+    marginBottom: height * 0.01,
   },
   userName: {
     color: '#FFFFFF',
@@ -203,65 +206,60 @@ const styles = StyleSheet.create({
   },
   userPhone: {
     color: '#FFFFFF',
-    paddingRight: 4,
+    paddingRight: width * 0.02,
   },
-  assignedJobSection: {
-    // backgroundColor: 'red',
-  },
-
   assignedJobCard: {
     backgroundColor: '#fff',
-    margin: 12,
-    borderRadius: 10,
-    padding: 15,
+    margin: width * 0.03,
+    borderRadius: width * 0.025,
+    padding: width * 0.04,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: height * 0.005 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: width * 0.03,
     elevation: 5,
-    height: 260,
+    height: height * 0.33,
   },
-
   assignedJobHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    marginBottom: height * 0.02,
   },
   assignedJobTitle: {
-    fontSize: 22,
+    fontSize: width * 0.055,
     fontWeight: '700',
     color: '#404969',
   },
   viewMore: {
-    fontSize: 15,
+    fontSize: width * 0.04,
     fontWeight: '700',
     color: '#404969',
   },
   jobsContent: {
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: height * 0.005 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: width * 0.03,
     elevation: 8,
-    padding: 10,
-    margin: 4,
-    height: 170,
+    padding: width * 0.03,
+    margin: width * 0.01,
+    height: height * 0.22,
   },
   panelType: {
     color: '#f02b2b',
-    fontSize: 16,
+    fontSize: width * 0.04,
     fontWeight: '700',
-    marginBottom: 10,
+    marginBottom: height * 0.01,
   },
   tokenStatusRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: height * 0.01,
   },
   tokenText: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: '#404969',
     fontWeight: '700',
   },
@@ -269,7 +267,7 @@ const styles = StyleSheet.create({
     color: '#4285F4',
   },
   status: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     color: '#404969',
     fontWeight: '700',
   },
@@ -277,45 +275,43 @@ const styles = StyleSheet.create({
     color: 'orange',
   },
   detailText: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     color: '#404969',
     fontWeight: '700',
-    marginVertical: 5,
+    marginVertical: height * 0.01,
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    marginTop: '5%',
+    paddingHorizontal: width * 0.05,
+    marginTop: height * 0.05,
   },
   gridItem: {
     width: '46%',
-    height: 150,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 10,
-    marginBottom: 15,
+    height: height * 0.2,
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: width * 0.025,
+    marginBottom: height * 0.02,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: height * 0.005 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: width * 0.03,
     elevation: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   gridImage: {
-    width: '30%', // Adjust to fit the grid item width
-    height: '30%', // Adjust to fit the grid item height
-    borderRadius: 8, // Optional: rounds the image corners
-    resizeMode: 'fit', // Ensures the image covers the grid item area
+    width: '30%',
+    height: '30%',
+    borderRadius: width * 0.02,
+    resizeMode: 'contain',
   },
   gridText: {
     color: 'black',
     fontWeight: '500',
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: width * 0.035,
+    marginTop: height * 0.01,
   },
   modalOverlay: {
     flex: 1,
@@ -325,31 +321,31 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: width * 0.025,
+    padding: width * 0.05,
     width: '80%',
     alignItems: 'center',
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: width * 0.05,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
   logoutButton: {
     backgroundColor: '#FF0000',
-    padding: 10,
-    borderRadius: 5,
+    padding: height * 0.015,
+    borderRadius: width * 0.02,
     width: '100%',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: height * 0.02,
   },
   logoutText: {
     color: '#fff',
     fontWeight: 'bold',
   },
   cancelButton: {
-    padding: 10,
-    borderRadius: 5,
+    padding: height * 0.015,
+    borderRadius: width * 0.02,
     width: '100%',
     alignItems: 'center',
   },
@@ -358,8 +354,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   activityIndicatorStyles: {
-    marginTop: 60,
+    marginTop: height * 0.08,
   },
 });
+
 
 export default HomeScreen;

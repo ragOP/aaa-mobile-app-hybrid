@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   TextInput,
   Linking,
+  Dimensions, Platform
 } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const ComplainDetailScreen = ({route}) => {
   const {
@@ -141,80 +144,80 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    paddingHorizontal: 16,
-    paddingVertical: 50,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: height * 0.06,
   },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    padding: 16,
-    marginBottom: 16,
+    padding: width * 0.04,
+    marginBottom: height * 0.02,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 4},
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowRadius: width * 0.02,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: height * 0.015,
   },
   label: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: width * 0.035,
     flex: 1,
     color: 'black',
   },
   value: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     flex: 2,
     color: '#000',
   },
   link: {
     color: '#FF0000',
     fontWeight: 'bold',
-    marginLeft: 8,
+    marginLeft: width * 0.02,
   },
   imageContainer: {
     flexDirection: 'row',
-    marginLeft: 8,
+    marginLeft: width * 0.02,
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    marginRight: 10,
+    width: width * 0.12,
+    height: width * 0.12,
+    borderRadius: width * 0.02,
+    marginRight: width * 0.025,
     backgroundColor: '#E0E0E0',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: height * 0.02,
     color: 'red',
   },
   codeInputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 12,
+    marginVertical: height * 0.015,
   },
   codeInput: {
-    width: 40,
-    height: 40,
+    width: width * 0.1,
+    height: width * 0.1,
     backgroundColor: '#F0F0F0',
-    borderRadius: 5,
+    borderRadius: width * 0.02,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: width * 0.045,
   },
   completeButton: {
     backgroundColor: '#FF0000',
-    padding: 12,
-    borderRadius: 10,
+    padding: height * 0.015,
+    borderRadius: width * 0.03,
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: height * 0.015,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
   },
   low: {

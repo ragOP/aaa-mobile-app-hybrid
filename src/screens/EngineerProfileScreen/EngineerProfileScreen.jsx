@@ -7,7 +7,9 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 const EngineerProfileScreen = () => {
   const [engineer, setEngineer] = useState(null);
@@ -92,37 +94,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    padding: 20,
+    padding: width * 0.05,
   },
   header: {
-    fontSize: 24,
+    fontSize: width * 0.06,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: height * 0.03,
   },
   field: {
-    marginBottom: 15,
+    marginBottom: height * 0.02,
   },
   label: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: '#666',
-    marginBottom: 5,
+    marginBottom: height * 0.01,
   },
   input: {
     backgroundColor: '#FFF',
-    borderRadius: 8,
+    borderRadius: width * 0.02,
     borderWidth: 1,
     borderColor: '#DDD',
-    padding: 10,
-    fontSize: 16,
+    padding: width * 0.03,
+    fontSize: width * 0.04,
     color: '#333',
   },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 200,
+    height: height * 0.25,
   },
 });
 
