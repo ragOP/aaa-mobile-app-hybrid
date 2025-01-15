@@ -12,12 +12,20 @@ import {
 import {customerloginApi} from '../../store/api';
 import toastFunction from '../../functions/toastFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ForgotPasswordModal from './components/ForgotPasswordModal';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+
+
+  const handleOpenModal = () => {
+    setShowModal(!showModal);
+    console.log(">>> Pressed")
+  };
 
   const handleLogin = async () => {
     setLoading(true);
@@ -103,12 +111,17 @@ const LoginScreen = ({navigation}) => {
       </TouchableOpacity>
 
       <TouchableOpacity activeOpacity={1}>
-        <Text style={styles.forgotPasswordText}>Forget Password?</Text>
+        <Text style={styles.forgotPasswordText} onPress={handleOpenModal}>Forget Password?</Text>
       </TouchableOpacity>
 
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
+      {
+        showModal && (
+          <ForgotPasswordModal showModal={showModal} setShowModal={setShowModal} userType="customer" />
+        )
+      }
     </View>
   );
 };
@@ -179,6 +192,7 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: '#FF0000',
     fontSize: 16,
+    marginLeft: -170,
     marginBottom: 30,
   },
   footerText: {

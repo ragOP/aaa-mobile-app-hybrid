@@ -12,16 +12,24 @@ import {
 import {engineerloginApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import toastFunction from '../../functions/toastFunction';
+import ForgotPasswordModal from './components/ForgotPasswordModal';
 
 const EngineerLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // New state for loader
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // New state for button
+  const [showModal, setShowModal] = useState(false);
 
   const saveTokenHandler = async token => {
     await AsyncStorage.setItem('aaa_token', token);
   };
+
+  const handleOpenModal = () => {
+    setShowModal(!showModal);
+    console.log(">>> Pressed")
+  };
+
 
   const handleLogin = async () => {
     if (loading) {
@@ -116,13 +124,18 @@ const EngineerLoginScreen = ({navigation}) => {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={1}>
-        <Text style={styles.forgotPasswordText}>Forget Password ?</Text>
+      <TouchableOpacity activeOpacity={1} >
+        <Text style={styles.forgotPasswordText} onPress={handleOpenModal}>Forget Password ?</Text>
       </TouchableOpacity>
 
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
+      {
+        showModal && (
+          <ForgotPasswordModal showModal={showModal} setShowModal={setShowModal} userType="engineer" />
+        )
+      }
     </View>
   );
 };
@@ -193,6 +206,7 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: '#FF0000',
     fontSize: 16,
+    marginLeft: -170,
     marginBottom: 30,
   },
   footerText: {

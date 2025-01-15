@@ -52,3 +52,6 @@ export const completeJob = (id, formData) =>
       'Content-Type': 'multipart/form-data',
     },
   });
+
+export const engineerForgetPassword = (formData ) => API.post('/api/engineer/forget-password', formData);
+export const customerForgetPassword = (formData ) => API.post('/api/customer/forget-password', formData);
