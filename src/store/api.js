@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://aaa-backend-prcc.onrender.com',
+  baseURL: 'https://aaa-backend-tunq.onrender.com',
 });
 
 API.interceptors.request.use(
