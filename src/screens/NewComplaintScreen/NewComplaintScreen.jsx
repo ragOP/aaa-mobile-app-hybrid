@@ -341,7 +341,7 @@ const NewComplaintScreen = () => {
           placeholder="A Product of AAA SWITCH GEAR PVT LTD\nAll Rights Reserved."
           value={issuedescription}
           onChangeText={setIssueDescription}
-          placeholderTextColor="black"
+          placeholderTextColor="#A9A9A9"
         />
         <View>
           <TouchableOpacity onPress={handlePress} style={styles.micButton}>

@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const OPENCAGE_API_KEY = 'fb60d08501c04460a47b9d4f5fa4c860'; // Replace with your OpenCage API Key
+const OPENCAGE_API_KEY = '5dea540accc54d1b80abc3b528679557'; // Replace with your OpenCage API Key
 exports.getAddressFromCoordinates = async (latitude, longitude) => {
   try {
     const response = await axios.get(
-      `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${OPENCAGE_API_KEY}&language=en&countrycode=in&no_annotations=1`
+      `https://api.opencagedata.com/geocode/v1/json?q=${latitude}%2C+${longitude}&key=${OPENCAGE_API_KEY}`
     );
 
-    console.log('Response: >>>>>', latitude, longitude);
+    console.log('Response: >>>>>', latitude, longitude, response.data);
 
     if (response.data.results.length > 0) {
       const address = response.data.results[0].formatted;
