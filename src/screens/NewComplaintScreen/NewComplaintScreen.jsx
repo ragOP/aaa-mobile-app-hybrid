@@ -289,10 +289,10 @@ const NewComplaintScreen = () => {
         <View style={[styles.inputContainer1, styles.flexContainer]}>
           <TextInput
             placeholder="Add Site Location:"
+            placeholderTextColor="#A9A9A9"
             value={siteLocation}
             onChangeText={setSiteLocation}
             style={styles.address}
-            placeholderTextColor="black"
           />
         </View>
 
@@ -338,7 +338,7 @@ const NewComplaintScreen = () => {
         <TextInput
           style={styles.descriptionInput}
           multiline
-          placeholder="A Product of AAA SWITCH GEAR PVT LTD\nAll Rights Reserved."
+          placeholder="Describe the issue in detail to help us assist you better..."
           value={issuedescription}
           onChangeText={setIssueDescription}
           placeholderTextColor="#A9A9A9"
@@ -348,7 +348,7 @@ const NewComplaintScreen = () => {
             <Image source={audioIcons} style={styles.micIcon} />
           </TouchableOpacity>
           {audioPath && (
-            <Text style={{position: 'absolute', right: -5, bottom: -8}}>
+            <Text style={{position: 'absolute', right: -5, bottom: -8, fontSize: 10}}>
               Record again
             </Text>
           )}
@@ -442,14 +442,15 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   uploadedPhotosContainer: {
-    width: '47%',
+    width: '48%',
     marginVertical: 10,
-    backgroundColor: '#fff',
+    borderRadius: width * 0.025,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 5,
+    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowRadius: width * 0.02,
     elevation: 3,
+    backgroundColor: '#fff',
     alignContent: 'center  ',
     padding: 10,
   },
@@ -481,6 +482,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3a3a3a',
     marginBottom: 5,
+    textAlign: 'center',
   },
   siteLocationInput: {
     width: '80%',
@@ -495,6 +497,8 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: width * 0.01,
   },
   autoLocationButton: {
     backgroundColor: '#fff',
@@ -532,13 +536,14 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   descriptionInput: {
-    height: height * 0.12,
+    height: height * 0.07,
+    width: '80%',
     color: '#4f4f4f',
     marginBottom: height * 0.02,
   },
   micButton: {
     position: 'absolute',
-    right: width * 0.04,
+    right: width * 0.001,
     bottom: height * 0.015,
     backgroundColor: '#FF0000',
     borderRadius: width * 0.055,
@@ -549,12 +554,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: height * 0.015,
     backgroundColor: '#fff',
+    borderRadius: width * 0.025,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: height * 0.002 },
     shadowRadius: width * 0.02,
     elevation: 3,
-    width: '47%',
+    width: '48%',
   },
   addPhotosButton: {
     borderRadius: width * 0.025,
@@ -577,7 +583,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
     padding: width * 0.04,
-    marginVertical: height * 0.015,
+    marginVertical: height * 0.01,
   },
   severityLabel: {
     fontWeight: 'bold',
@@ -585,7 +591,6 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
   },
   slider: {
-    marginTop: height * 0.015,
     width: '96%',
     height: height * 0.05,
     borderRadius: width * 0.025,
@@ -618,7 +623,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: height * 0.02,
+    gap: width * 0.02,
   },
   picker: {
     height: height * 0.06,
