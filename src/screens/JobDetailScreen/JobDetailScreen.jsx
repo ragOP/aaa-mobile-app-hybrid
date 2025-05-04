@@ -90,16 +90,16 @@ const JobDetailScreen = ({route, navigation}) => {
 
     if (startCode?.length !== 4) {
       Alert.alert(
-        'Invalid Status Code',
-        'Please enter a complete 4-digit status code',
+        'Invalid Job Code',
+        'Please enter a complete 4-digit Job Code',
       );
       return;
     }
 
     if (startCode?.toString() !== statusCode?.toString()) {
       Alert.alert(
-        'Invalid Status Code',
-        'Please enter a valid 4-digit status code.',
+        'Invalid Job Code',
+        'Please enter a valid 4-digit Job Code.',
       );
       return;
     }
@@ -116,7 +116,7 @@ const JobDetailScreen = ({route, navigation}) => {
       if (apiResponse?.data?.success) {
         Alert.alert(
           'Job Started Successfully',
-          'The job has been started with the provided status code.',
+          'The job has been started with the provided Job Code.',
         );
 
         setStartCodeVerified(true);
@@ -144,8 +144,8 @@ const JobDetailScreen = ({route, navigation}) => {
 
     if (happyCode?.length !== 4) {
       Alert.alert(
-        'Invalid Status Code',
-        'Please enter a complete 4-digit status code',
+        'Invalid Job Code',
+        'Please enter a complete 4-digit Job Code',
       );
       return;
     }

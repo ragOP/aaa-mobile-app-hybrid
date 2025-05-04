@@ -8,10 +8,10 @@ import {
   ScrollView,
   Image,
   Alert,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
@@ -80,7 +80,7 @@ const NewComplaintScreen = () => {
       const {latitude, longitude} = await getLocation();
       setGeoLatitude(latitude);
       setGeoLongitude(longitude);
-      console.log("Location >>>", geoLatitude, geoLongitude);
+      console.log('Location >>>', geoLatitude, geoLongitude);
       const fullAddress = await getAddressFromCoordinates(latitude, longitude);
       setSiteLocation(fullAddress);
     } catch (error) {
@@ -171,7 +171,7 @@ const NewComplaintScreen = () => {
       formData.append('geoLatitude', geoLatitude);
       formData.append('geoLongitude', geoLongitude);
 
-      console.log("FormData >>> ", formData);
+      console.log('FormData >>> ', formData);
 
       formData.append('voiceNote', {
         uri: `file://${audioPath}`,
@@ -297,15 +297,7 @@ const NewComplaintScreen = () => {
         </View>
 
         {isFetchingLocation ? (
-          <View
-            style={{
-              ...styles.autoLocationButton,
-              flex: 1,
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+          <View style={styles.autoLocationButton}>
             <ActivityIndicator />
           </View>
         ) : (
@@ -348,7 +340,13 @@ const NewComplaintScreen = () => {
             <Image source={audioIcons} style={styles.micIcon} />
           </TouchableOpacity>
           {audioPath && (
-            <Text style={{position: 'absolute', right: -5, bottom: -8, fontSize: 10}}>
+            <Text
+              style={{
+                position: 'absolute',
+                right: -5,
+                bottom: -8,
+                fontSize: 10,
+              }}>
               Record again
             </Text>
           )}
@@ -437,7 +435,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
   },
@@ -447,7 +445,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.025,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
     backgroundColor: '#fff',
@@ -464,7 +462,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
     width: '60%',
@@ -497,7 +495,6 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     gap: width * 0.01,
   },
   autoLocationButton: {
@@ -507,7 +504,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
     marginLeft: width * 0.01,
@@ -531,7 +528,7 @@ const styles = StyleSheet.create({
     padding: width * 0.04,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
   },
@@ -557,7 +554,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.025,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
     width: '48%',
@@ -637,7 +634,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowRadius: width * 0.02,
     elevation: 3,
     color: 'black',
@@ -646,6 +643,5 @@ const styles = StyleSheet.create({
     color: 'black',
   },
 });
-
 
 export default NewComplaintScreen;

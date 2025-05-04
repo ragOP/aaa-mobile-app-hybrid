@@ -92,7 +92,7 @@ const ComplainDetailScreen = ({route}) => {
 
         {statusCode && (
           <View style={styles.row}>
-            <Text style={styles.label}>Status Code:</Text>
+            <Text style={styles.label}>Job Code:</Text>
             <Text style={styles.value}>{statusCode}</Text>
           </View>
         )}
