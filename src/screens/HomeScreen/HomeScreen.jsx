@@ -111,7 +111,7 @@ const HomeScreen = ({navigation}) => {
                   <Text style={styles.panelType}>{complaint?.projectName}</Text>
                   <View style={styles.tokenStatusRow}>
                     <Text style={styles.tokenText}>
-                      Token No.{' '}
+                      Job Code{' '}
                       <Text style={styles.tokenNumber}>
                         {complaint?.statusCode || '-'}
                       </Text>

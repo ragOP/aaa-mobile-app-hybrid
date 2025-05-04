@@ -9,10 +9,10 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 import {OtpInput} from 'react-native-otp-entry';
 import pause from '../../assets/icons/pause.png';
 import play from '../../assets/icons/Play.png';
@@ -97,10 +97,7 @@ const JobDetailScreen = ({route, navigation}) => {
     }
 
     if (startCode?.toString() !== statusCode?.toString()) {
-      Alert.alert(
-        'Invalid Job Code',
-        'Please enter a valid 4-digit Job Code.',
-      );
+      Alert.alert('Invalid Job Code', 'Please enter a valid 4-digit Job Code.');
       return;
     }
 
@@ -455,7 +452,6 @@ const JobDetailScreen = ({route, navigation}) => {
               <View style={styles.column}>
                 <Text style={styles.label}>Project Name:</Text>
                 <Text style={styles.value}>{projectName || ''}</Text>
-
               </View>
             </View>
 
@@ -484,8 +480,10 @@ const JobDetailScreen = ({route, navigation}) => {
           </View>
 
           <View style={styles.projectColumn}>
-            <Text style={styles.label}>Address -</Text>            
-            <Text style={styles.value}>{siteLocation || "No Address Found"}</Text>
+            <Text style={styles.label}>Address -</Text>
+            <Text style={styles.value}>
+              {siteLocation || 'No Address Found'}
+            </Text>
           </View>
 
           <View style={styles.photoContainerRows}>
@@ -559,9 +557,9 @@ const JobDetailScreen = ({route, navigation}) => {
                   }
                   placeholder="Enter Repair Description"
                 />
-                {/* <Text style={styles.descriptionValue}>
+                <Text style={styles.descriptionValue}>
                   {issueDescription || ''}
-                </Text> */}
+                </Text>
                 <View
                   style={{
                     display: 'flex',
@@ -710,7 +708,7 @@ const styles = StyleSheet.create({
     padding: width * 0.04,
     marginBottom: height * 0.02,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.001 },
+    shadowOffset: {width: 0, height: height * 0.001},
     shadowOpacity: 0.25,
     shadowRadius: width * 0.02,
     elevation: 4,
@@ -827,7 +825,7 @@ const styles = StyleSheet.create({
     width: width * 0.1,
     marginRight: width * 0.005,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowOpacity: 0.25,
     shadowRadius: width * 0.02,
     elevation: 4,
@@ -900,4 +898,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
 });
-

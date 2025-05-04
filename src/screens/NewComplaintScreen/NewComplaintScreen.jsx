@@ -167,7 +167,8 @@ const NewComplaintScreen = () => {
       formData.append('siteLocation', siteLocation);
       formData.append('panelSectionName', selectedPanelName);
       formData.append('severity', severityText);
-      formData.append('issuedescription', issuedescription);
+      formData.append('issueDescription', issuedescription);
+      console.log('FormData >>> ', formData);
       formData.append('geoLatitude', geoLatitude);
       formData.append('geoLongitude', geoLongitude);
 

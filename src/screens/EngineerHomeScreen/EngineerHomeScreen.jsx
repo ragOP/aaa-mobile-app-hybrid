@@ -106,7 +106,7 @@ const HomeScreen = ({navigation}) => {
                   <Text style={styles.panelType}>{job?.projectName}</Text>
                   <View style={styles.tokenStatusRow}>
                     <Text style={styles.tokenText}>
-                      Token No.{' '}
+                      Job Code: {' '}
                       <Text style={styles.tokenNumber}>
                         {job?.statusCode || '-'}
                       </Text>

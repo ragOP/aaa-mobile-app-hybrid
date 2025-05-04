@@ -86,10 +86,10 @@ const AllJobsScreen = ({route, navigation}) => {
             onPress={() => navigation.navigate('JobDetailScreen', {job})}>
             <Text style={styles.panelType}>{job?.projectName}</Text>
             <View style={styles.tokenStatusRow}>
-              <Text style={styles.tokenText}>
-                Token No.{' '}
+              {job.activity === 'Pending' && <Text style={styles.tokenText}>
+                Job Code{' '}
                 <Text style={styles.tokenNumber}>{job?.statusCode || '-'}</Text>
-              </Text>
+              </Text>}
               <Text style={styles.status}>
                 Status:{" "}
                 <Text
