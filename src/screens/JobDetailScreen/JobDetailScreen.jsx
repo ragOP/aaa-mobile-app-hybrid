@@ -45,7 +45,9 @@ const JobDetailScreen = ({route, navigation}) => {
   } = route.params.job;
 
   const isJobStarted = activity === 'Pending' ? true : false;
+  // console.log('isJobStarted', isJobStarted, activity);
   const [audioIcons, setAudioIcons] = useState(play);
+  const [recordAudioIcons, setRecordAudioIcons] = useState(mic);
   const [isPlaying, setIsPlaying] = useState(false);
   const [sound, setSound] = useState(null);
   const [startCode, setStartCode] = useState('');
@@ -264,8 +266,10 @@ const JobDetailScreen = ({route, navigation}) => {
   const onHandleAudioRecord = () => {
     if (isRecording) {
       stopRecording();
+      setRecordAudioIcons(mic);
     } else {
       startRecording();
+      setRecordAudioIcons(pause);
     }
   };
 
@@ -540,7 +544,7 @@ const JobDetailScreen = ({route, navigation}) => {
           </View>
         )}
 
-        {(!isJobStarted || startCodeVerified) && (
+        {((!isJobStarted || startCodeVerified) && activity !== 'Closed') && (
           <View style={{...styles.card, marginTop: 8}}>
             <Text style={styles.label}>Job Actions</Text>
 
@@ -557,9 +561,6 @@ const JobDetailScreen = ({route, navigation}) => {
                   }
                   placeholder="Enter Repair Description"
                 />
-                <Text style={styles.descriptionValue}>
-                  {issueDescription || ''}
-                </Text>
                 <View
                   style={{
                     display: 'flex',
@@ -567,23 +568,23 @@ const JobDetailScreen = ({route, navigation}) => {
                     alignItems: 'center',
                     gap: 10,
                   }}>
-                  {!audioPath ? (
+                  {/* {!audioPath ? ( */}
                     <TouchableOpacity
                       style={styles.playIconContainer}
                       onPress={onHandleAudioRecord}>
                       <Image
-                        source={require('../../assets/icons/mic.png')}
+                        source={recordAudioIcons}
                         style={styles.micIcon}
                       />
                     </TouchableOpacity>
-                  ) : (
+                  {/* ) : (
                     <TouchableOpacity
                       style={styles.playIconContainer}
                       onPress={onPlayRecordedAudio}>
                       <Image source={recordingIcon} style={styles.micIcon} />
                     </TouchableOpacity>
-                  )}
-                  {isRecording && <Text>Recording...</Text>}
+                  )} */}
+                  {/* {isRecording && <Text>Recording</Text>} */}
                   {audioPath && (
                     <TouchableOpacity onPress={onRemoveRecording}>
                       <Text>Record again</Text>
