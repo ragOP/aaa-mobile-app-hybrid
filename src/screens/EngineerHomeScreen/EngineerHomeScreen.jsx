@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,22 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Modal,
-  Dimensions, Platform
+  Dimensions,
+  RefreshControl,
+  Alert,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getAllJobsApi} from '../../store/api';
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const HomeScreen = ({navigation}) => {
   const [jobs, setJobs] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [isFetchingJobs, setIsFetchingJobs] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('aaa_user');
@@ -32,6 +35,13 @@ const HomeScreen = ({navigation}) => {
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
+
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+    setTimeout(() => {
+      setRefresh(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -49,7 +59,7 @@ const HomeScreen = ({navigation}) => {
       }
     };
     fetchAllJobs();
-  }, []);
+  }, [refresh]);
 
   return (
     <ScrollView style={styles.container}>
@@ -78,15 +88,22 @@ const HomeScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.assignedJobSection}>
+      <ScrollView
+        style={styles.assignedJobSection}
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }>
         <View style={styles.assignedJobCard}>
           <View style={styles.assignedJobHeader}>
             <Text style={styles.assignedJobTitle}>Assigned Jobs</Text>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => navigation.navigate('AllJobScreen')}>
-              <Text style={styles.viewMore}>View More</Text>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => navigation.navigate('AllJobScreen')}>
+                <Text style={styles.viewMore}>View More</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {jobs?.length === 0 && isFetchingJobs && (
@@ -96,7 +113,7 @@ const HomeScreen = ({navigation}) => {
           )}
 
           {jobs && (
-            <Swiper showsPagination={false} autoplay={false} loop={false}>
+            <Swiper showsPagination={true} autoplay={true} loop={true}>
               {jobs.map((job, index) => (
                 <TouchableOpacity
                   key={index}
@@ -106,7 +123,7 @@ const HomeScreen = ({navigation}) => {
                   <Text style={styles.panelType}>{job?.projectName}</Text>
                   <View style={styles.tokenStatusRow}>
                     <Text style={styles.tokenText}>
-                      Job Code: {' '}
+                      Job Code:{' '}
                       <Text style={styles.tokenNumber}>
                         {job?.statusCode || '-'}
                       </Text>
@@ -133,7 +150,7 @@ const HomeScreen = ({navigation}) => {
             </Swiper>
           )}
         </View>
-      </View>
+      </ScrollView>
 
       {/* <View style={styles.grid}>
         <TouchableOpacity style={styles.gridItem} activeOpacity={1}>
@@ -200,6 +217,8 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.06,
     marginBottom: height * 0.01,
   },
+  assignedJobSection: {
+  },
   userName: {
     color: '#FFFFFF',
     fontWeight: 'bold',
@@ -214,7 +233,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.025,
     padding: width * 0.04,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowOpacity: 0.1,
     shadowRadius: width * 0.03,
     elevation: 5,
@@ -239,7 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowOpacity: 0.1,
     shadowRadius: width * 0.03,
     elevation: 8,
@@ -294,7 +313,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.025,
     marginBottom: height * 0.02,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowOpacity: 0.1,
     shadowRadius: width * 0.03,
     elevation: 5,
@@ -357,6 +376,5 @@ const styles = StyleSheet.create({
     marginTop: height * 0.08,
   },
 });
-
 
 export default HomeScreen;
