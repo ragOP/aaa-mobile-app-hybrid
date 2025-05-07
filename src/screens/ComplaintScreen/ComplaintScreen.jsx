@@ -133,21 +133,21 @@ const ComplaintScreen = ({route, navigation}) => {
             <View style={styles.statusBar}>
               <View
                 style={
-                  complaint?.activity === 'Pending'
+                  complaint?.activity === 'Pending' || complaint?.activity === 'Ongoing' || complaint?.activity === 'Closed'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
               />
               <View
                 style={
-                  complaint?.activity === 'Ongoing'
+                  complaint?.activity === 'Ongoing' || complaint?.activity === 'Closed'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
               />
               <View
                 style={
-                  complaint?.activity === 'Ongoing'
+                  complaint?.activity === 'Ongoing' || complaint?.activity === 'Closed'
                     ? styles.statusBarSectionComplete
                     : styles.statusBarSectionIncomplete
                 }
