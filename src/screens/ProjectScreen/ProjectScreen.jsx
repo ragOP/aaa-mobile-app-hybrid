@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,16 +7,17 @@ import {
   ScrollView,
   Image,
   Alert,
-  Dimensions
+  Dimensions,
+  RefreshControl,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 import RNFS from 'react-native-fs';
 import warrantyImage from '../..//assets/icons/Settings.png';
 import amcImage from '../../assets/icons/doc.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getProjectsApi } from '../../store/api';
-import { ActivityIndicator } from 'react-native-paper';
+import {getProjectsApi} from '../../store/api';
+import {ActivityIndicator} from 'react-native-paper';
 
 const ProjectCard = ({
   projectName,
@@ -91,18 +92,31 @@ const ProjectCard = ({
 
       <View style={styles.statusContainer}>
         <TouchableOpacity
-          style={styles.statusBox}
-          onPress={() => handleDownload('warranty')}>
+          style={[
+            styles.statusBox,
+            warrantyStatus === 'Not Applicable' && {opacity: 0.8},
+          ]}
+          onPress={() => handleDownload('warranty')}
+          disabled={warrantyStatus === 'Not Applicable'}>
           <Image source={warrantyImage} style={styles.statusImage} />
           <Text style={styles.statusTitle}>Warranty</Text>
-          <Text style={styles.statusText}>{warrantyStatus}</Text>
+          <Text style={styles.statusText}>
+            {warrantyStatus !== 'Not Applicable' && 'Total Duration:'}{' '}
+            {warrantyStatus}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.statusBox}
-          onPress={() => handleDownload('AMC')}>
+          style={[
+            styles.statusBox,
+            amcStatus === 'Not Applicable' && {opacity: 0.8},
+          ]}
+          onPress={() => handleDownload('AMC')}
+          disabled={amcStatus === 'Not Applicable'}>
           <Image source={amcImage} style={styles.statusImage} />
           <Text style={styles.statusTitle}>AMC</Text>
-          <Text style={styles.statusText}>{amcStatus}</Text>
+          <Text style={styles.statusText}>
+            {amcStatus !== 'Not Applicable' && 'Total Duration:'} {amcStatus}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -112,10 +126,17 @@ const ProjectCard = ({
 const ProjectScreen = () => {
   const [projects, setProjects] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+    setTimeout(() => {
+      setRefresh(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     const fetchAllProjects = async () => {
@@ -132,10 +153,15 @@ const ProjectScreen = () => {
       }
     };
     fetchAllProjects();
-  }, []);
+  }, [refresh]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollView}
+      refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+      }>
       <Text style={styles.screenTitle}>My Projects</Text>
 
       {isFetching ? (
@@ -150,10 +176,12 @@ const ProjectScreen = () => {
             panels={project?.panels?.length || 0}
             activity={project?.activity}
             location={project?.siteLocation}
-            warrantyStatus="Active: 81 days left"
-            amcStatus="Not Applicable"
-            warrantyLink={project?.warrantyPdf}
-            amcLink={project?.amcPdf}
+            warrantyStatus={
+              project?.warranties[0]?.durationInMonths || 'Not Applicable'
+            }
+            amcStatus={project?.amcs[0]?.durationInMonths || 'Not Applicable'}
+            warrantyLink={project?.warranties[0]?.warrntyPdf}
+            amcLink={project?.amcs[0]?.amcPdf}
           />
         ))
       ) : (
@@ -167,24 +195,24 @@ const ProjectScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: width * 0.05, 
+    padding: width * 0.05,
     backgroundColor: '#F3F6FC',
     flexGrow: 1,
   },
   screenTitle: {
-    fontSize: width * 0.06, 
+    fontSize: width * 0.06,
     fontWeight: 'bold',
-    marginBottom: height * 0.02, 
+    marginBottom: height * 0.02,
     color: '#333',
   },
   cardContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: width * 0.03,
-    padding: width * 0.04, 
+    padding: width * 0.04,
     marginBottom: height * 0.02,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowRadius: 5,
     elevation: 5,
   },
@@ -227,12 +255,12 @@ const styles = StyleSheet.create({
   },
   statusBox: {
     alignItems: 'center',
-    padding: height * 0.015, 
+    padding: height * 0.015,
     backgroundColor: '#FFF',
-    width: '40%',
+    width: '45%',
     shadowColor: '#000',
     shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowRadius: 5,
     elevation: 4,
     borderBottomEndRadius: width * 0.03,
@@ -251,13 +279,13 @@ const styles = StyleSheet.create({
   },
   statusImage: {
     width: width * 0.08,
-    height: width * 0.08, 
-    marginBottom: height * 0.01, 
+    height: width * 0.08,
+    marginBottom: height * 0.01,
   },
   detailTextRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    fontSize: width * 0.04, 
+    fontSize: width * 0.04,
     color: '#D64541',
     marginVertical: height * 0.005,
   },
@@ -281,6 +309,5 @@ const styles = StyleSheet.create({
     marginTop: height * 0.04,
   },
 });
-
 
 export default ProjectScreen;
