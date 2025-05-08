@@ -95,12 +95,12 @@ const ForgotPasswordModal = ({showModal, setShowModal, userType}) => {
           <TouchableOpacity
             style={styles.submitButton}
             onPress={handleForgotPassword}>
-            <Text style={styles.buttonText}>Submitt</Text>
+            <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={handleCloseModal}>
-            <Text style={styles.buttonText}>Closee</Text>
+            <Text style={styles.buttonText}>Close</Text>
           </TouchableOpacity>
         </View>
       </View>
