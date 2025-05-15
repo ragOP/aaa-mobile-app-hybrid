@@ -146,14 +146,6 @@ const NewComplaintScreen = () => {
       return;
     }
 
-    if (isSubmitDisabled()) {
-      Alert.alert(
-        'Missing Fields',
-        'Please fill all the required fields before submitting.',
-      );
-      return;
-    }
-
     try {
       setIsCreatingComplaint(true);
       const selectedProjectName = selectedProject?.title || '';
@@ -168,17 +160,26 @@ const NewComplaintScreen = () => {
       formData.append('panelSectionName', selectedPanelName);
       formData.append('severity', severityText);
       formData.append('issueDescription', issuedescription);
-      console.log('FormData >>> ', formData);
+      // console.log('FormData >>> ', formData);
       formData.append('geoLatitude', geoLatitude);
       formData.append('geoLongitude', geoLongitude);
 
-      console.log('FormData >>> ', formData);
+      if(!selectedProjectName || !selectedPanelName) {
+        Alert.alert(
+          'Project and Panel are required',
+          'Please select a project and panel.',
+        );
+        return;
+      }
 
-      formData.append('voiceNote', {
-        uri: `file://${audioPath}`,
-        type: 'audio/wav',
-        name: 'audio.wav',
-      });
+      console.log('FormData >>> ', formData);
+      if (audioPath) {
+        formData.append('voiceNote', {
+          uri: `file://${audioPath}`,
+          type: 'audio/wav',
+          name: 'audio.wav',
+        });
+      }
 
       images.forEach((image, index) => {
         formData.append('images', {
@@ -187,6 +188,8 @@ const NewComplaintScreen = () => {
           name: `image_${index}.jpg`,
         });
       });
+
+      console.log('FormData2222222222222222222222 >>> ', formData);
 
       const response = await newComplaintApi(user._id, formData);
 
@@ -400,13 +403,7 @@ const NewComplaintScreen = () => {
       </View>
 
       {/* Submit Button */}
-      <TouchableOpacity
-        style={[
-          styles.submitButton,
-          (isSubmitDisabled() || isCreatingComplaint) && {opacity: 0.5},
-        ]}
-        onPress={handleSubmit}
-        disabled={isSubmitDisabled()}>
+      <TouchableOpacity style={[styles.submitButton]} onPress={handleSubmit}>
         {isCreatingComplaint && <ActivityIndicator size="small" />}
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>

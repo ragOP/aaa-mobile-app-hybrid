@@ -149,21 +149,21 @@ const JobDetailScreen = ({route, navigation}) => {
       return;
     }
 
-    if (!form || Object.values(form).some(value => !value)) {
-      Alert.alert(
-        'Missing Fields',
-        'All fields are required. Please fill out the entire form.',
-      );
-      return;
-    }
+    // if (!form || Object.values(form).some(value => !value)) {
+    //   Alert.alert(
+    //     'Missing Fields',
+    //     'All fields are required. Please fill out the entire form.',
+    //   );
+    //   return;
+    // }
 
-    if (!audioPath) {
-      Alert.alert(
-        'Missing Voice Note',
-        'Please upload a voice note before completing the job.',
-      );
-      return;
-    }
+    // if (!audioPath) {
+    //   Alert.alert(
+    //     'Missing Voice Note',
+    //     'Please upload a voice note before completing the job.',
+    //   );
+    //   return;
+    // }
 
     try {
       setCompletingJob(true);
@@ -212,48 +212,58 @@ const JobDetailScreen = ({route, navigation}) => {
     }
   };
 
-  const onHandleAudioPlay = () => {
-    if (isPlaying) {
-      if (sound) {
-        sound.pause();
+const onHandleAudioPlay = () => {
+  if (isPlaying) {
+    if (sound) {
+      sound.pause();
+    }
+    setAudioIcons(play);
+    setIsPlaying(false);
+    return;
+  }
+
+  if (sound) {
+    sound.play(success => {
+      if (success) {
+        console.log('Successfully finished playing');
+      } else {
+        console.error('Playback failed due to audio decoding errors');
+        Alert.alert('Audio playback failed');
       }
       setAudioIcons(play);
       setIsPlaying(false);
-    } else {
-      if (sound) {
-        sound.play(success => {
-          if (success) {
-            console.log('Successfully finished playing');
-          } else {
-            console.error('Playback failed due to audio decoding errors');
-          }
-          setAudioIcons(play);
-          setIsPlaying(false);
-        });
-        setAudioIcons(pause);
-        setIsPlaying(true);
-      } else {
-        const newSound = new Sound(voiceNote, null, error => {
-          if (error) {
-            console.error('Failed to load the sound', error);
-            return;
-          }
-          newSound.play(success => {
-            if (success) {
-              console.log('Successfully finished playing');
-            } else {
-              console.error('Playback failed due to audio decoding errors');
-            }
-            setAudioIcons(play);
-            setIsPlaying(false);
-          });
-          setSound(newSound);
-          setAudioIcons(pause);
-          setIsPlaying(true);
-        });
+    });
+    setAudioIcons(pause);
+    setIsPlaying(true);
+  } else {
+    const newSound = new Sound(voiceNote, null, error => {
+      if (error) {
+        console.error('Failed to load the sound', error);
+        Alert.alert('Failed to load audio file');
+        return;
       }
-    }
-  };
+
+      // Play only after sound is loaded
+      newSound.play(success => {
+        if (success) {
+          console.log('Successfully finished playing');
+        } else {
+          console.error('Playback failed due to audio decoding errors');
+          Alert.alert('Audio playback failed');
+        }
+        setAudioIcons(play);
+        setIsPlaying(false);
+      });
+
+      // Update state after playback starts
+      setSound(newSound);
+      setAudioIcons(pause);
+      setIsPlaying(true);
+    });
+  }
+};
+
+
 
   useEffect(() => {
     return () => {
@@ -475,11 +485,13 @@ const JobDetailScreen = ({route, navigation}) => {
               <Text style={styles.descriptionValue}>
                 {issueDescription || '-'}
               </Text>
-              <TouchableOpacity
-                style={styles.playIconContainer}
-                onPress={onHandleAudioPlay}>
-                <Image source={audioIcons} style={styles.playIcon} />
-              </TouchableOpacity>
+              {voiceNote && (
+                <TouchableOpacity
+                  style={styles.playIconContainer}
+                  onPress={onHandleAudioPlay}>
+                  <Image source={audioIcons} style={styles.micIcon} />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
 
