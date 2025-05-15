@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Modal,
-  Dimensions
+  Dimensions,
+  Linking
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -148,7 +149,10 @@ const HomeScreen = ({navigation}) => {
       </View>
 
       <View style={styles.grid}>
-        <TouchableOpacity style={styles.gridItem} activeOpacity={1}>
+        <TouchableOpacity
+          style={styles.gridItem}
+          activeOpacity={1}
+          onPress={() => Linking.openURL('tel:01169268243')}>
           <Image source={phoneIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Call Support</Text>
         </TouchableOpacity>
@@ -226,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.03,
     padding: width * 0.04,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowOpacity: 0.1,
     shadowRadius: width * 0.03,
     elevation: 5,
@@ -251,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: width * 0.03,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowOpacity: 0.1,
     shadowRadius: width * 0.03,
     elevation: 8,
@@ -305,7 +309,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: width * 0.03,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOffset: {width: 0, height: height * 0.002},
     shadowOpacity: 0.1,
     shadowRadius: width * 0.03,
     elevation: 5,
@@ -368,6 +372,5 @@ const styles = StyleSheet.create({
     marginTop: height * 0.08,
   },
 });
-
 
 export default HomeScreen;
