@@ -83,12 +83,16 @@ const ForgotPasswordModal = ({showModal, setShowModal, userType}) => {
           <TextInput
             style={styles.input}
             placeholder="Username"
+            placeholderTextColor={'gray'}
+            autoCapitalize="none"
             value={username}
             onChangeText={setUsername}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor={'gray'}
+            autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
           />
@@ -141,6 +145,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 15,
+    color: 'black',
   },
   input: {
     width: '100%',
@@ -151,6 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#f5f5f5',
     borderRadius: 5,
+    color: 'gray',
   },
   submitButton: {
     backgroundColor: 'red',

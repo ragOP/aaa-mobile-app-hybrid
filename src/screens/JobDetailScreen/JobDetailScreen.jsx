@@ -558,14 +558,15 @@ const onHandleAudioPlay = () => {
 
         {((!isJobStarted || startCodeVerified) && activity !== 'Closed') && (
           <View style={{...styles.card, marginTop: 8}}>
-            <Text style={styles.label}>Job Actions</Text>
+            <Text style={styles.label}>Job Actionssss</Text>
 
             <View style={styles.column}>
               <Text style={styles.label}>Repair Description</Text>
               <View style={styles.descriptionRow}>
                 <TextInput
                   value={form.repairDescription}
-                  style={{maxWidth: '67%'}}
+                  style={{maxWidth: '67%', color: '#000'}}
+                  placeholderTextColor={'gray'}
                   multiline={true}
                   numberOfLines={1}
                   onChangeText={text =>
@@ -609,7 +610,8 @@ const onHandleAudioPlay = () => {
             <View style={{...styles.column, gap: 4}}>
               <Text style={styles.label}>Parts Replaced</Text>
               <TextInput
-                style={{maxWidth: '70%'}}
+                style={{maxWidth: '70%', color: '#000'}}
+                placeholderTextColor={'gray'}
                 multiline={true}
                 numberOfLines={1}
                 value={form.replacedParts}
@@ -623,7 +625,8 @@ const onHandleAudioPlay = () => {
 
               <TextInput
                 value={form.remarks}
-                style={{maxWidth: '70%'}}
+                style={{maxWidth: '70%', color: '#000'}}
+                placeholderTextColor={'gray'}
                 multiline={true}
                 numberOfLines={1}
                 onChangeText={text => handleInputChange('remarks', text)}
@@ -642,6 +645,7 @@ const onHandleAudioPlay = () => {
                   theme={{
                     containerStyle: styles.otpMainContainer,
                     pinCodeContainerStyle: styles.pinCodeContainer,
+                    pinCodeTextStyle: { color: '#000000' },
                   }}
                 />
 
