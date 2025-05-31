@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* aaaMobileAppHybridTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* aaaMobileAppHybridTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-aaaMobileAppHybrid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-aaaMobileAppHybrid.a */; };
+		00E356F31AD99517003FC87E /* aaaserviceAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* aaaserviceAppTests.m */; };
+		0C80B921A6F3F58F76C31292 /* libPods-aaaserviceApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-aaaserviceApp.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-aaaMobileAppHybrid-aaaMobileAppHybridTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-aaaMobileAppHybrid-aaaMobileAppHybridTests.a */; };
+		7699B88040F8A987B510C191 /* libPods-aaaserviceApp-aaaserviceAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-aaaserviceApp-aaaserviceAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -22,28 +22,28 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = aaaMobileAppHybrid;
+			remoteInfo = aaaserviceApp;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* aaaMobileAppHybridTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aaaMobileAppHybridTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* aaaserviceAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aaaserviceAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* aaaMobileAppHybridTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aaaMobileAppHybridTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* aaaMobileAppHybrid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aaaMobileAppHybrid.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = aaaMobileAppHybrid/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = aaaMobileAppHybrid/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = aaaMobileAppHybrid/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = aaaMobileAppHybrid/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = aaaMobileAppHybrid/main.m; sourceTree = "<group>"; };
-		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = aaaMobileAppHybrid/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-aaaMobileAppHybrid-aaaMobileAppHybridTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aaaMobileAppHybrid-aaaMobileAppHybridTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-aaaMobileAppHybrid.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaMobileAppHybrid.debug.xcconfig"; path = "Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-aaaMobileAppHybrid.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaMobileAppHybrid.release.xcconfig"; path = "Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.debug.xcconfig"; path = "Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-aaaMobileAppHybrid.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aaaMobileAppHybrid.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = aaaMobileAppHybrid/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.release.xcconfig"; path = "Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.release.xcconfig"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* aaaserviceAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aaaserviceAppTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* aaaserviceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aaaserviceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = aaaserviceApp/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = aaaserviceApp/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = aaaserviceApp/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = aaaserviceApp/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = aaaserviceApp/main.m; sourceTree = "<group>"; };
+		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = aaaserviceApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		19F6CBCC0A4E27FBF8BF4A61 /* libPods-aaaserviceApp-aaaserviceAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aaaserviceApp-aaaserviceAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-aaaserviceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaserviceApp.debug.xcconfig"; path = "Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-aaaserviceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaserviceApp.release.xcconfig"; path = "Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp.release.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-aaaserviceApp-aaaserviceAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaserviceApp-aaaserviceAppTests.debug.xcconfig"; path = "Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DCACB8F33CDC322A6C60F78 /* libPods-aaaserviceApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aaaserviceApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = aaaserviceApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-aaaserviceApp-aaaserviceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aaaserviceApp-aaaserviceAppTests.release.xcconfig"; path = "Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -52,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-aaaMobileAppHybrid-aaaMobileAppHybridTests.a in Frameworks */,
+				7699B88040F8A987B510C191 /* libPods-aaaserviceApp-aaaserviceAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,20 +60,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-aaaMobileAppHybrid.a in Frameworks */,
+				0C80B921A6F3F58F76C31292 /* libPods-aaaserviceApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* aaaMobileAppHybridTests */ = {
+		00E356EF1AD99517003FC87E /* aaaserviceAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* aaaMobileAppHybridTests.m */,
+				00E356F21AD99517003FC87E /* aaaserviceAppTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = aaaMobileAppHybridTests;
+			path = aaaserviceAppTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -84,7 +84,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* aaaMobileAppHybrid */ = {
+		13B07FAE1A68108700A75B9A /* aaaserviceApp */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -95,15 +95,15 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 			);
-			name = aaaMobileAppHybrid;
+			name = aaaserviceApp;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-aaaMobileAppHybrid.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-aaaMobileAppHybrid-aaaMobileAppHybridTests.a */,
+				5DCACB8F33CDC322A6C60F78 /* libPods-aaaserviceApp.a */,
+				19F6CBCC0A4E27FBF8BF4A61 /* libPods-aaaserviceApp-aaaserviceAppTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -118,9 +118,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* aaaMobileAppHybrid */,
+				13B07FAE1A68108700A75B9A /* aaaserviceApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* aaaMobileAppHybridTests */,
+				00E356EF1AD99517003FC87E /* aaaserviceAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -133,8 +133,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* aaaMobileAppHybrid.app */,
-				00E356EE1AD99517003FC87E /* aaaMobileAppHybridTests.xctest */,
+				13B07F961A680F5B00A75B9A /* aaaserviceApp.app */,
+				00E356EE1AD99517003FC87E /* aaaserviceAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,10 +142,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-aaaMobileAppHybrid.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-aaaMobileAppHybrid.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-aaaserviceApp.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-aaaserviceApp.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-aaaserviceApp-aaaserviceAppTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-aaaserviceApp-aaaserviceAppTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -153,9 +153,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* aaaMobileAppHybridTests */ = {
+		00E356ED1AD99517003FC87E /* aaaserviceAppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "aaaMobileAppHybridTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "aaaserviceAppTests" */;
 			buildPhases = (
 				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -169,14 +169,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = aaaMobileAppHybridTests;
-			productName = aaaMobileAppHybridTests;
-			productReference = 00E356EE1AD99517003FC87E /* aaaMobileAppHybridTests.xctest */;
+			name = aaaserviceAppTests;
+			productName = aaaserviceAppTests;
+			productReference = 00E356EE1AD99517003FC87E /* aaaserviceAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* aaaMobileAppHybrid */ = {
+		13B07F861A680F5B00A75B9A /* aaaserviceApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aaaMobileAppHybrid" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aaaserviceApp" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
@@ -190,9 +190,9 @@
 			);
 			dependencies = (
 			);
-			name = aaaMobileAppHybrid;
-			productName = aaaMobileAppHybrid;
-			productReference = 13B07F961A680F5B00A75B9A /* aaaMobileAppHybrid.app */;
+			name = aaaserviceApp;
+			productName = aaaserviceApp;
+			productReference = 13B07F961A680F5B00A75B9A /* aaaserviceApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -212,7 +212,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aaaMobileAppHybrid" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aaaserviceApp" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -225,8 +225,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* aaaMobileAppHybrid */,
-				00E356ED1AD99517003FC87E /* aaaMobileAppHybridTests */,
+				13B07F861A680F5B00A75B9A /* aaaserviceApp */,
+				00E356ED1AD99517003FC87E /* aaaserviceAppTests */,
 			);
 		};
 /* End PBXProject section */
@@ -273,15 +273,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
@@ -299,7 +299,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-aaaserviceApp-aaaserviceAppTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -321,7 +321,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-aaaMobileAppHybrid-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-aaaserviceApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -334,15 +334,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
@@ -351,15 +351,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid/Pods-aaaMobileAppHybrid-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp/Pods-aaaserviceApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
@@ -368,15 +368,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests/Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aaaserviceApp-aaaserviceAppTests/Pods-aaaserviceApp-aaaserviceAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -386,7 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* aaaMobileAppHybridTests.m in Sources */,
+				00E356F31AD99517003FC87E /* aaaserviceAppTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,7 +404,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* aaaMobileAppHybrid */;
+			target = 13B07F861A680F5B00A75B9A /* aaaserviceApp */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -412,14 +412,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.debug.xcconfig */;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-aaaserviceApp-aaaserviceAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = aaaMobileAppHybridTests/Info.plist;
+				INFOPLIST_FILE = aaaserviceAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -433,17 +433,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aaaMobileAppHybrid.app/aaaMobileAppHybrid";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aaaserviceApp.app/aaaserviceApp";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-aaaMobileAppHybrid-aaaMobileAppHybridTests.release.xcconfig */;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-aaaserviceApp-aaaserviceAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = aaaMobileAppHybridTests/Info.plist;
+				INFOPLIST_FILE = aaaserviceAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -457,19 +457,19 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aaaMobileAppHybrid.app/aaaMobileAppHybrid";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aaaserviceApp.app/aaaserviceApp";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-aaaMobileAppHybrid.debug.xcconfig */;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-aaaserviceApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = aaaMobileAppHybrid/Info.plist;
+				INFOPLIST_FILE = aaaserviceApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -481,7 +481,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = aaaMobileAppHybrid;
+				PRODUCT_NAME = aaaserviceApp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -490,12 +490,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-aaaMobileAppHybrid.release.xcconfig */;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-aaaserviceApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = aaaMobileAppHybrid/Info.plist;
+				INFOPLIST_FILE = aaaserviceApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -507,7 +507,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = aaaMobileAppHybrid;
+				PRODUCT_NAME = aaaserviceApp;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -655,7 +655,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "aaaMobileAppHybridTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "aaaserviceAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -664,7 +664,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aaaMobileAppHybrid" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aaaserviceApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -673,7 +673,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aaaMobileAppHybrid" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aaaserviceApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

@@ -1,4 +1,4 @@
-package com.aaamobileapphybrid
+package com.aaaserviceApp
 
 import android.app.Application
 import com.facebook.react.PackageList
