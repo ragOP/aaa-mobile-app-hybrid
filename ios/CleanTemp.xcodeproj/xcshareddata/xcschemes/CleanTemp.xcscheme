@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "aaaserviceApp.app"
-               BlueprintName = "aaaserviceApp"
-               ReferencedContainer = "container:aaaserviceApp.xcodeproj">
+               BuildableName = "CleanTemp.app"
+               BlueprintName = "CleanTemp"
+               ReferencedContainer = "container:CleanTemp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "aaaserviceAppTests.xctest"
-               BlueprintName = "aaaserviceAppTests"
-               ReferencedContainer = "container:aaaserviceApp.xcodeproj">
+               BuildableName = "CleanTempTests.xctest"
+               BlueprintName = "CleanTempTests"
+               ReferencedContainer = "container:CleanTemp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "aaaserviceApp.app"
-            BlueprintName = "aaaserviceApp"
-            ReferencedContainer = "container:aaaserviceApp.xcodeproj">
+            BuildableName = "CleanTemp.app"
+            BlueprintName = "CleanTemp"
+            ReferencedContainer = "container:CleanTemp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "aaaserviceApp.app"
-            BlueprintName = "aaaserviceApp"
-            ReferencedContainer = "container:aaaserviceApp.xcodeproj">
+            BuildableName = "CleanTemp.app"
+            BlueprintName = "CleanTemp"
+            ReferencedContainer = "container:CleanTemp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
