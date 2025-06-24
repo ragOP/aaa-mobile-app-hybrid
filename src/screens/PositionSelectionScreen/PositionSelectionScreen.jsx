@@ -12,8 +12,8 @@ const PositionSelectionScreen = ({navigation}) => {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Please Select Your Position</Text>
-      <Text style={styles.subtitle}>We look forward to serving you.</Text>
+      <Text style={styles.title}>Please Select Your Position-KKD2</Text>
+      <Text style={styles.subtitle}>We look forward to servidsng you.</Text>
       <TouchableOpacity
         activeOpacity={1}
         style={styles.customerButton}

@@ -10,6 +10,7 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
@@ -263,7 +264,8 @@ const NewComplaintScreen = () => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#f0f4fc'}}>
+    <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
       {/* Title */}
       <Text style={styles.title}>New Complaint</Text>
 
@@ -407,7 +409,8 @@ const NewComplaintScreen = () => {
         {isCreatingComplaint && <ActivityIndicator size="small" />}
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
-    </ScrollView>
+      </ScrollView>
+  </SafeAreaView>
   );
 };
 
@@ -451,6 +454,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputContainer1: {
+     flex: 1, // ✅ Let it take available space
+  minWidth: '60%',
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
     padding: width * 0.04,
@@ -490,12 +495,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
-  locationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: width * 0.01,
-  },
+ locationContainer: {
+  flexDirection: 'row',
+  flexWrap: 'wrap', // ✅ allow wrapping on smaller screens
+  gap: width * 0.02,
+  justifyContent: 'space-between',
+  marginBottom: height * 0.01,
+},
+
   autoLocationButton: {
+      flex: 1, // ✅ So both items share the row equally
+  minWidth: '35%',
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
     padding: width * 0.025,
