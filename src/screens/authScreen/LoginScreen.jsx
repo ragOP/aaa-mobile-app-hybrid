@@ -8,9 +8,11 @@ import {
   Image,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {customerloginApi} from '../../store/api';
-import toastFunction from '../../functions/toastFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ForgotPasswordModal from './components/ForgotPasswordModal';
 
@@ -21,10 +23,8 @@ const LoginScreen = ({navigation}) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-
   const handleOpenModal = () => {
     setShowModal(!showModal);
-    console.log(">>> Pressed")
   };
 
   const handleLogin = async () => {
@@ -34,7 +34,6 @@ const LoginScreen = ({navigation}) => {
       const body = {userName: username, password};
       const response = await customerloginApi(body);
 
-      console.log('response >>>', response?.data);
       const token = response?.data?.data?.token;
       const user = response?.data?.data?.user;
       if (response?.data?.success) {
@@ -63,70 +62,88 @@ const LoginScreen = ({navigation}) => {
   }, [username, password]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <View style={styles.logoCircle}>
-          <Image
-            source={require('../../assets/icons/Smartphone.png')}
-            style={styles.logoIcon}
+    <SafeAreaView style={styles.safeArea} edges={['bottom', 'left', 'right']}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logoCircle}>
+              <Image
+                source={require('../../assets/icons/Smartphone.png')}
+                style={styles.logoIcon}
+              />
+            </View>
+          </View>
+
+          {/* Title */}
+          <Text style={styles.title}>Customer Login</Text>
+
+          {/* Subtitle */}
+          <Text style={styles.subtitle}>Enter Your Username & Password</Text>
+
+          {/* Username Input */}
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            placeholderTextColor="#888"
           />
+
+          {/* Password Input */}
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            placeholderTextColor="#888"
+            secureTextEntry={true}
+          />
+
+          <TouchableOpacity
+            onPress={handleLogin}
+            activeOpacity={1}
+            style={[
+              styles.submitButton,
+              isButtonDisabled && styles.disabledButton,
+            ]}
+            disabled={isButtonDisabled || loading}>
+            {loading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.submitButtonText}>Submit</Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={1}>
+            <Text style={styles.forgotPasswordText} onPress={handleOpenModal}>
+              Forget Password?
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.footerText}>
+            A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
+          </Text>
+          {showModal && (
+            <ForgotPasswordModal
+              showModal={showModal}
+              setShowModal={setShowModal}
+              userType="customer"
+            />
+          )}
         </View>
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>Customer Login</Text>
-
-      {/* Subtitle */}
-      <Text style={styles.subtitle}>Enter Your Username & Password</Text>
-
-      {/* Username Input */}
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        placeholderTextColor="#888"
-      />
-
-      {/* Password Input */}
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        placeholderTextColor="#888"
-        secureTextEntry={true}
-      />
-
-      <TouchableOpacity
-        onPress={handleLogin}
-        activeOpacity={1}
-        style={[styles.submitButton, isButtonDisabled && styles.disabledButton]}
-        disabled={isButtonDisabled || loading}>
-        {loading ? (
-          <ActivityIndicator size="small" color="#fff" />
-        ) : (
-          <Text style={styles.submitButtonText}>Submit</Text>
-        )}
-      </TouchableOpacity>
-
-      <TouchableOpacity activeOpacity={1}>
-        <Text style={styles.forgotPasswordText} onPress={handleOpenModal}>Forget Password?</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.footerText}>
-        A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
-      </Text>
-      {
-        showModal && (
-          <ForgotPasswordModal showModal={showModal} setShowModal={setShowModal} userType="customer" />
-        )
-      }
-    </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -169,6 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f3f3f3',
     borderRadius: 5,
     paddingHorizontal: 15,
+    paddingVertical: Platform.OS === 'ios' ? 14 : 8,
     marginBottom: 15,
     color: '#000',
   },
@@ -200,7 +218,9 @@ const styles = StyleSheet.create({
     color: '#555',
     textAlign: 'center',
     position: 'absolute',
-    bottom: '1%',
+    left: 0,
+    right: 0,
+    bottom: 10, // Use a fixed value for better safe area support
     fontStyle: 'italic',
   },
 });
