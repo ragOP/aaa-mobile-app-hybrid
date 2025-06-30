@@ -7,12 +7,15 @@ import {
   TouchableOpacity,
   TextInput,
   Linking,
-  Dimensions, Platform
+  Dimensions,
+  Platform,
 } from 'react-native';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-const ComplainDetailScreen = ({route}) => {
+const ComplainDetailScreen = ({route, navigation}) => {
   const {
     projectName,
     siteLocation,
@@ -34,118 +37,136 @@ const ComplainDetailScreen = ({route}) => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Project Details Section */}
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <Text style={styles.label}>Project Name:</Text>
-          <Text style={styles.value}>{projectName}</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Panel Name:</Text>
-          <Text style={styles.value}>{panelSectionName}</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Description:</Text>
-          <Text style={styles.value}>{issueDescription}</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Location:</Text>
-          <Text style={styles.value}>{siteLocation}</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Photos:</Text>
-          <View style={styles.imageContainer}>
-            {images.map((image, index) => (
-              <Image key={index} source={{uri: image}} style={styles.image} />
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Severity:</Text>
-          <Text style={[styles.value, styles[severity.toLowerCase()]]}>
-            {severity}
-          </Text>
-        </View>
+    <ScreenWrapper>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <MaterialIcons name="arrow-back" size={28} color="#FF0000" />
+        </TouchableOpacity>
       </View>
-
-      {/* Job Actions Section */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Job Actions</Text>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Voice Note:</Text>
-          <TouchableOpacity>
-            {/* <FontAwesome name="microphone" size={24} color="#FF0000" /> */}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Activity:</Text>
-          <Text style={styles.value}>{activity}</Text>
-        </View>
-
-        {statusCode && (
-          <View style={styles.row}>
-            <Text style={styles.label}>Job Code:</Text>
-            <Text style={styles.value}>{statusCode}</Text>
-          </View>
-        )}
-      </View>
-
-      {route.params.complaint?.technician && (
+      <View style={styles.container}>
+        {/* Project Details Section */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Engineer Detail</Text>
-
           <View style={styles.row}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.value}>
-              {route.params.complaint?.technician.name}
-            </Text>
+            <Text style={styles.label}>Project Name:</Text>
+            <Text style={styles.value}>{projectName}</Text>
           </View>
 
           <View style={styles.row}>
-            <Text style={styles.label}>Username:</Text>
-            <Text style={styles.value}>
-              {route.params.complaint?.technician.userName}
-            </Text>
+            <Text style={styles.label}>Panel Name:</Text>
+            <Text style={styles.value}>{panelSectionName}</Text>
           </View>
 
           <View style={styles.row}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.value}>
-              {route.params.complaint?.technician.email}
+            <Text style={styles.label}>Description:</Text>
+            <Text style={styles.value}>{issueDescription}</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Location:</Text>
+            <Text style={styles.value}>{siteLocation}</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Photos:</Text>
+            <View style={styles.imageContainer}>
+              {images.map((image, index) => (
+                <Image key={index} source={{uri: image}} style={styles.image} />
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Severity:</Text>
+            <Text style={[styles.value, styles[severity.toLowerCase()]]}>
+              {severity}
             </Text>
+          </View>
+        </View>
+
+        {/* Job Actions Section */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Job Actions</Text>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Voice Note:</Text>
+            <TouchableOpacity>
+              {/* <FontAwesome name="microphone" size={24} color="#FF0000" /> */}
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Activity:</Text>
+            <Text style={styles.value}>{activity}</Text>
           </View>
 
           {statusCode && (
-            <TouchableOpacity
-              style={styles.completeButton}
-              onPress={() =>
-                handleCallEngineer(
-                  route.params.complaint?.technician?.phoneNumber,
-                )
-              }>
-              <Text style={styles.buttonText}>Call Engineer</Text>
-            </TouchableOpacity>
+            <View style={styles.row}>
+              <Text style={styles.label}>Job Code:</Text>
+              <Text style={styles.value}>{statusCode}</Text>
+            </View>
           )}
         </View>
-      )}
-    </View>
+
+        {route.params.complaint?.technician && (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Engineer Detail</Text>
+
+            <View style={styles.row}>
+              <Text style={styles.label}>Name:</Text>
+              <Text style={styles.value}>
+                {route.params.complaint?.technician.name}
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.label}>Username:</Text>
+              <Text style={styles.value}>
+                {route.params.complaint?.technician.userName}
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.label}>Name:</Text>
+              <Text style={styles.value}>
+                {route.params.complaint?.technician.email}
+              </Text>
+            </View>
+
+            {statusCode && (
+              <TouchableOpacity
+                style={styles.completeButton}
+                onPress={() =>
+                  handleCallEngineer(
+                    route.params.complaint?.technician?.phoneNumber,
+                  )
+                }>
+                <Text style={styles.buttonText}>Call Engineer</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  backButton: {
+    padding: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
     paddingHorizontal: width * 0.04,
-    paddingVertical: height * 0.06,
+    paddingVertical: 10,
   },
   card: {
     backgroundColor: '#FFFFFF',
@@ -154,7 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.02,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowRadius: width * 0.02,
   },
   row: {

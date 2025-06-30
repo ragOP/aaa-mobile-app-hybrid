@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -11,6 +12,7 @@ import {
   View,
   Dimensions,
 } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const {width, height} = Dimensions.get('window');
 import {OtpInput} from 'react-native-otp-entry';
@@ -25,8 +27,7 @@ import {completeJob, startJob} from '../../store/api';
 import Geolocation from '@react-native-community/geolocation';
 import {Linking} from 'react-native';
 import {Modal} from 'react-native-paper';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
 
 const JobDetailScreen = ({route, navigation}) => {
   const {
@@ -212,39 +213,18 @@ const JobDetailScreen = ({route, navigation}) => {
     }
   };
 
-const onHandleAudioPlay = () => {
-  if (isPlaying) {
-    if (sound) {
-      sound.pause();
-    }
-    setAudioIcons(play);
-    setIsPlaying(false);
-    return;
-  }
-
-  if (sound) {
-    sound.play(success => {
-      if (success) {
-        console.log('Successfully finished playing');
-      } else {
-        console.error('Playback failed due to audio decoding errors');
-        Alert.alert('Audio playback failed');
+  const onHandleAudioPlay = () => {
+    if (isPlaying) {
+      if (sound) {
+        sound.pause();
       }
       setAudioIcons(play);
       setIsPlaying(false);
-    });
-    setAudioIcons(pause);
-    setIsPlaying(true);
-  } else {
-    const newSound = new Sound(voiceNote, null, error => {
-      if (error) {
-        console.error('Failed to load the sound', error);
-        Alert.alert('Failed to load audio file');
-        return;
-      }
+      return;
+    }
 
-      // Play only after sound is loaded
-      newSound.play(success => {
+    if (sound) {
+      sound.play(success => {
         if (success) {
           console.log('Successfully finished playing');
         } else {
@@ -254,16 +234,35 @@ const onHandleAudioPlay = () => {
         setAudioIcons(play);
         setIsPlaying(false);
       });
-
-      // Update state after playback starts
-      setSound(newSound);
       setAudioIcons(pause);
       setIsPlaying(true);
-    });
-  }
-};
+    } else {
+      const newSound = new Sound(voiceNote, null, error => {
+        if (error) {
+          console.error('Failed to load the sound', error);
+          Alert.alert('Failed to load audio file');
+          return;
+        }
 
+        // Play only after sound is loaded
+        newSound.play(success => {
+          if (success) {
+            console.log('Successfully finished playing');
+          } else {
+            console.error('Playback failed due to audio decoding errors');
+            Alert.alert('Audio playback failed');
+          }
+          setAudioIcons(play);
+          setIsPlaying(false);
+        });
 
+        // Update state after playback starts
+        setSound(newSound);
+        setAudioIcons(pause);
+        setIsPlaying(true);
+      });
+    }
+  };
 
   useEffect(() => {
     return () => {
@@ -455,217 +454,230 @@ const onHandleAudioPlay = () => {
   };
   return (
     <>
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>
-          Job Details : <Text style={styles.repairText}>Repair</Text>
-        </Text>
-
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <View style={styles.projectTopRow}>
-              <View style={styles.column}>
-                <Text style={styles.label}>Project Name:</Text>
-                <Text style={styles.value}>{projectName || ''}</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity onPress={handleGetSiteLocation}>
-              <Text style={styles.siteDirectionTitle}>Get Site Directions</Text>
+      <ScreenWrapper>
+        <ScrollView style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={{
+                zIndex: 10,
+                paddingHorizontal: 4,
+              }}
+              onPress={() => navigation.goBack()}>
+              <MaterialIcons name="arrow-back" size={28} color="#FF0000" />
             </TouchableOpacity>
-          </View>
-
-          <View style={styles.projectColumn}>
-            <Text style={styles.label}>Panel Name:</Text>
-            <Text style={styles.value}>{panelSectionName || ''}</Text>
-          </View>
-
-          <View style={styles.column}>
-            <Text style={styles.label}>Description:</Text>
-            <View style={styles.descriptionRow}>
-              <Text style={styles.descriptionValue}>
-                {issueDescription || '-'}
-              </Text>
-              {voiceNote && (
-                <TouchableOpacity
-                  style={styles.playIconContainer}
-                  onPress={onHandleAudioPlay}>
-                  <Image source={audioIcons} style={styles.micIcon} />
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-
-          <View style={styles.projectColumn}>
-            <Text style={styles.label}>Address -</Text>
-            <Text style={styles.value}>
-              {siteLocation || 'No Address Found'}
+            <Text style={styles.title}>
+              Job Details : <Text style={styles.repairText}>Repair</Text>
             </Text>
           </View>
 
-          <View style={styles.photoContainerRows}>
-            <Text style={styles.label}>Photos:</Text>
-            <View style={styles.photoRows}>
-              {images &&
-                images?.length > 0 &&
-                images.map((image, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => handleOpenModal(image)}>
-                    <Image
-                      source={{uri: image}}
-                      style={styles.photoPlaceholder}
-                    />
-                  </TouchableOpacity>
-                ))}
-            </View>
-          </View>
+          <View style={styles.card}>
+            <View style={styles.row}>
+              <View style={styles.projectTopRow}>
+                <View style={styles.column}>
+                  <Text style={styles.label}>Project Name:</Text>
+                  <Text style={styles.value}>{projectName || ''}</Text>
+                </View>
+              </View>
 
-          <View style={styles.projectRow}>
-            <Text style={styles.label}>Severity:</Text>
-            <Text style={styles.severityValue}>{severity || ''}</Text>
-          </View>
-        </View>
-
-        {isJobStarted && (
-          <View style={styles.startCodeBox}>
-            <Text style={styles.label}>Enter start code</Text>
-            <View style={styles.startCodeInnerBox}>
-              <OtpInput
-                numberOfDigits={4}
-                autoFocus={false}
-                onTextChange={text => setStartCode(text)}
-                focusColor={'#404969'}
-                theme={{
-                  containerStyle: styles.otpMainContainer,
-                  pinCodeContainerStyle: styles.pinCodeContainer,
-                }}
-              />
-
-              <TouchableOpacity
-                style={{
-                  ...styles.button,
-                  backgroundColor:
-                    startCode?.length === 4
-                      ? 'rgba(255, 0, 0, 1)'
-                      : 'rgba(255, 0, 0, 0.4)',
-                }}
-                onPress={onStartJob}>
-                <Text style={styles.buttonText}>Start Job</Text>
+              <TouchableOpacity onPress={handleGetSiteLocation}>
+                <Text style={styles.siteDirectionTitle}>
+                  Get Site Directions
+                </Text>
               </TouchableOpacity>
             </View>
-          </View>
-        )}
 
-        {((!isJobStarted || startCodeVerified) && activity !== 'Closed') && (
-          <View style={{...styles.card, marginTop: 8}}>
-            <Text style={styles.label}>Job Actionssss</Text>
+            <View style={styles.projectColumn}>
+              <Text style={styles.label}>Panel Name:</Text>
+              <Text style={styles.value}>{panelSectionName || ''}</Text>
+            </View>
 
             <View style={styles.column}>
-              <Text style={styles.label}>Repair Description</Text>
+              <Text style={styles.label}>Description:</Text>
               <View style={styles.descriptionRow}>
-                <TextInput
-                  value={form.repairDescription}
-                  style={{maxWidth: '67%', color: '#000'}}
-                  placeholderTextColor={'gray'}
-                  multiline={true}
-                  numberOfLines={1}
-                  onChangeText={text =>
-                    handleInputChange('repairDescription', text)
-                  }
-                  placeholder="Enter Repair Description"
-                />
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}>
-                  {/* {!audioPath ? ( */}
-                    <TouchableOpacity
-                      style={styles.playIconContainer}
-                      onPress={onHandleAudioRecord}>
-                      <Image
-                        source={recordAudioIcons}
-                        style={styles.micIcon}
-                      />
-                    </TouchableOpacity>
-                  {/* ) : (
-                    <TouchableOpacity
-                      style={styles.playIconContainer}
-                      onPress={onPlayRecordedAudio}>
-                      <Image source={recordingIcon} style={styles.micIcon} />
-                    </TouchableOpacity>
-                  )} */}
-                  {/* {isRecording && <Text>Recording</Text>} */}
-                  {audioPath && (
-                    <TouchableOpacity onPress={onRemoveRecording}>
-                      <Text>Record again</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+                <Text style={styles.descriptionValue}>
+                  {issueDescription || '-'}
+                </Text>
+                {voiceNote && (
+                  <TouchableOpacity
+                    style={styles.playIconContainer}
+                    onPress={onHandleAudioPlay}>
+                    <Image source={audioIcons} style={styles.micIcon} />
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
 
-            <View style={{...styles.column, gap: 4}}>
-              <Text style={styles.label}>Parts Replaced</Text>
-              <TextInput
-                style={{maxWidth: '70%', color: '#000'}}
-                placeholderTextColor={'gray'}
-                multiline={true}
-                numberOfLines={1}
-                value={form.replacedParts}
-                onChangeText={text => handleInputChange('replacedParts', text)}
-                placeholder="Enter Repair Description"
-              />
+            <View style={styles.projectColumn}>
+              <Text style={styles.label}>Address -</Text>
+              <Text style={styles.value}>
+                {siteLocation || 'No Address Found'}
+              </Text>
             </View>
 
-            <View style={{...styles.column, gap: 4}}>
-              <Text style={styles.label}>Pending Remarks </Text>
-
-              <TextInput
-                value={form.remarks}
-                style={{maxWidth: '70%', color: '#000'}}
-                placeholderTextColor={'gray'}
-                multiline={true}
-                numberOfLines={1}
-                onChangeText={text => handleInputChange('remarks', text)}
-                placeholder="Enter Repair Description"
-              />
+            <View style={styles.photoContainerRows}>
+              <Text style={styles.label}>Photos:</Text>
+              <View style={styles.photoRows}>
+                {images &&
+                  images?.length > 0 &&
+                  images.map((image, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => handleOpenModal(image)}>
+                      <Image
+                        source={{uri: image}}
+                        style={styles.photoPlaceholder}
+                      />
+                    </TouchableOpacity>
+                  ))}
+              </View>
             </View>
 
-            <View style={{...styles.startCodeBox, marginTop: 0}}>
-              <Text style={styles.label}>Enter Happy Code</Text>
+            <View style={styles.projectRow}>
+              <Text style={styles.label}>Severity:</Text>
+              <Text style={styles.severityValue}>{severity || ''}</Text>
+            </View>
+          </View>
+
+          {isJobStarted && (
+            <View style={styles.startCodeBox}>
+              <Text style={styles.label}>Enter start code</Text>
               <View style={styles.startCodeInnerBox}>
                 <OtpInput
                   numberOfDigits={4}
                   autoFocus={false}
-                  onTextChange={text => setHappyCode(text)}
+                  onTextChange={text => setStartCode(text)}
                   focusColor={'#404969'}
                   theme={{
                     containerStyle: styles.otpMainContainer,
                     pinCodeContainerStyle: styles.pinCodeContainer,
-                    pinCodeTextStyle: { color: '#000000' },
                   }}
                 />
 
                 <TouchableOpacity
                   style={{
                     ...styles.button,
-                    width: '55%',
                     backgroundColor:
-                      happyCode?.length === 4
+                      startCode?.length === 4
                         ? 'rgba(255, 0, 0, 1)'
                         : 'rgba(255, 0, 0, 0.4)',
                   }}
-                  onPress={onCompleteJob}>
-                  <Text style={styles.buttonText}>Complete Job</Text>
+                  onPress={onStartJob}>
+                  <Text style={styles.buttonText}>Start Job</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
-        )}
-      </ScrollView>
+          )}
+
+          {(!isJobStarted || startCodeVerified) && activity !== 'Closed' && (
+            <View style={{...styles.card, marginTop: 8}}>
+              <Text style={styles.label}>Job Actionssss</Text>
+
+              <View style={styles.column}>
+                <Text style={styles.label}>Repair Description</Text>
+                <View style={styles.descriptionRow}>
+                  <TextInput
+                    value={form.repairDescription}
+                    style={{maxWidth: '67%', color: '#000'}}
+                    placeholderTextColor={'gray'}
+                    multiline={true}
+                    numberOfLines={1}
+                    onChangeText={text =>
+                      handleInputChange('repairDescription', text)
+                    }
+                    placeholder="Enter Repair Description"
+                  />
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 10,
+                    }}>
+                    {/* {!audioPath ? ( */}
+                    <TouchableOpacity
+                      style={styles.playIconContainer}
+                      onPress={onHandleAudioRecord}>
+                      <Image source={recordAudioIcons} style={styles.micIcon} />
+                    </TouchableOpacity>
+                    {/* ) : (
+                    <TouchableOpacity
+                      style={styles.playIconContainer}
+                      onPress={onPlayRecordedAudio}>
+                      <Image source={recordingIcon} style={styles.micIcon} />
+                    </TouchableOpacity>
+                  )} */}
+                    {/* {isRecording && <Text>Recording</Text>} */}
+                    {audioPath && (
+                      <TouchableOpacity onPress={onRemoveRecording}>
+                        <Text>Record again</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
+              </View>
+
+              <View style={{...styles.column, gap: 4}}>
+                <Text style={styles.label}>Parts Replaced</Text>
+                <TextInput
+                  style={{maxWidth: '70%', color: '#000'}}
+                  placeholderTextColor={'gray'}
+                  multiline={true}
+                  numberOfLines={1}
+                  value={form.replacedParts}
+                  onChangeText={text =>
+                    handleInputChange('replacedParts', text)
+                  }
+                  placeholder="Enter Repair Description"
+                />
+              </View>
+
+              <View style={{...styles.column, gap: 4}}>
+                <Text style={styles.label}>Pending Remarks </Text>
+
+                <TextInput
+                  value={form.remarks}
+                  style={{maxWidth: '70%', color: '#000'}}
+                  placeholderTextColor={'gray'}
+                  multiline={true}
+                  numberOfLines={1}
+                  onChangeText={text => handleInputChange('remarks', text)}
+                  placeholder="Enter Repair Description"
+                />
+              </View>
+
+              <View style={{...styles.startCodeBox, marginTop: 0}}>
+                <Text style={styles.label}>Enter Happy Code</Text>
+                <View style={styles.startCodeInnerBox}>
+                  <OtpInput
+                    numberOfDigits={4}
+                    autoFocus={false}
+                    onTextChange={text => setHappyCode(text)}
+                    focusColor={'#404969'}
+                    theme={{
+                      containerStyle: styles.otpMainContainer,
+                      pinCodeContainerStyle: styles.pinCodeContainer,
+                      pinCodeTextStyle: {color: '#000000'},
+                    }}
+                  />
+
+                  <TouchableOpacity
+                    style={{
+                      ...styles.button,
+                      width: '55%',
+                      backgroundColor:
+                        happyCode?.length === 4
+                          ? 'rgba(255, 0, 0, 1)'
+                          : 'rgba(255, 0, 0, 0.4)',
+                    }}
+                    onPress={onCompleteJob}>
+                    <Text style={styles.buttonText}>Complete Job</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )}
+        </ScrollView>
+      </ScreenWrapper>
       <Modal
         transparent={true}
         animationType="fade"
@@ -707,6 +719,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F5FD',
     paddingHorizontal: width * 0.05,
     gap: height * 0.003,
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   title: {
     fontSize: width * 0.06,

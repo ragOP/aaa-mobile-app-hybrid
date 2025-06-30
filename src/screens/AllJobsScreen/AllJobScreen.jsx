@@ -12,12 +12,13 @@ import {
 import phoneIcon from '../../assets/icons/Call.png';
 import warningIcon from '../../assets/icons/Priority.png';
 import checkCircleIcon from '../../assets/icons/Checkmark.png';
-import { Dimensions, Platform } from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 import {getAllJobsApi, raisePrority} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
 
 const AllJobsScreen = ({route, navigation}) => {
   const [jobs, setJobs] = useState([]);
@@ -26,7 +27,6 @@ const AllJobsScreen = ({route, navigation}) => {
   const getUserDetails = async () => {
     return JSON.parse(await AsyncStorage.getItem('aaa_user'));
   };
-
 
   const handleCallTechnician = number => {
     if (number == null) return;
@@ -44,13 +44,12 @@ const AllJobsScreen = ({route, navigation}) => {
     }
   };
 
-
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          console.log(await AsyncStorage.getItem('token'))
+          console.log(await AsyncStorage.getItem('token'));
           const user = await getUserDetails();
           if (user?._id) {
             const response = await getAllJobsApi(user._id);
@@ -67,50 +66,56 @@ const AllJobsScreen = ({route, navigation}) => {
   );
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Title */}
+    <ScreenWrapper>
+      <ScrollView style={styles.container}>
+        {/* Title */}
 
-      <Text style={styles.title}>All Jobs</Text>
+        <Text style={styles.title}>All Jobs</Text>
 
-      {/* Conditionally render the job card if data is available */}
-      {loading ? (
-        <View style={styles.activityIndicatorStyles}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : jobs && jobs.length > 0 ? (
-        jobs.map((job, index) => (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={1}
-            style={styles.jobsContent}
-            onPress={() => navigation.navigate('JobDetailScreen', {job})}>
-            <Text style={styles.panelType}>{job?.projectName}</Text>
-            <View style={styles.tokenStatusRow}>
-              {job.activity === 'Pending' && <Text style={styles.tokenText}>
-                Job Code{' '}
-                <Text style={styles.tokenNumber}>{job?.statusCode || '-'}</Text>
-              </Text>}
-              <Text style={styles.status}>
-                Status:{" "}
-                <Text
-                  style={[
-                    styles.ongoing,
-                    job.activity === 'Closed' ? {color: 'red'} : {},
-                  ]}>
-                  {job?.activity}
+        {/* Conditionally render the job card if data is available */}
+        {loading ? (
+          <View style={styles.activityIndicatorStyles}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : jobs && jobs.length > 0 ? (
+          jobs.map((job, index) => (
+            <TouchableOpacity
+              key={index}
+              activeOpacity={1}
+              style={styles.jobsContent}
+              onPress={() => navigation.navigate('JobDetailScreen', {job})}>
+              <Text style={styles.panelType}>{job?.projectName}</Text>
+              <View style={styles.tokenStatusRow}>
+                {job.activity === 'Pending' && (
+                  <Text style={styles.tokenText}>
+                    Job Code{' '}
+                    <Text style={styles.tokenNumber}>
+                      {job?.statusCode || '-'}
+                    </Text>
+                  </Text>
+                )}
+                <Text style={styles.status}>
+                  Status:{' '}
+                  <Text
+                    style={[
+                      styles.ongoing,
+                      job.activity === 'Closed' ? {color: 'red'} : {},
+                    ]}>
+                    {job?.activity}
+                  </Text>
                 </Text>
-              </Text>
-            </View>
-            <Text style={styles.detailText}>{job?.projectName || ''}</Text>
-            <Text style={styles.detailText}>{job?.siteLocation || ''}</Text>
-          </TouchableOpacity>
-        ))
-      ) : (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>No jobs found</Text>
-        </View>
-      )}
-    </ScrollView>
+              </View>
+              <Text style={styles.detailText}>{job?.projectName || ''}</Text>
+              <Text style={styles.detailText}>{job?.siteLocation || ''}</Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <View style={styles.noDataContainer}>
+            <Text style={styles.noDataText}>No jobs found</Text>
+          </View>
+        )}
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 8,

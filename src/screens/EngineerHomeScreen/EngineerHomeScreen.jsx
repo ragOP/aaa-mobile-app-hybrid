@@ -16,6 +16,7 @@ import Swiper from 'react-native-swiper';
 import PaperText from '../../ui/PaperText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getAllJobsApi} from '../../store/api';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
 const {width, height} = Dimensions.get('window');
 
 const HomeScreen = ({navigation}) => {
@@ -62,97 +63,100 @@ const HomeScreen = ({navigation}) => {
   }, [refresh]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={require('../../assets/images/logobg.png')}
-          style={styles.logo}
-        />
-        <TouchableOpacity
-          onPress={() => setModalVisible(true)}
-          style={styles.userInfo}>
+    <ScreenWrapper>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
           <Image
-            source={require('../../assets/images/avatar.png')}
-            style={styles.profileImage}
+            source={require('../../assets/images/logobg.png')}
+            style={styles.logo}
           />
-          <PaperText
-            text={userDetails?.userName || ''}
-            variant="titleSmall"
-            fontStyling={styles.userName}
-          />
-          <PaperText
-            text={userDetails?.phoneNumber || '-'}
-            variant="titleSmall"
-            fontStyling={styles.userPhone}
-          />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        style={styles.assignedJobSection}
-        contentContainerStyle={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-        }>
-        <View style={styles.assignedJobCard}>
-          <View style={styles.assignedJobHeader}>
-            <Text style={styles.assignedJobTitle}>Assigned Jobs</Text>
-            <View>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => navigation.navigate('AllJobScreen')}>
-                <Text style={styles.viewMore}>View More</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {jobs?.length === 0 && isFetchingJobs && (
-            <View style={styles.activityIndicatorStyles}>
-              <ActivityIndicator size="large" />
-            </View>
-          )}
-
-          {jobs && (
-            <Swiper showsPagination={true} autoplay={true} loop={true}>
-              {jobs.map((job, index) => (
-                <TouchableOpacity
-                  key={index}
-                  activeOpacity={1}
-                  style={styles.jobsContent}
-                  onPress={() => navigation.navigate('JobDetailScreen', {job})}>
-                  <Text style={styles.panelType}>{job?.projectName}</Text>
-                  <View style={styles.tokenStatusRow}>
-                    <Text style={styles.tokenText}>
-                      Job Code:{' '}
-                      <Text style={styles.tokenNumber}>
-                        {job?.statusCode || '-'}
-                      </Text>
-                    </Text>
-                    <Text style={styles.status}>
-                      Status:{' '}
-                      <Text
-                        style={[
-                          styles.ongoing,
-                          job.activity === 'Closed' ? {color: 'red'} : {},
-                        ]}>
-                        {job?.activity}
-                      </Text>
-                    </Text>
-                  </View>
-                  <Text style={styles.detailText}>
-                    {job?.projectName || ''}
-                  </Text>
-                  <Text style={styles.detailText}>
-                    {job?.siteLocation || ''}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </Swiper>
-          )}
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={styles.userInfo}>
+            <Image
+              source={require('../../assets/images/avatar.png')}
+              style={styles.profileImage}
+            />
+            <PaperText
+              text={userDetails?.userName || ''}
+              variant="titleSmall"
+              fontStyling={styles.userName}
+            />
+            <PaperText
+              text={userDetails?.phoneNumber || '-'}
+              variant="titleSmall"
+              fontStyling={styles.userPhone}
+            />
+          </TouchableOpacity>
         </View>
-      </ScrollView>
 
-      {/* <View style={styles.grid}>
+        <ScrollView
+          style={styles.assignedJobSection}
+          contentContainerStyle={styles.scrollView}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+          }>
+          <View style={styles.assignedJobCard}>
+            <View style={styles.assignedJobHeader}>
+              <Text style={styles.assignedJobTitle}>Assigned Jobs</Text>
+              <View>
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => navigation.navigate('AllJobScreen')}>
+                  <Text style={styles.viewMore}>View More</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {jobs?.length === 0 && isFetchingJobs && (
+              <View style={styles.activityIndicatorStyles}>
+                <ActivityIndicator size="large" />
+              </View>
+            )}
+
+            {jobs && (
+              <Swiper showsPagination={true} autoplay={true} loop={true}>
+                {jobs.map((job, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={1}
+                    style={styles.jobsContent}
+                    onPress={() =>
+                      navigation.navigate('JobDetailScreen', {job})
+                    }>
+                    <Text style={styles.panelType}>{job?.projectName}</Text>
+                    <View style={styles.tokenStatusRow}>
+                      <Text style={styles.tokenText}>
+                        Job Code:{' '}
+                        <Text style={styles.tokenNumber}>
+                          {job?.statusCode || '-'}
+                        </Text>
+                      </Text>
+                      <Text style={styles.status}>
+                        Status:{' '}
+                        <Text
+                          style={[
+                            styles.ongoing,
+                            job.activity === 'Closed' ? {color: 'red'} : {},
+                          ]}>
+                          {job?.activity}
+                        </Text>
+                      </Text>
+                    </View>
+                    <Text style={styles.detailText}>
+                      {job?.projectName || ''}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      {job?.siteLocation || ''}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </Swiper>
+            )}
+          </View>
+        </ScrollView>
+
+        {/* <View style={styles.grid}>
         <TouchableOpacity style={styles.gridItem} activeOpacity={1}>
           <Image source={phoneIcon} style={styles.gridImage} />
           <Text style={styles.gridText}>Call Support</Text>
@@ -165,28 +169,29 @@ const HomeScreen = ({navigation}) => {
         <View style={styles.gridItem} />
       </View> */}
 
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Profile Options</Text>
-            <TouchableOpacity
-              onPress={handleLogout}
-              style={styles.logoutButton}>
-              <Text style={styles.logoutText}>Logout</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={isModalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Profile Options</Text>
+              <TouchableOpacity
+                onPress={handleLogout}
+                style={styles.logoutButton}>
+                <Text style={styles.logoutText}>Logout</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.cancelButton}>
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
-    </ScrollView>
+        </Modal>
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
@@ -217,8 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.06,
     marginBottom: height * 0.01,
   },
-  assignedJobSection: {
-  },
+  assignedJobSection: {},
   userName: {
     color: '#FFFFFF',
     fontWeight: 'bold',

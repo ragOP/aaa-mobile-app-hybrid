@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet, View, Platform} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {colors} from '../utils/constants';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
@@ -63,8 +63,8 @@ const BottomTabNavigation = () => {
           backgroundColor: colors.white,
           borderTopWidth: 1,
           borderTopColor: '#eee',
-          height: 60 + insets.bottom, // Dynamic height for all devices
-          paddingBottom: insets.bottom, // Dynamic safe area for all devices
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom,
         },
         tabBarHideOnKeyboard: true,
       }}

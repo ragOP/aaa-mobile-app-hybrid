@@ -10,6 +10,8 @@ import {
   Modal,
   Dimensions,
   Linking,
+  Alert,
+  Platform,
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -161,7 +163,19 @@ const HomeScreen = ({navigation}) => {
           <TouchableOpacity
             style={styles.gridItem}
             activeOpacity={1}
-            onPress={() => Linking.openURL('tel:01169268243')}>
+            onPress={async () => {
+              const number = '01169268243';
+              const url =
+                Platform.OS === 'ios' ? `tel:${number}` : `tel:${number}`;
+              try {
+                await Linking.openURL(url);
+              } catch (e) {
+                Alert.alert(
+                  'Error',
+                  e?.message || 'An error occurred while trying to open the phone app.'
+                );
+              }
+            }}>
             <Image source={phoneIcon} style={styles.gridImage} />
             <Text style={styles.gridText}>Call Support</Text>
           </TouchableOpacity>

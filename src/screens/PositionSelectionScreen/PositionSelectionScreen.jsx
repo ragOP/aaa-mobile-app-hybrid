@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const PositionSelectionScreen = ({navigation}) => {
   const handleLogin = () => {
@@ -9,7 +10,7 @@ const PositionSelectionScreen = ({navigation}) => {
   const handleEngineerLogin = () => {
     navigation.navigate('EngineerLoginScreen');
   };
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Please Select Your Position</Text>
@@ -34,9 +35,18 @@ const PositionSelectionScreen = ({navigation}) => {
         <Text style={styles.engineerButtonText}>Service Engineer</Text>
       </TouchableOpacity>
 
-      <Text style={styles.footerText}>
-        A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
-      </Text>
+      <View style={styles.footerContainer}>
+        <Text style={styles.footerText}>
+          A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
+        </Text>
+
+        <View style={styles.madeWithLoveFooter}>
+          <Text style={styles.madeWithLoveTextWithMargin}>
+            MADE WITH LOVE BY NAJCODE
+          </Text>
+          <MaterialIcons name="favorite" size={14} color="#FF0000" />
+        </View>
+      </View>
     </View>
   );
 };
@@ -104,13 +114,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+  footerContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 20,
+    gap: 8,
+  },
   footerText: {
     fontSize: 12,
     color: '#555',
     textAlign: 'center',
-    position: 'absolute',
-    bottom: 20,
     fontStyle: 'italic',
+  },
+  madeWithLoveFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  madeWithLoveTextWithMargin: {
+    fontSize: 12,
+    color: '#555',
+    marginRight: 4,
+    paddingTop: 4,
+    marginBottom: 6,
   },
 });
 

@@ -8,7 +8,7 @@ const ScreenWrapper = ({ children, style, contentContainerStyle, ...props }) => 
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 410 : 0}
         {...props}
       >
         <View style={[styles.flex, contentContainerStyle]}>{children}</View>

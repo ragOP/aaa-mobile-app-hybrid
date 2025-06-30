@@ -87,110 +87,112 @@ const ComplaintScreen = ({route, navigation}) => {
             <ActivityIndicator size="large" />
           </View>
         ) : complaints && complaints?.length > 0 ? (
-          complaints.map((complaint, index) => (
-            <View key={index} style={styles.card}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.panelText}>{complaint?.projectName}</Text>
-                <Text
-                  style={styles.viewMoreText}
-                  onPress={() =>
-                    navigation.navigate('ComplainDetailScreen', {complaint})
-                  }>
-                  View More
+          <View style={{flex: 1}}>
+            {complaints.map((complaint, index) => (
+              <View key={index} style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <Text style={styles.panelText}>{complaint?.projectName}</Text>
+                  <Text
+                    style={styles.viewMoreText}
+                    onPress={() =>
+                      navigation.navigate('ComplainDetailScreen', {complaint})
+                    }>
+                    View More
+                  </Text>
+                </View>
+
+                {/* <View style={styles.infoRow}> */}
+                <Text style={styles.labelText}>
+                  Project Name: {complaint?.projectName || '-'}
                 </Text>
-              </View>
-
-              {/* <View style={styles.infoRow}> */}
-              <Text style={styles.labelText}>
-                Project Name: {complaint?.projectName || '-'}
-              </Text>
-              <View style={styles.row}>
-                <Text style={styles.labelText}>Activity: </Text>
-                <Text style={styles.statusCode}>
-                  {' '}
-                  {complaint?.activity || '-'}
-                </Text>
-              </View>
-              {/* </View> */}
-
-              <Text style={styles.labelText}>
-                Site Location: {complaint?.siteLocation || '-'}
-              </Text>
-
-              <View style={styles.divider} />
-
-              <Text style={styles.statusText}>
-                <Text style={styles.labelText}>Current Status: </Text>
-                <Text style={styles.statusCode}>
-                  {complaint?.activity || '-'}
-                </Text>
-                {complaint.statusCode && (
+                <View style={styles.row}>
+                  <Text style={styles.labelText}>Activity: </Text>
                   <Text style={styles.statusCode}>
                     {' '}
-                    : {complaint?.statusCode || '-'}
+                    {complaint?.activity || '-'}
                   </Text>
-                )}
-              </Text>
+                </View>
+                {/* </View> */}
 
-              {/* Status Bar */}
-              <View style={styles.statusBar}>
-                <View
-                  style={
-                    complaint?.activity === 'Pending' ||
-                    complaint?.activity === 'Ongoing' ||
-                    complaint?.activity === 'Closed'
-                      ? styles.statusBarSectionComplete
-                      : styles.statusBarSectionIncomplete
-                  }
-                />
-                <View
-                  style={
-                    complaint?.activity === 'Ongoing' ||
-                    complaint?.activity === 'Closed'
-                      ? styles.statusBarSectionComplete
-                      : styles.statusBarSectionIncomplete
-                  }
-                />
-                <View
-                  style={
-                    complaint?.activity === 'Ongoing' ||
-                    complaint?.activity === 'Closed'
-                      ? styles.statusBarSectionComplete
-                      : styles.statusBarSectionIncomplete
-                  }
-                />
-                <View
-                  style={
-                    complaint?.activity === 'Closed'
-                      ? styles.statusBarSectionComplete
-                      : styles.statusBarSectionIncomplete
-                  }
-                />
-              </View>
+                <Text style={styles.labelText}>
+                  Site Location: {complaint?.siteLocation || '-'}
+                </Text>
 
-              {/* Action Buttons */}
-              <View style={styles.actionButtons}>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    handleCallTechnician(complaint?.technician?.phoneNumber)
-                  }>
-                  <Image source={phoneIcon} style={styles.actionIcon} />
-                  <Text style={styles.actionButtonText}>Call Technician</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => handleRaisePriority(complaint._id)}>
-                  <Image source={warningIcon} style={styles.actionIcon} />
-                  <Text style={styles.actionButtonText}>Raise Priority</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                  <Image source={checkCircleIcon} style={styles.actionIcon} />
-                  <Text style={styles.actionButtonText}>Mark Complete</Text>
-                </TouchableOpacity>
+                <View style={styles.divider} />
+
+                <Text style={styles.statusText}>
+                  <Text style={styles.labelText}>Current Status: </Text>
+                  <Text style={styles.statusCode}>
+                    {complaint?.activity || '-'}
+                  </Text>
+                  {complaint.statusCode && (
+                    <Text style={styles.statusCode}>
+                      {' '}
+                      : {complaint?.statusCode || '-'}
+                    </Text>
+                  )}
+                </Text>
+
+                {/* Status Bar */}
+                <View style={styles.statusBar}>
+                  <View
+                    style={
+                      complaint?.activity === 'Pending' ||
+                      complaint?.activity === 'Ongoing' ||
+                      complaint?.activity === 'Closed'
+                        ? styles.statusBarSectionComplete
+                        : styles.statusBarSectionIncomplete
+                    }
+                  />
+                  <View
+                    style={
+                      complaint?.activity === 'Ongoing' ||
+                      complaint?.activity === 'Closed'
+                        ? styles.statusBarSectionComplete
+                        : styles.statusBarSectionIncomplete
+                    }
+                  />
+                  <View
+                    style={
+                      complaint?.activity === 'Ongoing' ||
+                      complaint?.activity === 'Closed'
+                        ? styles.statusBarSectionComplete
+                        : styles.statusBarSectionIncomplete
+                    }
+                  />
+                  <View
+                    style={
+                      complaint?.activity === 'Closed'
+                        ? styles.statusBarSectionComplete
+                        : styles.statusBarSectionIncomplete
+                    }
+                  />
+                </View>
+
+                {/* Action Buttons */}
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() =>
+                      handleCallTechnician(complaint?.technician?.phoneNumber)
+                    }>
+                    <Image source={phoneIcon} style={styles.actionIcon} />
+                    <Text style={styles.actionButtonText}>Call Technician</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => handleRaisePriority(complaint._id)}>
+                    <Image source={warningIcon} style={styles.actionIcon} />
+                    <Text style={styles.actionButtonText}>Raise Priority</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.actionButton}>
+                    <Image source={checkCircleIcon} style={styles.actionIcon} />
+                    <Text style={styles.actionButtonText}>Mark Complete</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))
+            ))}
+          </View>
         ) : (
           <Text style={styles.noDataText}>No complaint data available</Text>
         )}
@@ -202,6 +204,7 @@ const ComplaintScreen = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: '100%',
     backgroundColor: '#F3F5FD',
     paddingHorizontal: width * 0.05, // Dynamic horizontal padding
   },
@@ -221,9 +224,9 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.02,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: height * 0.005},
-    shadowOpacity: 0.8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.1 : 0.18,
     shadowRadius: width * 0.03,
-    elevation: 5,
+    elevation: Platform.OS === 'ios' ? 2 : 5,
   },
   newComplaintText: {
     color: 'black',
@@ -239,13 +242,9 @@ const styles = StyleSheet.create({
     height: height * 0.06,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: height * 0.005},
-    shadowOpacity: 0.8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.1 : 0.18,
     shadowRadius: width * 0.03,
-    elevation: 5,
-  },
-  plusIcon: {
-    width: width * 0.055,
-    height: width * 0.055,
+    elevation: Platform.OS === 'ios' ? 3 : 5,
   },
   card: {
     backgroundColor: '#fff',
@@ -253,10 +252,10 @@ const styles = StyleSheet.create({
     padding: width * 0.04,
     marginVertical: height * 0.01,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: Platform.OS === 'ios' ? 0.06 : 0.1,
     shadowOffset: {width: 0, height: height * 0.005},
     shadowRadius: width * 0.03,
-    elevation: 3,
+    elevation: Platform.OS === 'ios' ? 0 : 3,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -333,10 +332,10 @@ const styles = StyleSheet.create({
     width: width * 0.25,
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: Platform.OS === 'ios' ? 0.06 : 0.1,
     shadowOffset: {width: 0, height: height * 0.005},
     shadowRadius: width * 0.03,
-    elevation: 3,
+    elevation: Platform.OS === 'ios' ? 0 : 3,
   },
   actionButtonText: {
     marginLeft: width * 0.012,
@@ -349,6 +348,12 @@ const styles = StyleSheet.create({
   actionIcon: {
     width: width * 0.055,
     height: width * 0.055,
+    // No shadow for icons/images
+  },
+  plusIcon: {
+    width: width * 0.055,
+    height: width * 0.055,
+    // No shadow on image itself, only on button
   },
   noDataText: {
     fontSize: width * 0.045,

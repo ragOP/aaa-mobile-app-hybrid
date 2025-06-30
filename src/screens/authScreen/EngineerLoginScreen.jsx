@@ -23,10 +23,6 @@ const EngineerLoginScreen = ({navigation}) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-  const saveTokenHandler = async token => {
-    await AsyncStorage.setItem('aaa_token', token);
-  };
-
   const handleOpenModal = () => {
     setShowModal(!showModal);
   };
@@ -139,6 +135,7 @@ const EngineerLoginScreen = ({navigation}) => {
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
+
       {showModal && (
         <ForgotPasswordModal
           showModal={showModal}

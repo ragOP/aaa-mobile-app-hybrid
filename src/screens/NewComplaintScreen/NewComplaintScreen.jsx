@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
@@ -26,6 +26,9 @@ import {getAddressFromCoordinates} from '../../helper/getAddress';
 import pause from '../../assets/icons/pause.png';
 import play from '../../assets/icons/mic.png';
 import {ActivityIndicator} from 'react-native-paper';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 const NewComplaintScreen = () => {
   const navigation = useNavigation();
 
@@ -165,7 +168,7 @@ const NewComplaintScreen = () => {
       formData.append('geoLatitude', geoLatitude);
       formData.append('geoLongitude', geoLongitude);
 
-      if(!selectedProjectName || !selectedPanelName) {
+      if (!selectedProjectName || !selectedPanelName) {
         Alert.alert(
           'Project and Panel are required',
           'Please select a project and panel.',
@@ -264,153 +267,164 @@ const NewComplaintScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#f0f4fc'}}>
-    <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
-      {/* Title */}
-      <Text style={styles.title}>New Complaint</Text>
-
-      <Picker
-        selectedValue={selectedProject}
-        onValueChange={itemValue => {
-          setSelectedProject(itemValue);
-          setPanels(itemValue.panels);
-          setSelectedPanel('');
-        }}
-        style={styles.picker}
-        dropdownIconColor="red">
-        <Picker.Item
-          label={isFetching ? 'Fetching projects...' : 'Project Name :'}
-          value={selectedProject?.title || ''}
-        />
-        {projects.map(project => (
-          <Picker.Item
-            key={project._id}
-            label={project.title}
-            value={project}
-          />
-        ))}
-      </Picker>
-
-      <View style={styles.locationContainer}>
-        <View style={[styles.inputContainer1, styles.flexContainer]}>
-          <TextInput
-            placeholder="Add Site Location:"
-            placeholderTextColor="#A9A9A9"
-            value={siteLocation}
-            onChangeText={setSiteLocation}
-            style={styles.address}
-          />
+    <ScreenWrapper style={{flex: 1, backgroundColor: '#f0f4fc'}}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{paddingBottom: 100}}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={{
+              zIndex: 10,
+              paddingHorizontal: 4,
+            }}
+            onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back" size={28} color="#FF0000" />
+          </TouchableOpacity>
+          <Text style={styles.title}>New Complaint</Text>
         </View>
 
-        {isFetchingLocation ? (
-          <View style={styles.autoLocationButton}>
-            <ActivityIndicator />
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.autoLocationButton}
-            onPress={getYourCurrentLocation}>
-            <Image
-              source={require('../../assets/icons/location.png')}
-              style={styles.icon}
+        <Picker
+          selectedValue={selectedProject}
+          onValueChange={itemValue => {
+            setSelectedProject(itemValue);
+            setPanels(itemValue.panels);
+            setSelectedPanel('');
+          }}
+          style={styles.picker}
+          dropdownIconColor="red">
+          <Picker.Item
+            label={isFetching ? 'Fetching projects...' : 'Project Name :'}
+            value={selectedProject?.title || ''}
+          />
+          {projects.map(project => (
+            <Picker.Item
+              key={project._id}
+              label={project.title}
+              value={project}
             />
-            <Text style={styles.autoLocationText}>Auto Location</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+          ))}
+        </Picker>
 
-      <Picker
-        selectedValue={selectedPanel}
-        onValueChange={itemValue => setSelectedPanel(itemValue)}
-        style={styles.picker}
-        enabled={panels.length > 0}
-        dropdownIconColor="red">
-        <Picker.Item label="Panel/Section Name :" value="" />
-        {panels.map((panel, index) => (
-          <Picker.Item key={index} label={panel} value={panel} />
-        ))}
-      </Picker>
+        <View style={styles.locationContainer}>
+          <View style={[styles.inputContainer1, styles.flexContainer]}>
+            <TextInput
+              placeholder="Add Site Location:"
+              placeholderTextColor="#A9A9A9"
+              value={siteLocation}
+              onChangeText={setSiteLocation}
+              style={styles.address}
+            />
+          </View>
 
-      <View style={styles.descriptionContainer}>
-        <Text style={styles.label}>Describe Your Issue :</Text>
-        <TextInput
-          style={styles.descriptionInput}
-          multiline
-          placeholder="Describe the issue in detail to help us assist you better..."
-          value={issuedescription}
-          onChangeText={setIssueDescription}
-          placeholderTextColor="#A9A9A9"
-        />
-        <View>
-          <TouchableOpacity onPress={handlePress} style={styles.micButton}>
-            <Image source={audioIcons} style={styles.micIcon} />
-          </TouchableOpacity>
-          {audioPath && (
-            <Text
-              style={{
-                position: 'absolute',
-                right: -5,
-                bottom: -8,
-                fontSize: 10,
-              }}>
-              Record again
-            </Text>
+          {isFetchingLocation ? (
+            <View style={styles.autoLocationButton}>
+              <ActivityIndicator />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.autoLocationButton}
+              onPress={getYourCurrentLocation}>
+              <Image
+                source={require('../../assets/icons/location.png')}
+                style={styles.icon}
+              />
+              <Text style={styles.autoLocationText}>Auto Location</Text>
+            </TouchableOpacity>
           )}
         </View>
-      </View>
 
-      {/* Add Photos and Uploaded Photos */}
-      <View style={styles.grid}>
-        <View style={styles.photosContainer}>
-          <TouchableOpacity
-            style={styles.addPhotosButton}
-            onPress={handleImagePicker}>
-            <Image
-              source={require('../../assets/icons/cam.png')}
-              style={styles.camicon}
-            />
-            <Text style={styles.addPhotosText}>Add Photos</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.uploadedPhotosContainer}>
-          <Text style={styles.uploadedPhotosText}>Uploaded Photos</Text>
-          <View style={styles.photosPreview}>
-            {images.map((image, index) => (
-              <Image
-                key={index}
-                source={{uri: image.uri}}
-                style={styles.photoPlaceholder}
-              />
-            ))}
+        <Picker
+          selectedValue={selectedPanel}
+          onValueChange={itemValue => setSelectedPanel(itemValue)}
+          style={styles.picker}
+          enabled={panels.length > 0}
+          dropdownIconColor="red">
+          <Picker.Item label="Panel/Section Name :" value="" />
+          {panels.map((panel, index) => (
+            <Picker.Item key={index} label={panel} value={panel} />
+          ))}
+        </Picker>
+
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.label}>Describe Your Issue :</Text>
+          <TextInput
+            style={styles.descriptionInput}
+            multiline
+            placeholder="Describe the issue in detail to help us assist you better..."
+            value={issuedescription}
+            onChangeText={setIssueDescription}
+            placeholderTextColor="#A9A9A9"
+          />
+          <View>
+            <TouchableOpacity onPress={handlePress} style={styles.micButton}>
+              <Image source={audioIcons} style={styles.micIcon} />
+            </TouchableOpacity>
+            {audioPath && (
+              <Text
+                style={{
+                  position: 'absolute',
+                  right: -5,
+                  bottom: -8,
+                  fontSize: 10,
+                }}>
+                Record again
+              </Text>
+            )}
           </View>
         </View>
-      </View>
 
-      {/* Severity Slider */}
-      <View style={styles.severityContainer}>
-        <Text style={styles.severityLabel}>Severity</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={1}
-          minimumTrackTintColor={getSeverityColor()}
-          maximumTrackTintColor="#d3d3d3"
-          thumbTintColor={getSeverityColor()}
-          value={severity}
-          onValueChange={value => setSeverity(value)}
-        />
-        <Text style={[styles.severityText, {color: getSeverityColor()}]}>
-          {getSeverityText()}
-        </Text>
-      </View>
+        {/* Add Photos and Uploaded Photos */}
+        <View style={styles.grid}>
+          <View style={styles.photosContainer}>
+            <TouchableOpacity
+              style={styles.addPhotosButton}
+              onPress={handleImagePicker}>
+              <Image
+                source={require('../../assets/icons/cam.png')}
+                style={styles.camicon}
+              />
+              <Text style={styles.addPhotosText}>Add Photos</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.uploadedPhotosContainer}>
+            <Text style={styles.uploadedPhotosText}>Uploaded Photos</Text>
+            <View style={styles.photosPreview}>
+              {images.map((image, index) => (
+                <Image
+                  key={index}
+                  source={{uri: image.uri}}
+                  style={styles.photoPlaceholder}
+                />
+              ))}
+            </View>
+          </View>
+        </View>
 
-      {/* Submit Button */}
-      <TouchableOpacity style={[styles.submitButton]} onPress={handleSubmit}>
-        {isCreatingComplaint && <ActivityIndicator size="small" />}
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
+        {/* Severity Slider */}
+        <View style={styles.severityContainer}>
+          <Text style={styles.severityLabel}>Severity</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor={getSeverityColor()}
+            maximumTrackTintColor="#d3d3d3"
+            thumbTintColor={getSeverityColor()}
+            value={severity}
+            onValueChange={value => setSeverity(value)}
+          />
+          <Text style={[styles.severityText, {color: getSeverityColor()}]}>
+            {getSeverityText()}
+          </Text>
+        </View>
+
+        {/* Submit Button */}
+        <TouchableOpacity style={[styles.submitButton]} onPress={handleSubmit}>
+          {isCreatingComplaint && <ActivityIndicator size="small" />}
+          <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
       </ScrollView>
-  </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 
@@ -419,6 +433,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f4fc',
     paddingHorizontal: width * 0.05,
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   title: {
     fontSize: width * 0.06,
@@ -454,8 +474,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputContainer1: {
-     flex: 1, // ✅ Let it take available space
-  minWidth: '60%',
+    flex: 1, // ✅ Let it take available space
+    minWidth: '60%',
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
     padding: width * 0.04,
@@ -495,17 +515,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
- locationContainer: {
-  flexDirection: 'row',
-  flexWrap: 'wrap', // ✅ allow wrapping on smaller screens
-  gap: width * 0.02,
-  justifyContent: 'space-between',
-  marginBottom: height * 0.01,
-},
+  locationContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap', // ✅ allow wrapping on smaller screens
+    gap: width * 0.02,
+    justifyContent: 'space-between',
+    marginBottom: height * 0.01,
+  },
 
   autoLocationButton: {
-      flex: 1, // ✅ So both items share the row equally
-  minWidth: '35%',
+    flex: 1,
+    minWidth: '35%',
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
     padding: width * 0.025,
@@ -519,7 +539,6 @@ const styles = StyleSheet.create({
     marginRight: 0,
     marginVertical: height * 0.01,
     justifyContent: 'center',
-    flex: 1,
     width: '100%',
   },
   autoLocationText: {

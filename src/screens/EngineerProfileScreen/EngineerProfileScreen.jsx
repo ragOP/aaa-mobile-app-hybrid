@@ -7,9 +7,10 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
 } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
+const {width, height} = Dimensions.get('window');
 
 const EngineerProfileScreen = () => {
   const [engineer, setEngineer] = useState(null);
@@ -36,57 +37,59 @@ const EngineerProfileScreen = () => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>My Profile</Text>
-      {isFetchingCustomer ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#007BFF" />
-        </View>
-      ) : (
-        <>
-          <View style={styles.field}>
-            <Text style={styles.label}>Username:</Text>
-            <TextInput
-              style={styles.input}
-              value={engineer?.userName || ''}
-              editable={false}
-            />
+    <ScreenWrapper>
+      <ScrollView style={styles.container}>
+        <Text style={styles.header}>My Profile</Text>
+        {isFetchingCustomer ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color="#007BFF" />
           </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Email:</Text>
-            <TextInput
-              style={styles.input}
-              value={engineer?.email || ''}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Name:</Text>
-            <TextInput
-              style={styles.input}
-              value={engineer?.name || ''}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Phone number:</Text>
-            <TextInput
-              style={styles.input}
-              value={engineer?.phoneNumber || '-'}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Employee Id:</Text>
-            <TextInput
-              style={styles.input}
-              value={engineer?.employeeId || ''}
-              editable={false}
-            />
-          </View>
-        </>
-      )}
-    </ScrollView>
+        ) : (
+          <>
+            <View style={styles.field}>
+              <Text style={styles.label}>Username:</Text>
+              <TextInput
+                style={styles.input}
+                value={engineer?.userName || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Email:</Text>
+              <TextInput
+                style={styles.input}
+                value={engineer?.email || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Name:</Text>
+              <TextInput
+                style={styles.input}
+                value={engineer?.name || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Phone number:</Text>
+              <TextInput
+                style={styles.input}
+                value={engineer?.phoneNumber || '-'}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Employee Id:</Text>
+              <TextInput
+                style={styles.input}
+                value={engineer?.employeeId || ''}
+                editable={false}
+              />
+            </View>
+          </>
+        )}
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
