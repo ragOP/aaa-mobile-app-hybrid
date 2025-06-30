@@ -8,17 +8,19 @@ import {
   Image,
   ActivityIndicator,
   Alert,
+  Platform,
 } from 'react-native';
 import {engineerloginApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import toastFunction from '../../functions/toastFunction';
 import ForgotPasswordModal from './components/ForgotPasswordModal';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const EngineerLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // New state for loader
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // New state for button
+  const [loading, setLoading] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   const saveTokenHandler = async token => {
@@ -27,9 +29,7 @@ const EngineerLoginScreen = ({navigation}) => {
 
   const handleOpenModal = () => {
     setShowModal(!showModal);
-    console.log(">>> Pressed")
   };
-
 
   const handleLogin = async () => {
     if (loading) {
@@ -76,6 +76,14 @@ const EngineerLoginScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <MaterialIcons name="arrow-back" size={28} color="#FF0000" />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Image
@@ -113,10 +121,8 @@ const EngineerLoginScreen = ({navigation}) => {
       <TouchableOpacity
         onPress={handleLogin}
         activeOpacity={1}
-        style={[styles.submitButton, isButtonDisabled && styles.disabledButton]} // Apply disabled style
-        disabled={isButtonDisabled || loading} // Disable button if either isButtonDisabled or loading is true
-      >
-        {/* Show loader when logging in, otherwise show the submit text */}
+        style={[styles.submitButton, isButtonDisabled && styles.disabledButton]}
+        disabled={isButtonDisabled || loading}>
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
@@ -124,18 +130,22 @@ const EngineerLoginScreen = ({navigation}) => {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={1} >
-        <Text style={styles.forgotPasswordText} onPress={handleOpenModal}>Forget Password ?</Text>
+      <TouchableOpacity activeOpacity={1}>
+        <Text style={styles.forgotPasswordText} onPress={handleOpenModal}>
+          Forget Password ?
+        </Text>
       </TouchableOpacity>
 
       <Text style={styles.footerText}>
         A Product of AAA SWITCH GEAR PVT LTD{'\n'}All Rights Reserved.
       </Text>
-      {
-        showModal && (
-          <ForgotPasswordModal showModal={showModal} setShowModal={setShowModal} userType="engineer" />
-        )
-      }
+      {showModal && (
+        <ForgotPasswordModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          userType="engineer"
+        />
+      )}
     </View>
   );
 };
@@ -147,6 +157,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     paddingVertical: 20,
+  },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Platform.OS === 'ios' ? 44 : 10,
+    marginBottom: 10,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 10,
+    paddingLeft: 10,
+  },
+  backButton: {
+    padding: 10,
   },
   logoContainer: {
     marginBottom: 20,
@@ -183,6 +208,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f3f3f3',
     borderRadius: 5,
     paddingHorizontal: 15,
+    paddingVertical: Platform.OS === 'ios' ? 14 : 8, // Add vertical padding for iOS
     marginBottom: 15,
     color: '#000',
   },

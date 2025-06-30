@@ -15,6 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {customerloginApi} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ForgotPasswordModal from './components/ForgotPasswordModal';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -68,6 +69,14 @@ const LoginScreen = ({navigation}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
         <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}>
+              <MaterialIcons name="arrow-back" size={28} color="#FF0000" />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
               <Image
@@ -151,6 +160,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 20,
   },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Platform.OS === 'ios' ? 44 : 10,
+    marginBottom: 10,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 10,
+    paddingLeft: 10,
+  },
+  backButton: {
+    padding: 10,
+  },
   logoContainer: {
     marginBottom: 20,
   },
@@ -220,7 +244,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 10, // Use a fixed value for better safe area support
+    bottom: 10,
     fontStyle: 'italic',
   },
 });
