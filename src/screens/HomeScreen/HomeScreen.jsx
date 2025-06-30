@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Modal,
   Dimensions,
-  Linking
+  Linking,
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -19,6 +19,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getComplaintsApi} from '../../store/api';
 import phoneIcon from '../../assets/icons/Call.png';
 import checkCircleIcon from '../../assets/icons/Settings.png';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
+
 const HomeScreen = ({navigation}) => {
   const [complaints, setComplaints] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
@@ -54,138 +56,146 @@ const HomeScreen = ({navigation}) => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={require('../../assets/images/logobg.png')}
-          style={styles.logo}
-        />
-        <TouchableOpacity
-          onPress={() => setModalVisible(true)}
-          style={styles.userInfo}>
+    <ScreenWrapper>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
           <Image
-            source={require('../../assets/images/avatar.png')}
-            style={styles.profileImage}
+            source={require('../../assets/images/logobg.png')}
+            style={styles.logo}
           />
-          <PaperText
-            text={userDetails?.userName || ''}
-            variant="titleSmall"
-            fontStyling={styles.userName}
-          />
-          <PaperText
-            text={userDetails?.phoneNumber || '-'}
-            variant="titleSmall"
-            fontStyling={styles.userPhone}
-          />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={styles.userInfo}>
+            <Image
+              source={require('../../assets/images/avatar.png')}
+              style={styles.profileImage}
+            />
+            <PaperText
+              text={userDetails?.userName || ''}
+              variant="titleSmall"
+              fontStyling={styles.userName}
+            />
+            <PaperText
+              text={userDetails?.phoneNumber || '-'}
+              variant="titleSmall"
+              fontStyling={styles.userPhone}
+            />
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.complaintsSection}>
-        <View style={styles.complaintsCard}>
-          <View style={styles.complaintsHeader}>
-            <Text style={styles.complaintsTitle}>Your Complaints</Text>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => navigation.navigate('ViewMoreComplaints')}>
-              <Text
-                style={styles.viewMore}
-                onPress={() => navigation.navigate('ComplaintScreen')}>
-                View More
-              </Text>
-            </TouchableOpacity>
+        <View style={styles.complaintsSection}>
+          <View style={styles.complaintsCard}>
+            <View style={styles.complaintsHeader}>
+              <Text style={styles.complaintsTitle}>Your Complaints</Text>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => navigation.navigate('ViewMoreComplaints')}>
+                <Text
+                  style={styles.viewMore}
+                  onPress={() => navigation.navigate('ComplaintScreen')}>
+                  View More
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {isFetchingComplaints ? (
+              <View style={styles.activityIndicatorStyles}>
+                <ActivityIndicator size="large" />
+              </View>
+            ) : complaints && complaints.length > 0 ? (
+              <Swiper showsPagination={false} autoplay={false} loop={false}>
+                {complaints.map((complaint, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={1}
+                    style={styles.complaintsContent}
+                    onPress={() =>
+                      navigation.navigate('ComplainDetailScreen', {complaint})
+                    }>
+                    <Text style={styles.panelType}>
+                      {complaint?.projectName}
+                    </Text>
+                    <View style={styles.tokenStatusRow}>
+                      <Text style={styles.tokenText}>
+                        Job Code{' '}
+                        <Text style={styles.tokenNumber}>
+                          {complaint?.statusCode || '-'}
+                        </Text>
+                      </Text>
+                      <Text style={styles.status}>
+                        Status:{' '}
+                        <Text
+                          style={[
+                            styles.ongoing,
+                            complaint.activity === 'Closed'
+                              ? {color: 'red'}
+                              : {},
+                          ]}>
+                          {complaint.activity}
+                        </Text>
+                      </Text>
+                    </View>
+                    <Text style={styles.detailText}>
+                      {complaint.projectName}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      {complaint.siteLocation}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </Swiper>
+            ) : (
+              <View
+                style={{
+                  ...styles.activityIndicatorStyles,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{}}>No complaint data available</Text>
+              </View>
+            )}
           </View>
-
-          {isFetchingComplaints ? (
-            <View style={styles.activityIndicatorStyles}>
-              <ActivityIndicator size="large" />
-            </View>
-          ) : complaints && complaints.length > 0 ? (
-            <Swiper showsPagination={false} autoplay={false} loop={false}>
-              {complaints.map((complaint, index) => (
-                <TouchableOpacity
-                  key={index}
-                  activeOpacity={1}
-                  style={styles.complaintsContent}
-                  onPress={() =>
-                    navigation.navigate('ComplainDetailScreen', {complaint})
-                  }>
-                  <Text style={styles.panelType}>{complaint?.projectName}</Text>
-                  <View style={styles.tokenStatusRow}>
-                    <Text style={styles.tokenText}>
-                      Job Code{' '}
-                      <Text style={styles.tokenNumber}>
-                        {complaint?.statusCode || '-'}
-                      </Text>
-                    </Text>
-                    <Text style={styles.status}>
-                      Status:{' '}
-                      <Text
-                        style={[
-                          styles.ongoing,
-                          complaint.activity === 'Closed' ? {color: 'red'} : {},
-                        ]}>
-                        {complaint.activity}
-                      </Text>
-                    </Text>
-                  </View>
-                  <Text style={styles.detailText}>{complaint.projectName}</Text>
-                  <Text style={styles.detailText}>
-                    {complaint.siteLocation}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </Swiper>
-          ) : (
-            <View
-              style={{
-                ...styles.activityIndicatorStyles,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text style={{}}>No complaint data available</Text>
-            </View>
-          )}
         </View>
-      </View>
 
-      <View style={styles.grid}>
-        <TouchableOpacity
-          style={styles.gridItem}
-          activeOpacity={1}
-          onPress={() => Linking.openURL('tel:01169268243')}>
-          <Image source={phoneIcon} style={styles.gridImage} />
-          <Text style={styles.gridText}>Call Support</Text>
-        </TouchableOpacity>
-        <View style={styles.gridItem}>
-          <Image source={checkCircleIcon} style={styles.gridImage} />
-          <Text style={styles.gridText}>Warranty & AMC</Text>
-        </View>
-        {/* <View style={styles.gridItem} />
+        <View style={styles.grid}>
+          <TouchableOpacity
+            style={styles.gridItem}
+            activeOpacity={1}
+            onPress={() => Linking.openURL('tel:01169268243')}>
+            <Image source={phoneIcon} style={styles.gridImage} />
+            <Text style={styles.gridText}>Call Support</Text>
+          </TouchableOpacity>
+          <View style={styles.gridItem}>
+            <Image source={checkCircleIcon} style={styles.gridImage} />
+            <Text style={styles.gridText}>Warranty & AMC</Text>
+          </View>
+          {/* <View style={styles.gridItem} />
         <View style={styles.gridItem} /> */}
-      </View>
-
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Profile Options</Text>
-            <TouchableOpacity
-              onPress={handleLogout}
-              style={styles.logoutButton}>
-              <Text style={styles.logoutText}>Logout</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </Modal>
-    </ScrollView>
+
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={isModalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Profile Options</Text>
+              <TouchableOpacity
+                onPress={handleLogout}
+                style={styles.logoutButton}>
+                <Text style={styles.logoutText}>Logout</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.cancelButton}>
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 

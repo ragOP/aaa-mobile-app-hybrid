@@ -6,12 +6,12 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
 } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-
 import {getMyProfile} from '../../store/api';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
+
+const {width, height} = Dimensions.get('window');
 
 const ProfileScreen = () => {
   const [customer, setCustomer] = useState(null);
@@ -34,65 +34,69 @@ const ProfileScreen = () => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>My Profile</Text>
-      {isFetchingCustomer ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#007BFF" />
-        </View>
-      ) : (
-        <>
-          <View style={styles.field}>
-            <Text style={styles.label}>Username:</Text>
-            <TextInput
-              style={styles.input}
-              value={customer?.userName || ''}
-              editable={false}
-            />
+    <ScreenWrapper contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
+        <Text style={styles.header}>My Profile</Text>
+        {isFetchingCustomer ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color="#007BFF" />
           </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Email:</Text>
-            <TextInput
-              style={styles.input}
-              value={customer?.email || ''}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Name:</Text>
-            <TextInput
-              style={styles.input}
-              value={customer?.name || ''}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Address:</Text>
-            <TextInput
-              style={styles.input}
-              value={customer?.address || ''}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>GST:</Text>
-            <TextInput
-              style={styles.input}
-              value={customer?.gst || ''}
-              editable={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Contact Person:</Text>
-            <TextInput
-              style={styles.input}
-              value={customer?.contactPerson || ''}
-              editable={false}
-            />
-          </View>
-        </>
-      )}
-    </ScrollView>
+        ) : (
+          <>
+            <View style={styles.field}>
+              <Text style={styles.label}>Username:</Text>
+              <TextInput
+                style={styles.input}
+                value={customer?.userName || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Email:</Text>
+              <TextInput
+                style={styles.input}
+                value={customer?.email || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Name:</Text>
+              <TextInput
+                style={styles.input}
+                value={customer?.name || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Address:</Text>
+              <TextInput
+                style={styles.input}
+                value={customer?.address || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>GST:</Text>
+              <TextInput
+                style={styles.input}
+                value={customer?.gst || ''}
+                editable={false}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>Contact Person:</Text>
+              <TextInput
+                style={styles.input}
+                value={customer?.contactPerson || ''}
+                editable={false}
+              />
+            </View>
+          </>
+        )}
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
@@ -131,6 +135,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: height * 0.25,
+  },
+  scrollContent: {
+    padding: width * 0.05,
+    paddingBottom: 40,
+    flexGrow: 1,
+    justifyContent: 'flex-start',
   },
 });
 

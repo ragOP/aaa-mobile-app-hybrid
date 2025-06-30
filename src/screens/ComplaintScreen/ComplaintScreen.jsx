@@ -8,7 +8,8 @@ import {
   Image,
   Linking,
   ActivityIndicator,
-  Dimensions, Platform
+  Dimensions,
+  Platform,
 } from 'react-native';
 import addIcon from '../../assets/icons/+.png';
 import phoneIcon from '../../assets/icons/Call.png';
@@ -17,7 +18,8 @@ import checkCircleIcon from '../../assets/icons/Checkmark.png';
 import {getComplaintsApi, raisePrority} from '../../store/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
-const { width, height } = Dimensions.get('window');
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
+const {width, height} = Dimensions.get('window');
 
 const ComplaintScreen = ({route, navigation}) => {
   const [complaints, setComplaints] = useState([]);
@@ -64,130 +66,136 @@ const ComplaintScreen = ({route, navigation}) => {
   );
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Title */}
-      <Text style={styles.title}>Your Complaints</Text>
+    <ScreenWrapper>
+      <ScrollView style={styles.container}>
+        {/* Title */}
+        <Text style={styles.title}>Your Complaints</Text>
 
-      {/* New Complaint Button */}
-      <View style={styles.newComplaintButton}>
-        <Text style={styles.newComplaintText}>New Complaint</Text>
-        <TouchableOpacity
-          style={styles.plusButton}
-          onPress={() => navigation.navigate('NewComplaintScreen')}>
-          <Image source={addIcon} style={styles.plusIcon} />
-        </TouchableOpacity>
-      </View>
-
-      {/* Conditionally render the complaint card if data is available */}
-      {fetchingComplaints ? (
-        <View style={styles.activityIndicatorStyles}>
-          <ActivityIndicator size="large" />
+        {/* New Complaint Button */}
+        <View style={styles.newComplaintButton}>
+          <Text style={styles.newComplaintText}>New Complaint</Text>
+          <TouchableOpacity
+            style={styles.plusButton}
+            onPress={() => navigation.navigate('NewComplaintScreen')}>
+            <Image source={addIcon} style={styles.plusIcon} />
+          </TouchableOpacity>
         </View>
-      ) : complaints && complaints?.length > 0 ? (
-        complaints.map((complaint, index) => (
-          <View key={index} style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.panelText}>{complaint?.projectName}</Text>
-              <Text
-                style={styles.viewMoreText}
-                onPress={() =>
-                  navigation.navigate('ComplainDetailScreen', {complaint})
-                }>
-                View More
+
+        {/* Conditionally render the complaint card if data is available */}
+        {fetchingComplaints ? (
+          <View style={styles.activityIndicatorStyles}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : complaints && complaints?.length > 0 ? (
+          complaints.map((complaint, index) => (
+            <View key={index} style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.panelText}>{complaint?.projectName}</Text>
+                <Text
+                  style={styles.viewMoreText}
+                  onPress={() =>
+                    navigation.navigate('ComplainDetailScreen', {complaint})
+                  }>
+                  View More
+                </Text>
+              </View>
+
+              {/* <View style={styles.infoRow}> */}
+              <Text style={styles.labelText}>
+                Project Name: {complaint?.projectName || '-'}
               </Text>
-            </View>
-
-            {/* <View style={styles.infoRow}> */}
-            <Text style={styles.labelText}>
-              Project Name: {complaint?.projectName || '-'}
-            </Text>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Activity: </Text>
-              <Text style={styles.statusCode}>
-                {' '}
-                {complaint?.activity || '-'}
-              </Text>
-            </View>
-            {/* </View> */}
-
-            <Text style={styles.labelText}>
-              Site Location: {complaint?.siteLocation || '-'}
-            </Text>
-
-            <View style={styles.divider} />
-
-            <Text style={styles.statusText}>
-              <Text style={styles.labelText}>Current Status: </Text>
-              <Text style={styles.statusCode}>
-                {complaint?.activity || '-'}
-              </Text>
-              {complaint.statusCode && (
+              <View style={styles.row}>
+                <Text style={styles.labelText}>Activity: </Text>
                 <Text style={styles.statusCode}>
                   {' '}
-                  : {complaint?.statusCode || '-'}
+                  {complaint?.activity || '-'}
                 </Text>
-              )}
-            </Text>
+              </View>
+              {/* </View> */}
 
-            {/* Status Bar */}
-            <View style={styles.statusBar}>
-              <View
-                style={
-                  complaint?.activity === 'Pending' || complaint?.activity === 'Ongoing' || complaint?.activity === 'Closed'
-                    ? styles.statusBarSectionComplete
-                    : styles.statusBarSectionIncomplete
-                }
-              />
-              <View
-                style={
-                  complaint?.activity === 'Ongoing' || complaint?.activity === 'Closed'
-                    ? styles.statusBarSectionComplete
-                    : styles.statusBarSectionIncomplete
-                }
-              />
-              <View
-                style={
-                  complaint?.activity === 'Ongoing' || complaint?.activity === 'Closed'
-                    ? styles.statusBarSectionComplete
-                    : styles.statusBarSectionIncomplete
-                }
-              />
-              <View
-                style={
-                  complaint?.activity === 'Closed'
-                    ? styles.statusBarSectionComplete
-                    : styles.statusBarSectionIncomplete
-                }
-              />
-            </View>
+              <Text style={styles.labelText}>
+                Site Location: {complaint?.siteLocation || '-'}
+              </Text>
 
-            {/* Action Buttons */}
-            <View style={styles.actionButtons}>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={() =>
-                  handleCallTechnician(complaint?.technician?.phoneNumber)
-                }>
-                <Image source={phoneIcon} style={styles.actionIcon} />
-                <Text style={styles.actionButtonText}>Call Technician</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={() => handleRaisePriority(complaint._id)}>
-                <Image source={warningIcon} style={styles.actionIcon} />
-                <Text style={styles.actionButtonText}>Raise Priority</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
-                <Image source={checkCircleIcon} style={styles.actionIcon} />
-                <Text style={styles.actionButtonText}>Mark Complete</Text>
-              </TouchableOpacity>
+              <View style={styles.divider} />
+
+              <Text style={styles.statusText}>
+                <Text style={styles.labelText}>Current Status: </Text>
+                <Text style={styles.statusCode}>
+                  {complaint?.activity || '-'}
+                </Text>
+                {complaint.statusCode && (
+                  <Text style={styles.statusCode}>
+                    {' '}
+                    : {complaint?.statusCode || '-'}
+                  </Text>
+                )}
+              </Text>
+
+              {/* Status Bar */}
+              <View style={styles.statusBar}>
+                <View
+                  style={
+                    complaint?.activity === 'Pending' ||
+                    complaint?.activity === 'Ongoing' ||
+                    complaint?.activity === 'Closed'
+                      ? styles.statusBarSectionComplete
+                      : styles.statusBarSectionIncomplete
+                  }
+                />
+                <View
+                  style={
+                    complaint?.activity === 'Ongoing' ||
+                    complaint?.activity === 'Closed'
+                      ? styles.statusBarSectionComplete
+                      : styles.statusBarSectionIncomplete
+                  }
+                />
+                <View
+                  style={
+                    complaint?.activity === 'Ongoing' ||
+                    complaint?.activity === 'Closed'
+                      ? styles.statusBarSectionComplete
+                      : styles.statusBarSectionIncomplete
+                  }
+                />
+                <View
+                  style={
+                    complaint?.activity === 'Closed'
+                      ? styles.statusBarSectionComplete
+                      : styles.statusBarSectionIncomplete
+                  }
+                />
+              </View>
+
+              {/* Action Buttons */}
+              <View style={styles.actionButtons}>
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={() =>
+                    handleCallTechnician(complaint?.technician?.phoneNumber)
+                  }>
+                  <Image source={phoneIcon} style={styles.actionIcon} />
+                  <Text style={styles.actionButtonText}>Call Technician</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={() => handleRaisePriority(complaint._id)}>
+                  <Image source={warningIcon} style={styles.actionIcon} />
+                  <Text style={styles.actionButtonText}>Raise Priority</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton}>
+                  <Image source={checkCircleIcon} style={styles.actionIcon} />
+                  <Text style={styles.actionButtonText}>Mark Complete</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        ))
-      ) : (
-        <Text style={styles.noDataText}>No complaint data available</Text>
-      )}
-    </ScrollView>
+          ))
+        ) : (
+          <Text style={styles.noDataText}>No complaint data available</Text>
+        )}
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
@@ -212,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: height * 0.02,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowOpacity: 0.8,
     shadowRadius: width * 0.03,
     elevation: 5,
@@ -230,7 +238,7 @@ const styles = StyleSheet.create({
     width: width * 0.25,
     height: height * 0.06,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowOpacity: 0.8,
     shadowRadius: width * 0.03,
     elevation: 5,
@@ -246,7 +254,7 @@ const styles = StyleSheet.create({
     marginVertical: height * 0.01,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowRadius: width * 0.03,
     elevation: 3,
   },
@@ -326,7 +334,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: height * 0.005 },
+    shadowOffset: {width: 0, height: height * 0.005},
     shadowRadius: width * 0.03,
     elevation: 3,
   },

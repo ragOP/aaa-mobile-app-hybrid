@@ -18,6 +18,7 @@ import amcImage from '../../assets/icons/doc.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getProjectsApi} from '../../store/api';
 import {ActivityIndicator} from 'react-native-paper';
+import ScreenWrapper from '../../wrapper/ScreenWrapper';
 
 const ProjectCard = ({
   projectName,
@@ -156,40 +157,42 @@ const ProjectScreen = () => {
   }, [refresh]);
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.scrollView}
-      refreshControl={
-        <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-      }>
-      <Text style={styles.screenTitle}>My Projects</Text>
+    <ScreenWrapper>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }>
+        <Text style={styles.screenTitle}>My Projects</Text>
 
-      {isFetching ? (
-        <View style={styles.centeredContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : projects && projects.length > 0 ? (
-        projects.map(project => (
-          <ProjectCard
-            key={project?._id}
-            projectName={project?.title || ''}
-            panels={project?.panels?.length || 0}
-            activity={project?.activity}
-            location={project?.siteLocation}
-            warrantyStatus={
-              project?.warranties[0]?.durationInMonths || 'Not Applicable'
-            }
-            amcStatus={project?.amcs[0]?.durationInMonths || 'Not Applicable'}
-            warrantyLink={project?.warranties[0]?.warrntyPdf}
-            amcLink={project?.amcs[0]?.amcPdf}
-          />
-        ))
-      ) : (
-        <View style={styles.notFoundContainer}>
-          <Text style={styles.notFoundText}>No projects found.</Text>
-        </View>
-      )}
-    </ScrollView>
+        {isFetching ? (
+          <View style={styles.centeredContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : projects && projects.length > 0 ? (
+          projects.map(project => (
+            <ProjectCard
+              key={project?._id}
+              projectName={project?.title || ''}
+              panels={project?.panels?.length || 0}
+              activity={project?.activity}
+              location={project?.siteLocation}
+              warrantyStatus={
+                project?.warranties[0]?.durationInMonths || 'Not Applicable'
+              }
+              amcStatus={project?.amcs[0]?.durationInMonths || 'Not Applicable'}
+              warrantyLink={project?.warranties[0]?.warrntyPdf}
+              amcLink={project?.amcs[0]?.amcPdf}
+            />
+          ))
+        ) : (
+          <View style={styles.notFoundContainer}>
+            <Text style={styles.notFoundText}>No projects found.</Text>
+          </View>
+        )}
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
