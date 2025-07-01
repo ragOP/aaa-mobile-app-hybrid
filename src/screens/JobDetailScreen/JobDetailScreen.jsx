@@ -193,7 +193,23 @@ const JobDetailScreen = ({route, navigation}) => {
           [
             {
               text: 'OK',
-              onPress: () => navigation.navigate('AllJobScreen'),
+              onPress: () =>
+                navigation.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'EngineerTabNavigation',
+                      state: {
+                        routes: [
+                          {name: 'EngineerHomeScreen'},
+                          {name: 'AllJobsScreen'},
+                          {name: 'EngineerProfileScreen'},
+                        ],
+                        index: 1,
+                      },
+                    },
+                  ],
+                }),
             },
           ],
           {cancelable: false},

@@ -5,14 +5,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const ScreenWrapper = ({ children, style, contentContainerStyle, ...props }) => {
   return (
     <SafeAreaView style={[styles.safeArea, style]} edges={['top', 'bottom', 'left', 'right']}>
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 410 : 0}
         {...props}
-      >
+      > */}
         <View style={[styles.flex, contentContainerStyle]}>{children}</View>
-      </KeyboardAvoidingView>
+      {/* </KeyboardAvoidingView> */}
     </SafeAreaView>
   );
 };

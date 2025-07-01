@@ -12,7 +12,6 @@ API.interceptors.request.use(
     if (token) {
       req.headers['Authorization'] = `Bearer ${token}`;
     }
-    // console.log('REQUEST: ', req);
     return req;
   },
   error => {

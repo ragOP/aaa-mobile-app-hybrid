@@ -9,12 +9,11 @@ import {
   Image,
   Alert,
   Dimensions,
+  Platform,
 } from 'react-native';
-import {SafeAreaView} from 'react-native';
-
 const {width, height} = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
-import {Picker} from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {getProjectsApi, newComplaintApi} from '../../store/api';
@@ -51,7 +50,9 @@ const NewComplaintScreen = () => {
   const [geoLongitude, setGeoLongitude] = useState(0);
 
   useEffect(() => {
-    requestMicrophonePermission();
+    if (Platform.OS === 'android') {
+      requestMicrophonePermission();
+    }
     AudioRecord.init({
       sampleRate: 16000,
       channels: 1,
@@ -164,7 +165,6 @@ const NewComplaintScreen = () => {
       formData.append('panelSectionName', selectedPanelName);
       formData.append('severity', severityText);
       formData.append('issueDescription', issuedescription);
-      // console.log('FormData >>> ', formData);
       formData.append('geoLatitude', geoLatitude);
       formData.append('geoLongitude', geoLongitude);
 
@@ -176,8 +176,8 @@ const NewComplaintScreen = () => {
         return;
       }
 
-      console.log('FormData >>> ', formData);
       if (audioPath) {
+        console.log('audioPath');
         formData.append('voiceNote', {
           uri: `file://${audioPath}`,
           type: 'audio/wav',
@@ -186,16 +186,17 @@ const NewComplaintScreen = () => {
       }
 
       images.forEach((image, index) => {
+        console.log('Image object >>>>>>>', image);
         formData.append('images', {
           uri: image.uri,
-          type: image.type,
+          type: image.type || 'image/jpeg',
           name: `image_${index}.jpg`,
         });
       });
-
-      console.log('FormData2222222222222222222222 >>> ', formData);
+      console.log('FormData >>> ', formData);
 
       const response = await newComplaintApi(user._id, formData);
+      console.log('Response >>>', response);
 
       if (response?.data?.success) {
         setSelectedProject('');
@@ -213,19 +214,41 @@ const NewComplaintScreen = () => {
           [
             {
               text: 'OK',
-              onPress: () => navigation.navigate('ComplaintScreen'),
+              onPress: () =>
+                navigation.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'BottomTabNavigation',
+                      state: {
+                        routes: [
+                          {name: 'HomeScreen'},
+                          {name: 'ComplaintScreen'},
+                          {name: 'ProjectScreen'},
+                          {name: 'ProfileScreen'},
+                        ],
+                        index: 1,
+                      },
+                    },
+                  ],
+                }),
             },
           ],
           {cancelable: false},
         );
-        navigation.navigate('ComplaintScreen');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'ComplaintScreen'}],
+        });
       } else {
+        console.log(11111);
         Alert.alert(
           'Create failed',
           response?.data?.data?.message || 'New complaint create failed',
         );
       }
     } catch (error) {
+      console.log('Error submitting complaint:', error);
       console.error(
         'Error submitting complaint:',
         error.response ? error.response.data : error.message,
@@ -283,6 +306,7 @@ const NewComplaintScreen = () => {
           <Text style={styles.title}>New Complaint</Text>
         </View>
 
+        {/*
         <Picker
           selectedValue={selectedProject}
           onValueChange={itemValue => {
@@ -290,6 +314,7 @@ const NewComplaintScreen = () => {
             setPanels(itemValue.panels);
             setSelectedPanel('');
           }}
+          itemStyle={{width: "100%"}}
           style={styles.picker}
           dropdownIconColor="red">
           <Picker.Item
@@ -304,6 +329,29 @@ const NewComplaintScreen = () => {
             />
           ))}
         </Picker>
+        */}
+        <RNPickerSelect
+          onValueChange={value => {
+            setSelectedProject(projects.find(p => p._id === value) || '');
+            const selected = projects.find(p => p._id === value);
+            setPanels(selected ? selected.panels : []);
+            setSelectedPanel('');
+          }}
+          items={projects.map(project => ({
+            label: project.title,
+            value: project._id,
+            key: project._id,
+          }))}
+          value={selectedProject?._id || ''}
+          placeholder={{
+            label: isFetching ? 'Fetching projects...' : 'Project Name :',
+            value: '',
+            color: '#A9A9A9',
+          }}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false}
+          disabled={isFetching}
+        />
 
         <View style={styles.locationContainer}>
           <View style={[styles.inputContainer1, styles.flexContainer]}>
@@ -333,17 +381,38 @@ const NewComplaintScreen = () => {
           )}
         </View>
 
+        {/*
         <Picker
           selectedValue={selectedPanel}
           onValueChange={itemValue => setSelectedPanel(itemValue)}
           style={styles.picker}
-          enabled={panels.length > 0}
+          enabled={panels?.length > 0}
           dropdownIconColor="red">
           <Picker.Item label="Panel/Section Name :" value="" />
-          {panels.map((panel, index) => (
-            <Picker.Item key={index} label={panel} value={panel} />
-          ))}
+          {panels &&
+            panels?.length > 0 &&
+            panels?.map((panel, index) => (
+              <Picker.Item key={index} label={panel} value={panel} />
+            ))}
         </Picker>
+        */}
+        <RNPickerSelect
+          onValueChange={value => setSelectedPanel(value)}
+          items={panels.map((panel, idx) => ({
+            label: panel,
+            value: panel,
+            key: idx,
+          }))}
+          value={selectedPanel}
+          placeholder={{
+            label: 'Panel/Section Name :',
+            value: '',
+            color: '#A9A9A9',
+          }}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false}
+          disabled={panels.length === 0}
+        />
 
         <View style={styles.descriptionContainer}>
           <Text style={styles.label}>Describe Your Issue :</Text>
@@ -649,25 +718,46 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     gap: width * 0.02,
   },
-  picker: {
+  pickerInput: {
+    height: 44,
+    fontSize: width * 0.04,
+    color: '#000',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 8,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
     height: height * 0.06,
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: width * 0.025,
-    padding: width * 0.04,
+    paddingHorizontal: width * 0.04,
     marginVertical: height * 0.01,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: height * 0.002},
-    shadowRadius: width * 0.02,
-    elevation: 3,
     color: 'black',
+    fontSize: width * 0.04,
+    borderWidth: 1,
+    borderColor: '#d3d3d3',
   },
-  address: {
+  inputAndroid: {
+    height: height * 0.06,
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: width * 0.025,
+    paddingHorizontal: width * 0.04,
+    marginVertical: height * 0.01,
     color: 'black',
+    fontSize: width * 0.04,
+    borderWidth: 1,
+    borderColor: '#d3d3d3',
+  },
+  placeholder: {
+    color: '#A9A9A9',
   },
 });
 

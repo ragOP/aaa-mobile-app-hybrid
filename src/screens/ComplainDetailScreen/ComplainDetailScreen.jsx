@@ -28,6 +28,8 @@ const ComplainDetailScreen = ({route, navigation}) => {
     voiceNote,
   } = route.params.complaint;
 
+  console.log('Complaint Details:', route.params.complaint);
+
   const handleCallEngineer = number => {
     if (number == null) return;
     const phoneNumber = `tel:+91-${number}`;
