@@ -19,9 +19,8 @@ target 'aaaserviceApp' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # Disable Fabric to avoid ReactAppDependencyProvider error
-    :fabric_enabled => false,
-    :hermes_enabled => true,
+    :fabric_enabled => false, # Disable Fabric to avoid ReactAppDependencyProvider error
+    :hermes_enabled => false,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
@@ -31,5 +30,12 @@ target 'aaaserviceApp' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
     )
+
+    # ✅ Add this block to fix missing dSYM for Hermes.framework
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf-with-dsym'
+      end
+    end
   end
 end
